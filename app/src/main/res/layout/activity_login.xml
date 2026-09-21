@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background">
+
+    <!-- Header escuro -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primary_dark"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:paddingTop="60dp"
+        android:paddingBottom="52dp">
+
+        <!-- Logo + Nome centralizados -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:src="@drawable/logo_skadi"
+                android:contentDescription="Logo Skadi"
+                android:scaleType="fitCenter" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SKADI"
+                android:textColor="@color/white"
+                android:textSize="32sp"
+                android:fontFamily="@font/cinzel_decorative"
+                android:letterSpacing="0.15"
+                android:layout_marginStart="14dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Card branco com topo arredondado -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardBackgroundColor="@color/white"
+        app:cardElevation="0dp"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Skadi.CardTopRounded"
+        android:layout_marginTop="-16dp">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_vertical"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                android:paddingTop="32dp"
+                android:paddingBottom="32dp">
+
+                <!-- Título do formulário -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Entrar na conta"
+                    android:textColor="@color/primary_dark"
+                    android:textSize="22sp"
+                    android:fontFamily="@font/manrope"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:layout_marginBottom="28dp" />
+
+                <!-- Campo Usuário -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Usuario:"
+                    android:textColor="@color/primary_dark"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/manrope"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="6dp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilUsuario"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:boxCornerRadiusTopStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusBottomEnd="12dp"
+                    app:boxStrokeColor="@color/input_stroke_color"
+                    app:boxStrokeWidth="1.5dp"
+                    app:boxStrokeWidthFocused="2dp"
+                    app:hintTextColor="@color/primary_dark"
+                    android:layout_marginBottom="16dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etUsuario"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Nome"
+                        android:fontFamily="@font/manrope"
+                        android:textSize="14sp"
+                        android:inputType="text"
+                        android:textColor="@color/primary_dark"
+                        android:textCursorDrawable="@drawable/edit_text_cursor" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Campo Senha -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Senha:"
+                    android:textColor="@color/primary_dark"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/manrope"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="6dp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilSenha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:boxCornerRadiusTopStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusBottomEnd="12dp"
+                    app:boxStrokeColor="@color/input_stroke_color"
+                    app:boxStrokeWidth="1.5dp"
+                    app:boxStrokeWidthFocused="2dp"
+                    app:hintTextColor="@color/primary_dark"
+                    app:endIconMode="password_toggle"
+                    app:endIconTint="@color/primary_dark"
+                    app:errorIconDrawable="@null"
+                    android:layout_marginBottom="12dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etSenha"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="123456"
+                        android:fontFamily="@font/manrope"
+                        android:textSize="14sp"
+                        android:inputType="textPassword"
+                        android:textColor="@color/primary_dark"
+                        android:textCursorDrawable="@drawable/edit_text_cursor" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Lembre de mim + Esqueci senha -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="32dp">
+
+                    <CheckBox
+                        android:id="@+id/cbLembrar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Lembre de mim"
+                        android:textColor="@color/secondary_dark"
+                        android:textSize="13sp"
+                        android:fontFamily="@font/manrope"
+                        android:buttonTint="@color/checkbox_color"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:id="@+id/tvEsqueceuSenha"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Esqueci minha senha"
+                        android:textColor="@color/primary"
+                        android:textSize="13sp"
+                        android:fontFamily="@font/manrope"
+                        android:clickable="true"
+                        android:focusable="true" />
+                </LinearLayout>
+
+                <!-- Botão Entrar -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnEntrar"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:text="Entrar"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/manrope"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    app:backgroundTint="@color/primary_dark"
+                    app:cornerRadius="12dp"
+                    android:layout_marginBottom="20dp" />
+
+                <!-- Cadastro -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ainda não tem uma conta? "
+                        android:textColor="@color/secondary_gray"
+                        android:textSize="13sp"
+                        android:fontFamily="@font/manrope" />
+
+                    <TextView
+                        android:id="@+id/tvCadastrar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Clique aqui"
+                        android:textColor="@color/primary"
+                        android:textSize="13sp"
+                        android:fontFamily="@font/manrope"
+                        android:textStyle="bold"
+                        android:clickable="true"
+                        android:focusable="true" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>
