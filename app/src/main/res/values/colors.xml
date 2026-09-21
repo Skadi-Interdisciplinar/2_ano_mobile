@@ -2,4 +2,21 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Cores Principais -->
+    <color name="primary_dark">#0F2E4F</color>
+    <color name="primary">#2E8FEA</color>
+    <color name="primary_light">#A8D8FF</color>
+
+    <!-- Cores Secundárias -->
+    <color name="secondary_dark">#2D3748</color>
+    <color name="secondary">#55D8FF</color>
+    <color name="secondary_gray">#718096</color>
+    <color name="background">#F7FAFC</color>
+
+    <!-- Cores de Alerta -->
+    <color name="alert_success">#2FBF71</color>
+    <color name="alert_warning">#FFC857</color>
+    <color name="alert_orange">#FF8A3D</color>
+    <color name="alert_danger">#E63946</color>
 </resources>
