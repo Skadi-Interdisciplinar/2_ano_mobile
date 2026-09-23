@@ -2,8 +2,12 @@ name: Validação de testes
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
-    branches: [ "main", "master", "develop" ]
+    types: 
+      - opened
+      - synchronize
+      - reopened
+    
+    branches: ["main", "master", "develop"]
 
 permissions:
   contents: read
