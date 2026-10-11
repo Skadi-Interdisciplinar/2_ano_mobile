@@ -51,6 +51,7 @@
         android:layout_height="match_parent"
         app:cardBackgroundColor="@color/white"
         app:cardElevation="0dp"
+        app:strokeWidth="0dp"
         app:shapeAppearanceOverlay="@style/ShapeAppearance.Skadi.CardTopRounded"
         android:layout_marginTop="-16dp">
 
@@ -168,7 +169,7 @@
                     android:gravity="center_vertical"
                     android:layout_marginBottom="32dp">
 
-                    <CheckBox
+                    <com.google.android.material.checkbox.MaterialCheckBox
                         android:id="@+id/cbLembrar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -176,7 +177,7 @@
                         android:textColor="@color/secondary_dark"
                         android:textSize="13sp"
                         android:fontFamily="@font/manrope"
-                        android:buttonTint="@color/checkbox_color"
+                        app:buttonTint="@color/checkbox_color"
                         android:layout_weight="1" />
 
                     <TextView
