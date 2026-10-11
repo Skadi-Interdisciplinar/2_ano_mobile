@@ -28,6 +28,10 @@
         <activity
             android:name=".HomeActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".AlertsActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
