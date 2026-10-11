@@ -23,7 +23,6 @@ public class AlertDetailsActivity extends AppCompatActivity {
     private FrameLayout btnNotification;
     private MaterialCardView btnProfileAvatar;
     private MaterialButton btnJustificar;
-    private MaterialButton btnReconhecerAlerta;
 
     private TextView tvStartTime;
     private TextView tvStartTimeLabel;
@@ -59,7 +58,6 @@ public class AlertDetailsActivity extends AppCompatActivity {
         btnNotification = findViewById(R.id.btnNotification);
         btnProfileAvatar = findViewById(R.id.btnProfileAvatar);
         btnJustificar = findViewById(R.id.btnJustificar);
-        btnReconhecerAlerta = findViewById(R.id.btnReconhecerAlerta);
 
         tvStartTime = findViewById(R.id.tvStartTime);
         tvStartTimeLabel = findViewById(R.id.tvStartTimeLabel);
@@ -96,13 +94,6 @@ public class AlertDetailsActivity extends AppCompatActivity {
                 Toast.makeText(this, "Justificativa registrada com sucesso!", Toast.LENGTH_SHORT).show();
                 // TODO: Enviar justificativa para a API
             });
-        });
-
-        // Ação 2: Reconhecer alerta
-        btnReconhecerAlerta.setOnClickListener(v -> {
-            setAlertResolved(true);
-            Toast.makeText(this, "Alerta reconhecido!", Toast.LENGTH_SHORT).show();
-            // TODO: Chamar endpoint de reconhecimento de alerta
         });
 
         // Toolbar inferior
