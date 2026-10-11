@@ -1,5 +1,6 @@
 package com.example.mobile_skadi;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -74,6 +75,11 @@ public class LoginActivity extends AppCompatActivity {
 
         // TODO: chamar API de autenticacao
         // Ex: authViewModel.login(usuario, senha);
+
+        // Navega para a Home
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     // Helper para evitar boilerplate de TextWatcher
