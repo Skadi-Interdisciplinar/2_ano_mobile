@@ -62,15 +62,21 @@ public class AlertsActivity extends AppCompatActivity {
 
         // Detalhes dos alertas
         cardAlertCritical.setOnClickListener(v -> {
-            startActivity(new Intent(this, AlertDetailsActivity.class));
+            Intent intent = new Intent(this, AlertDetailsActivity.class);
+            intent.putExtra(AlertDetailsActivity.EXTRA_IS_RESOLVED, false);
+            startActivity(intent);
         });
 
         cardAlertWarning.setOnClickListener(v -> {
-            startActivity(new Intent(this, AlertDetailsActivity.class));
+            Intent intent = new Intent(this, AlertDetailsActivity.class);
+            intent.putExtra(AlertDetailsActivity.EXTRA_IS_RESOLVED, false);
+            startActivity(intent);
         });
 
         cardAlertStable.setOnClickListener(v -> {
-            startActivity(new Intent(this, AlertDetailsActivity.class));
+            Intent intent = new Intent(this, AlertDetailsActivity.class);
+            intent.putExtra(AlertDetailsActivity.EXTRA_IS_RESOLVED, true);
+            startActivity(intent);
         });
 
         // Níveis de alerta

@@ -1,16 +1,23 @@
 package com.example.mobile_skadi;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 
 public class AlertDetailsActivity extends AppCompatActivity {
+
+    public static final String EXTRA_IS_RESOLVED = "EXTRA_IS_RESOLVED";
 
     private FrameLayout btnBack;
     private FrameLayout btnNotification;
@@ -18,11 +25,21 @@ public class AlertDetailsActivity extends AppCompatActivity {
     private MaterialButton btnJustificar;
     private MaterialButton btnReconhecerAlerta;
 
+    private TextView tvStartTime;
+    private TextView tvStartTimeLabel;
+    private LinearLayout colEndTime;
+    private TextView tvEndTime;
+    private TextView tvEndTimeLabel;
+    private TextView tvAlertStatus;
+    private LinearLayout layoutActionButtons;
+
     private LinearLayout navCamaras;
     private LinearLayout navAlertas;
     private LinearLayout navInicio;
     private LinearLayout navRelatorios;
     private LinearLayout navTrimmy;
+
+    private boolean isResolved = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +48,10 @@ public class AlertDetailsActivity extends AppCompatActivity {
 
         initViews();
         setupListeners();
+
+        // Verifica estado inicial via intent (padrão: em andamento)
+        isResolved = getIntent().getBooleanExtra(EXTRA_IS_RESOLVED, false);
+        setAlertResolved(isResolved);
     }
 
     private void initViews() {
@@ -39,6 +60,14 @@ public class AlertDetailsActivity extends AppCompatActivity {
         btnProfileAvatar = findViewById(R.id.btnProfileAvatar);
         btnJustificar = findViewById(R.id.btnJustificar);
         btnReconhecerAlerta = findViewById(R.id.btnReconhecerAlerta);
+
+        tvStartTime = findViewById(R.id.tvStartTime);
+        tvStartTimeLabel = findViewById(R.id.tvStartTimeLabel);
+        colEndTime = findViewById(R.id.colEndTime);
+        tvEndTime = findViewById(R.id.tvEndTime);
+        tvEndTimeLabel = findViewById(R.id.tvEndTimeLabel);
+        tvAlertStatus = findViewById(R.id.tvAlertStatus);
+        layoutActionButtons = findViewById(R.id.layoutActionButtons);
 
         navCamaras = findViewById(R.id.navCamaras);
         navAlertas = findViewById(R.id.navAlertas);
@@ -60,13 +89,20 @@ public class AlertDetailsActivity extends AppCompatActivity {
             // TODO: Abrir perfil
         });
 
-        // Ações do alerta
+        // Ação 1: Justificar alerta (Abre modal de Justificativa - Frame 204)
         btnJustificar.setOnClickListener(v -> {
-            // TODO: Abrir modal/fluxo de Justificar alerta
+            AlertJustificationDialog.show(this, (reason, description) -> {
+                setAlertResolved(true);
+                Toast.makeText(this, "Justificativa registrada com sucesso!", Toast.LENGTH_SHORT).show();
+                // TODO: Enviar justificativa para a API
+            });
         });
 
+        // Ação 2: Reconhecer alerta
         btnReconhecerAlerta.setOnClickListener(v -> {
-            // TODO: Chamar endpoint para reconhecer alerta
+            setAlertResolved(true);
+            Toast.makeText(this, "Alerta reconhecido!", Toast.LENGTH_SHORT).show();
+            // TODO: Chamar endpoint de reconhecimento de alerta
         });
 
         // Toolbar inferior
@@ -75,7 +111,7 @@ public class AlertDetailsActivity extends AppCompatActivity {
         });
 
         navAlertas.setOnClickListener(v -> {
-            // Volta para a lista de alertas
+            // Já está no fluxo de alertas
             finish();
         });
 
@@ -93,5 +129,26 @@ public class AlertDetailsActivity extends AppCompatActivity {
         navTrimmy.setOnClickListener(v -> {
             // TODO: Navegar para Trimmy
         });
+    }
+
+    private void setAlertResolved(boolean resolved) {
+        this.isResolved = resolved;
+
+        if (resolved) {
+            // Estado Resolvido (Foto 2)
+            colEndTime.setVisibility(View.VISIBLE);
+            tvStartTime.setTextColor(Color.parseColor("#94A3B8")); // Hora inicial mais clara
+            tvEndTime.setTextColor(ContextCompat.getColor(this, R.color.primary_dark)); // Fim em destaque escuro
+            tvAlertStatus.setText("Resolvido");
+            tvAlertStatus.setTextColor(ContextCompat.getColor(this, R.color.alert_success));
+            layoutActionButtons.setVisibility(View.GONE); // Botões ocultos
+        } else {
+            // Estado Em Andamento (Foto anterior)
+            colEndTime.setVisibility(View.GONE);
+            tvStartTime.setTextColor(ContextCompat.getColor(this, R.color.primary_dark));
+            tvAlertStatus.setText("Em andamento");
+            tvAlertStatus.setTextColor(ContextCompat.getColor(this, R.color.alert_danger));
+            layoutActionButtons.setVisibility(View.VISIBLE); // Botões visíveis
+        }
     }
 }

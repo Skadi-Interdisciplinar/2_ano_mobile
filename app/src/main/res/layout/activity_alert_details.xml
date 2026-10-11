@@ -182,24 +182,75 @@
                             android:fontFamily="@font/manrope"
                             android:layout_marginBottom="20dp" />
 
-                        <!-- HORA -->
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <!-- SEÇÃO DE HORÁRIOS (INÍCIO E FIM DO ALERTA) -->
+                        <LinearLayout
+                            android:id="@+id/layoutTimeSection"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="11:11"
-                            android:textColor="@color/primary_dark"
-                            android:textSize="32sp"
-                            android:fontFamily="@font/manrope"
-                            android:textStyle="bold"
-                            android:layout_marginBottom="2dp" />
+                            android:orientation="horizontal"
+                            android:gravity="center">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Início do alerta"
-                            android:textColor="@color/secondary_gray"
-                            android:textSize="12sp"
-                            android:fontFamily="@font/manrope" />
+                            <!-- COLUNA 1: INÍCIO DO ALERTA -->
+                            <LinearLayout
+                                android:id="@+id/colStartTime"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:gravity="center">
+
+                                <TextView
+                                    android:id="@+id/tvStartTime"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="11:11"
+                                    android:textColor="@color/primary_dark"
+                                    android:textSize="32sp"
+                                    android:fontFamily="@font/manrope"
+                                    android:textStyle="bold"
+                                    android:layout_marginBottom="2dp" />
+
+                                <TextView
+                                    android:id="@+id/tvStartTimeLabel"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Início do alerta"
+                                    android:textColor="@color/secondary_gray"
+                                    android:textSize="12sp"
+                                    android:fontFamily="@font/manrope" />
+                            </LinearLayout>
+
+                            <!-- COLUNA 2: FIM DO ALERTA (EXIBIDO QUANDO RESOLVIDO) -->
+                            <LinearLayout
+                                android:id="@+id/colEndTime"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                android:visibility="gone">
+
+                                <TextView
+                                    android:id="@+id/tvEndTime"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="11:19"
+                                    android:textColor="@color/primary_dark"
+                                    android:textSize="32sp"
+                                    android:fontFamily="@font/manrope"
+                                    android:textStyle="bold"
+                                    android:layout_marginBottom="2dp" />
+
+                                <TextView
+                                    android:id="@+id/tvEndTimeLabel"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Fim do alerta"
+                                    android:textColor="@color/secondary_gray"
+                                    android:textSize="12sp"
+                                    android:fontFamily="@font/manrope" />
+                            </LinearLayout>
+                        </LinearLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -312,6 +363,7 @@
                                 android:layout_marginStart="10dp" />
 
                             <TextView
+                                android:id="@+id/tvAlertStatus"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Em andamento"
@@ -323,34 +375,42 @@
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- BOTÃO 1: JUSTIFICAR -->
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnJustificar"
+                <!-- CONTAINER BOTÕES DE AÇÃO (OCULTO QUANDO RESOLVIDO) -->
+                <LinearLayout
+                    android:id="@+id/layoutActionButtons"
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:text="Justificar"
-                    android:textColor="@color/white"
-                    android:textSize="15sp"
-                    android:fontFamily="@font/manrope"
-                    android:textStyle="bold"
-                    app:backgroundTint="@color/primary_dark"
-                    app:cornerRadius="12dp"
-                    android:textAllCaps="false"
-                    android:layout_marginBottom="12dp" />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                <!-- BOTÃO 2: RECONHECER ALERTA -->
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnReconhecerAlerta"
-                    android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:text="Reconhecer alerta"
-                    android:textColor="@color/white"
-                    android:textSize="15sp"
-                    android:fontFamily="@font/manrope"
-                    android:textStyle="bold"
-                    app:backgroundTint="@color/primary_dark"
-                    app:cornerRadius="12dp"
-                    android:textAllCaps="false" />
+                    <!-- BOTÃO 1: JUSTIFICAR -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnJustificar"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:text="Justificar"
+                        android:textColor="@color/white"
+                        android:textSize="15sp"
+                        android:fontFamily="@font/manrope"
+                        android:textStyle="bold"
+                        app:backgroundTint="@color/primary_dark"
+                        app:cornerRadius="12dp"
+                        android:textAllCaps="false"
+                        android:layout_marginBottom="12dp" />
+
+                    <!-- BOTÃO 2: RECONHECER ALERTA -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnReconhecerAlerta"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:text="Reconhecer alerta"
+                        android:textColor="@color/white"
+                        android:textSize="15sp"
+                        android:fontFamily="@font/manrope"
+                        android:textStyle="bold"
+                        app:backgroundTint="@color/primary_dark"
+                        app:cornerRadius="12dp"
+                        android:textAllCaps="false" />
+                </LinearLayout>
 
             </LinearLayout>
         </LinearLayout>
