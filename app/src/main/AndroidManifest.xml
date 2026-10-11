@@ -28,6 +28,14 @@
         <activity
             android:name=".HomeActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".AlertsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".AlertDetailsActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

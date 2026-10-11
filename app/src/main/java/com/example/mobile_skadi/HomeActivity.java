@@ -1,5 +1,6 @@
 package com.example.mobile_skadi;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -64,12 +65,12 @@ public class HomeActivity extends AppCompatActivity {
 
         // Ver todos os alertas
         btnVerTodosAlertas.setOnClickListener(v -> {
-            // TODO: Navegar para lista de Alertas
+            startActivity(new Intent(this, AlertsActivity.class));
         });
 
         // Detalhes do alerta crítico
         cardAlertaCritico.setOnClickListener(v -> {
-            // TODO: Navegar para detalhes do alerta da Câmara 291
+            startActivity(new Intent(this, AlertDetailsActivity.class));
         });
 
         // Mapa das unidades
@@ -79,7 +80,7 @@ public class HomeActivity extends AppCompatActivity {
 
         // Níveis de alerta
         btnNiveisAlerta.setOnClickListener(v -> {
-            // TODO: Abrir modal de Níveis de Alerta
+            AlertLevelsDialog.show(this);
         });
 
         // Bottom Navigation
@@ -88,7 +89,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         navAlertas.setOnClickListener(v -> {
-            // TODO: Navegar para tela de Alertas
+            startActivity(new Intent(this, AlertsActivity.class));
         });
 
         navInicio.setOnClickListener(v -> {

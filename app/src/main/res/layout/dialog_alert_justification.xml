@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_bottom_sheet_dialog"
+    android:paddingStart="24dp"
+    android:paddingEnd="24dp"
+    android:paddingTop="20dp"
+    android:paddingBottom="28dp">
+
+    <!-- BOTÃO CIRCULAR DE VOLTAR (AZUL ESCURO) -->
+    <FrameLayout
+        android:id="@+id/btnBackJustification"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:background="@drawable/bg_circle_navy_btn"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginBottom="16dp">
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_back_arrow_white"
+            android:contentDescription="Voltar" />
+    </FrameLayout>
+
+    <!-- CARD COM OS CAMPOS DE JUSTIFICATIVA -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="0dp"
+        app:strokeWidth="1dp"
+        app:strokeColor="#E2E8F0">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="18dp">
+
+            <!-- MOTIVO DO ALERTA -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Motivo do alerta:"
+                android:textColor="@color/primary_dark"
+                android:textSize="14sp"
+                android:fontFamily="@font/manrope"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <EditText
+                android:id="@+id/etAlertReason"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:background="@drawable/bg_input_pill"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="Porta aberta"
+                android:textColor="@color/primary_dark"
+                android:textSize="14sp"
+                android:fontFamily="@font/manrope"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:layout_marginBottom="18dp" />
+
+            <!-- DESCRIÇÃO -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Descrição"
+                android:textColor="@color/primary_dark"
+                android:textSize="14sp"
+                android:fontFamily="@font/manrope"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <EditText
+                android:id="@+id/etAlertDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="95dp"
+                android:background="@drawable/bg_input_rounded_box"
+                android:padding="14dp"
+                android:gravity="top|start"
+                android:text="A porta foi mantida aberta durante cerca de 20 minutos, o que fez a temperatura ser alterada"
+                android:textColor="@color/primary_dark"
+                android:textSize="13sp"
+                android:fontFamily="@font/manrope"
+                android:inputType="textMultiLine"
+                android:lineSpacingMultiplier="1.2" />
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- BOTÃO REGISTRAR JUSTIFICATIVA -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnRegistrarJustificativa"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginTop="20dp"
+        android:text="Registrar justificativa"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:fontFamily="@font/manrope"
+        android:textStyle="bold"
+        app:backgroundTint="@color/primary_dark"
+        app:cornerRadius="12dp"
+        android:textAllCaps="false" />
+
+</LinearLayout>
