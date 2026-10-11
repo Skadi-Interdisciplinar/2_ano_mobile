@@ -1,0 +1,43 @@
+name: Build do android
+
+on:
+  push:
+    branches: [ "main"]
+  workflow_dispatch: 
+
+jobs:
+  build-android:
+    name: Compilar Target Android
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Java (JDK 17)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Dar permissão de execução ao Gradlew
+        run: chmod +x gradlew
+
+      - name: Compilar APK
+        run: ./gradlew assembleDebug -x test
+
+      - name: Compilar App Bundle (AAB)
+        run: ./gradlew bundleDebug -x test
+
+      - name: Salvar APK como Artefato
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk-target
+          path: app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Salvar AAB como Artefato
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-aab-target
+          path: app/build/outputs/bundle/debug/app-debug.aab
