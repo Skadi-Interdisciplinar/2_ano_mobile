@@ -70,7 +70,7 @@ public class HomeActivity extends AppCompatActivity {
 
         // Detalhes do alerta crítico
         cardAlertaCritico.setOnClickListener(v -> {
-            // TODO: Navegar para detalhes do alerta da Câmara 291
+            startActivity(new Intent(this, AlertDetailsActivity.class));
         });
 
         // Mapa das unidades
@@ -80,7 +80,7 @@ public class HomeActivity extends AppCompatActivity {
 
         // Níveis de alerta
         btnNiveisAlerta.setOnClickListener(v -> {
-            // TODO: Abrir modal de Níveis de Alerta
+            AlertLevelsDialog.show(this);
         });
 
         // Bottom Navigation

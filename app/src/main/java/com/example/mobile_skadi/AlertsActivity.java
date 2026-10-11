@@ -62,20 +62,20 @@ public class AlertsActivity extends AppCompatActivity {
 
         // Detalhes dos alertas
         cardAlertCritical.setOnClickListener(v -> {
-            // TODO: Navegar para Detalhes do Alerta (Câmara 291)
+            startActivity(new Intent(this, AlertDetailsActivity.class));
         });
 
         cardAlertWarning.setOnClickListener(v -> {
-            // TODO: Navegar para Detalhes do Alerta (Câmara 61)
+            startActivity(new Intent(this, AlertDetailsActivity.class));
         });
 
         cardAlertStable.setOnClickListener(v -> {
-            // TODO: Navegar para Detalhes do Alerta (Câmara 1)
+            startActivity(new Intent(this, AlertDetailsActivity.class));
         });
 
         // Níveis de alerta
         btnEntendaNiveis.setOnClickListener(v -> {
-            // TODO: Abrir modal de Níveis de alerta
+            AlertLevelsDialog.show(this);
         });
 
         // Barra inferior de navegação
