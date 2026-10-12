@@ -98,7 +98,8 @@ public class AlertDetailsActivity extends AppCompatActivity {
 
         // Toolbar inferior
         navCamaras.setOnClickListener(v -> {
-            // TODO: Navegar para Câmaras
+            startActivity(new Intent(this, CamerasActivity.class));
+            finish();
         });
 
         navAlertas.setOnClickListener(v -> {

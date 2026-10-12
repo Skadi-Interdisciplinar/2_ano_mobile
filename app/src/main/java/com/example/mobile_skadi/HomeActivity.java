@@ -85,7 +85,7 @@ public class HomeActivity extends AppCompatActivity {
 
         // Bottom Navigation
         navCamaras.setOnClickListener(v -> {
-            // TODO: Navegar para tela de Câmaras
+            startActivity(new Intent(this, CamerasActivity.class));
         });
 
         navAlertas.setOnClickListener(v -> {
