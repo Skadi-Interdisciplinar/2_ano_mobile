@@ -17,7 +17,7 @@ public class ReportsActivity extends AppCompatActivity {
 
     private FrameLayout btnNotification;
     private MaterialCardView btnProfileAvatar;
-    private EditText etCentroDistribuicao;
+    private TextView tvCentroDistribuicao;
     private LinearLayout spnCamara;
     private TextView tvSelectedCamara;
     private LinearLayout btnDataInicial;
@@ -45,7 +45,7 @@ public class ReportsActivity extends AppCompatActivity {
     private void initViews() {
         btnNotification = findViewById(R.id.btnNotification);
         btnProfileAvatar = findViewById(R.id.btnProfileAvatar);
-        etCentroDistribuicao = findViewById(R.id.etCentroDistribuicao);
+        tvCentroDistribuicao = findViewById(R.id.tvCentroDistribuicao);
         spnCamara = findViewById(R.id.spnCamara);
         tvSelectedCamara = findViewById(R.id.tvSelectedCamara);
         btnDataInicial = findViewById(R.id.btnDataInicial);
