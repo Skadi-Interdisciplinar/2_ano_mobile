@@ -40,6 +40,18 @@
         <activity
             android:name=".CamerasActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".ReportsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".FullAnalysisActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".GeneratedReportActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

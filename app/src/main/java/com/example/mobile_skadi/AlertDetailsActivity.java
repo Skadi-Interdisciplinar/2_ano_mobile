@@ -115,7 +115,8 @@ public class AlertDetailsActivity extends AppCompatActivity {
         });
 
         navRelatorios.setOnClickListener(v -> {
-            // TODO: Navegar para Relatórios
+            startActivity(new Intent(this, ReportsActivity.class));
+            finish();
         });
 
         navTrimmy.setOnClickListener(v -> {
