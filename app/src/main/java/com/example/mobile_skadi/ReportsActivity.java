@@ -98,7 +98,7 @@ public class ReportsActivity extends AppCompatActivity {
 
         // Bottom Navigation
         navCamaras.setOnClickListener(v -> {
-            startActivity(new Intent(this, CamerasActivity.class));
+            startActivity(new Intent(this, CamarasActivity.class));
         });
 
         navAlertas.setOnClickListener(v -> {

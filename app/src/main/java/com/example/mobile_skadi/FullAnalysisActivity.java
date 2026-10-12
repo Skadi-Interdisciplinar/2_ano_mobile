@@ -65,7 +65,7 @@ public class FullAnalysisActivity extends AppCompatActivity {
 
         // Bottom Navigation
         navCamaras.setOnClickListener(v -> {
-            startActivity(new Intent(this, CamerasActivity.class));
+            startActivity(new Intent(this, CamarasActivity.class));
             finish();
         });
 
