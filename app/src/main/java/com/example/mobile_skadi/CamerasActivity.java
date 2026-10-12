@@ -91,27 +91,19 @@ public class CamerasActivity extends AppCompatActivity {
 
         // Detalhes das câmaras
         cardCamara291.setOnClickListener(v -> {
-            Intent intent = new Intent(this, AlertDetailsActivity.class);
-            intent.putExtra(AlertDetailsActivity.EXTRA_IS_RESOLVED, false);
-            startActivity(intent);
+            // TODO: Navegar para tela de Detalhes da Câmara 291
         });
 
         cardCamara61.setOnClickListener(v -> {
-            Intent intent = new Intent(this, AlertDetailsActivity.class);
-            intent.putExtra(AlertDetailsActivity.EXTRA_IS_RESOLVED, false);
-            startActivity(intent);
+            // TODO: Navegar para tela de Detalhes da Câmara 61
         });
 
         cardCamara1.setOnClickListener(v -> {
-            Intent intent = new Intent(this, AlertDetailsActivity.class);
-            intent.putExtra(AlertDetailsActivity.EXTRA_IS_RESOLVED, true);
-            startActivity(intent);
+            // TODO: Navegar para tela de Detalhes da Câmara 1
         });
 
         cardCamara521.setOnClickListener(v -> {
-            Intent intent = new Intent(this, AlertDetailsActivity.class);
-            intent.putExtra(AlertDetailsActivity.EXTRA_IS_RESOLVED, true);
-            startActivity(intent);
+            // TODO: Navegar para tela de Detalhes da Câmara 521
         });
 
         // Filtros (Chips)
