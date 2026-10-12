@@ -283,6 +283,7 @@
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
                                 android:src="@drawable/ic_location_pin"
+                                app:tint="@color/primary_dark"
                                 android:contentDescription="Local" />
 
                             <TextView
@@ -317,6 +318,7 @@
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
                                 android:src="@drawable/ic_thermometer_blue"
+                                app:tint="@color/primary_dark"
                                 android:contentDescription="Câmara" />
 
                             <TextView
@@ -350,6 +352,7 @@
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
                                 android:src="@drawable/ic_clock_gray"
+                                app:tint="@color/primary_dark"
                                 android:contentDescription="Situação" />
 
                             <TextView

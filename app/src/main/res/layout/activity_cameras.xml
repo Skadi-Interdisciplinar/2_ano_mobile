@@ -1,0 +1,646 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <!-- CONTEÚDO COM ROLAGEM -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollCameras"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="120dp">
+
+            <!-- CABEÇALHO AZUL ESCURO ARREDONDADO -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_header_rounded_bottom"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:paddingTop="50dp"
+                android:paddingBottom="24dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Câmaras"
+                        android:textColor="@color/white"
+                        android:textSize="24sp"
+                        android:fontFamily="@font/manrope"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Gerencie suas câmaras frigoríficas"
+                        android:textColor="#A8C4DC"
+                        android:textSize="13sp"
+                        android:fontFamily="@font/manrope"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+
+                <!-- BOTÃO NOTIFICAÇÃO (CIRCULAR) -->
+                <FrameLayout
+                    android:id="@+id/btnNotification"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/bg_circle_notif"
+                    android:layout_marginEnd="10dp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_bell_rounded"
+                        android:contentDescription="Notificações" />
+                </FrameLayout>
+
+                <!-- AVATAR DO USUÁRIO -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/btnProfileAvatar"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1.5dp"
+                    app:strokeColor="@color/white">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/logo_skadi"
+                        android:background="@color/primary_light"
+                        android:scaleType="centerInside"
+                        android:padding="4dp"
+                        android:contentDescription="Perfil" />
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!-- CORPO DA TELA (BUSCA, FILTROS E LISTA) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:paddingTop="20dp">
+
+                <!-- BARRA DE BUSCA EM PÍLULA COM ÍCONE DE LUPA -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="@drawable/bg_search_bar"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:layout_marginBottom="16dp">
+
+                    <EditText
+                        android:id="@+id/etSearchCameras"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:hint="Pesquise aqui..."
+                        android:textColorHint="#94A3B8"
+                        android:textColor="@color/primary_dark"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/manrope"
+                        android:singleLine="true"
+                        android:imeOptions="actionSearch" />
+
+                    <ImageView
+                        android:id="@+id/ivSearchIcon"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_search"
+                        android:contentDescription="Buscar" />
+                </LinearLayout>
+
+                <!-- FILTROS HORIZONTAIS (CHIPS) -->
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"
+                    android:layout_marginBottom="18dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <!-- CHIP 1: TODAS -->
+                        <TextView
+                            android:id="@+id/chipTodas"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Todas"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            android:fontFamily="@font/manrope"
+                            android:background="@drawable/bg_chip_filter_selected"
+                            android:paddingStart="14dp"
+                            android:paddingEnd="14dp"
+                            android:paddingTop="7dp"
+                            android:paddingBottom="7dp"
+                            android:layout_marginEnd="8dp"
+                            android:clickable="true"
+                            android:focusable="true" />
+
+                        <!-- CHIP 2: DENTRO DA FAIXA -->
+                        <TextView
+                            android:id="@+id/chipDentroFaixa"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Dentro da faixa"
+                            android:textColor="#64748B"
+                            android:textSize="12sp"
+                            android:fontFamily="@font/manrope"
+                            android:background="@drawable/bg_chip_filter_unselected"
+                            android:paddingStart="14dp"
+                            android:paddingEnd="14dp"
+                            android:paddingTop="7dp"
+                            android:paddingBottom="7dp"
+                            android:layout_marginEnd="8dp"
+                            android:clickable="true"
+                            android:focusable="true" />
+
+                        <!-- CHIP 3: ACIMA DA MÁX. -->
+                        <TextView
+                            android:id="@+id/chipAcimaMax"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Acima da máx."
+                            android:textColor="#64748B"
+                            android:textSize="12sp"
+                            android:fontFamily="@font/manrope"
+                            android:background="@drawable/bg_chip_filter_unselected"
+                            android:paddingStart="14dp"
+                            android:paddingEnd="14dp"
+                            android:paddingTop="7dp"
+                            android:paddingBottom="7dp"
+                            android:layout_marginEnd="8dp"
+                            android:clickable="true"
+                            android:focusable="true" />
+
+                        <!-- CHIP 4: ABAIXO DA MÍN. -->
+                        <TextView
+                            android:id="@+id/chipAbaixoMin"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Abaixo da mín."
+                            android:textColor="#64748B"
+                            android:textSize="12sp"
+                            android:fontFamily="@font/manrope"
+                            android:background="@drawable/bg_chip_filter_unselected"
+                            android:paddingStart="14dp"
+                            android:paddingEnd="14dp"
+                            android:paddingTop="7dp"
+                            android:paddingBottom="7dp"
+                            android:clickable="true"
+                            android:focusable="true" />
+
+                    </LinearLayout>
+                </HorizontalScrollView>
+
+                <!-- LISTAGEM DAS CÂMARAS -->
+                <LinearLayout
+                    android:id="@+id/layoutCamerasList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- CARD 1: CÂMARA 291 (CRÍTICO / ACIMA DA MÁX.) -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardCamara291"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="#E2E8F0"
+                        android:layout_marginBottom="14dp"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="16dp">
+
+                            <TextView
+                                android:id="@+id/tvNameCamara291"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Câmara 291"
+                                android:textColor="@color/primary_dark"
+                                android:textSize="15sp"
+                                android:fontFamily="@font/manrope"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Temperatura atual"
+                                android:textColor="@color/secondary_gray"
+                                android:textSize="11.5sp"
+                                android:fontFamily="@font/manrope"
+                                android:layout_marginTop="3dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="8,4°C"
+                                android:textColor="@color/alert_danger"
+                                android:textSize="26sp"
+                                android:fontFamily="@font/manrope"
+                                android:textStyle="bold"
+                                android:layout_marginTop="2dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Mín. 0°C | Máx. 4°C"
+                                android:textColor="@color/secondary_gray"
+                                android:textSize="11.5sp"
+                                android:fontFamily="@font/manrope"
+                                android:layout_marginTop="2dp" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- CARD 2: CÂMARA 61 (ATENÇÃO / ACIMA DA MÁX.) -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardCamara61"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="#E2E8F0"
+                        android:layout_marginBottom="14dp"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="16dp">
+
+                            <TextView
+                                android:id="@+id/tvNameCamara61"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Câmara 61"
+                                android:textColor="@color/primary_dark"
+                                android:textSize="15sp"
+                                android:fontFamily="@font/manrope"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Temperatura atual"
+                                android:textColor="@color/secondary_gray"
+                                android:textSize="11.5sp"
+                                android:fontFamily="@font/manrope"
+                                android:layout_marginTop="3dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="2,3°C"
+                                android:textColor="#E5A100"
+                                android:textSize="26sp"
+                                android:fontFamily="@font/manrope"
+                                android:textStyle="bold"
+                                android:layout_marginTop="2dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Mín. 0°C | Máx. 2°C"
+                                android:textColor="@color/secondary_gray"
+                                android:textSize="11.5sp"
+                                android:fontFamily="@font/manrope"
+                                android:layout_marginTop="2dp" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- CARD 3: CÂMARA 1 (ESTÁVEL / DENTRO DA FAIXA) -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardCamara1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="#E2E8F0"
+                        android:layout_marginBottom="14dp"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="16dp">
+
+                            <TextView
+                                android:id="@+id/tvNameCamara1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Câmara 1"
+                                android:textColor="@color/primary_dark"
+                                android:textSize="15sp"
+                                android:fontFamily="@font/manrope"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Temperatura atual"
+                                android:textColor="@color/secondary_gray"
+                                android:textSize="11.5sp"
+                                android:fontFamily="@font/manrope"
+                                android:layout_marginTop="3dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="1,4°C"
+                                android:textColor="@color/alert_success"
+                                android:textSize="26sp"
+                                android:fontFamily="@font/manrope"
+                                android:textStyle="bold"
+                                android:layout_marginTop="2dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Mín. 0°C | Máx. 4°C"
+                                android:textColor="@color/secondary_gray"
+                                android:textSize="11.5sp"
+                                android:fontFamily="@font/manrope"
+                                android:layout_marginTop="2dp" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- CARD 4: CÂMARA 521 (ESTÁVEL / DENTRO DA FAIXA) -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardCamara521"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="#E2E8F0"
+                        android:layout_marginBottom="14dp"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="16dp">
+
+                            <TextView
+                                android:id="@+id/tvNameCamara521"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Câmara 521"
+                                android:textColor="@color/primary_dark"
+                                android:textSize="15sp"
+                                android:fontFamily="@font/manrope"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Temperatura atual"
+                                android:textColor="@color/secondary_gray"
+                                android:textSize="11.5sp"
+                                android:fontFamily="@font/manrope"
+                                android:layout_marginTop="3dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="3,7°C"
+                                android:textColor="@color/alert_success"
+                                android:textSize="26sp"
+                                android:fontFamily="@font/manrope"
+                                android:textStyle="bold"
+                                android:layout_marginTop="2dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Mín. 0°C | Máx. 4°C"
+                                android:textColor="@color/secondary_gray"
+                                android:textSize="11.5sp"
+                                android:fontFamily="@font/manrope"
+                                android:layout_marginTop="2dp" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- TOOLBAR FLUTUANTE EM PÍLULA (COM CÂMARAS EM DESTAQUE NO CÍRCULO - FOTO) -->
+    <LinearLayout
+        android:id="@+id/bottomNavContainer"
+        android:layout_width="0dp"
+        android:layout_height="76dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal"
+        android:background="@drawable/bg_floating_bottom_bar"
+        android:elevation="10dp"
+        android:gravity="center_vertical"
+        android:paddingStart="6dp"
+        android:paddingEnd="6dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- 1. Câmaras (ABA ATIVA COM CÍRCULO AZUL MARINHO) -->
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.2"
+            android:gravity="center">
+
+            <LinearLayout
+                android:id="@+id/navCamaras"
+                android:layout_width="66dp"
+                android:layout_height="66dp"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/bg_circle_nav_home"
+                android:elevation="4dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:src="@drawable/ic_snowflake_white"
+                    android:contentDescription="Câmaras" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Câmaras"
+                    android:textColor="@color/white"
+                    android:textSize="10.5sp"
+                    android:fontFamily="@font/manrope"
+                    android:layout_marginTop="1dp" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <!-- 2. Alertas -->
+        <LinearLayout
+            android:id="@+id/navAlertas"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_megaphone"
+                android:contentDescription="Alertas" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Alertas"
+                android:textColor="@color/primary_dark"
+                android:textSize="11sp"
+                android:fontFamily="@font/manrope"
+                android:layout_marginTop="3dp" />
+        </LinearLayout>
+
+        <!-- 3. Início -->
+        <LinearLayout
+            android:id="@+id/navInicio"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_home_navy"
+                android:contentDescription="Início" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Início"
+                android:textColor="@color/primary_dark"
+                android:textSize="11sp"
+                android:fontFamily="@font/manrope"
+                android:layout_marginTop="3dp" />
+        </LinearLayout>
+
+        <!-- 4. Relatórios -->
+        <LinearLayout
+            android:id="@+id/navRelatorios"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_doc_report"
+                android:contentDescription="Relatórios" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Relatórios"
+                android:textColor="@color/primary_dark"
+                android:textSize="11sp"
+                android:fontFamily="@font/manrope"
+                android:layout_marginTop="3dp" />
+        </LinearLayout>
+
+        <!-- 5. Trimmy (IA) -->
+        <LinearLayout
+            android:id="@+id/navTrimmy"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_sparkle_trimmy"
+                android:contentDescription="Trimmy" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Trimmy"
+                android:textColor="@color/primary_dark"
+                android:textSize="11sp"
+                android:fontFamily="@font/manrope"
+                android:layout_marginTop="3dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
