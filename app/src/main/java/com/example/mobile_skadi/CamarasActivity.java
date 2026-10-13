@@ -19,11 +19,11 @@ import com.google.android.material.card.MaterialCardView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CamerasActivity extends AppCompatActivity {
+public class CamarasActivity extends AppCompatActivity {
 
     private FrameLayout btnNotification;
     private MaterialCardView btnProfileAvatar;
-    private EditText etSearchCameras;
+    private EditText etSearchCamaras;
 
     private TextView chipTodas;
     private TextView chipDentroFaixa;
@@ -51,7 +51,7 @@ public class CamerasActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cameras);
+        setContentView(R.layout.activity_camaras);
 
         initViews();
         setupListeners();
@@ -60,7 +60,7 @@ public class CamerasActivity extends AppCompatActivity {
     private void initViews() {
         btnNotification = findViewById(R.id.btnNotification);
         btnProfileAvatar = findViewById(R.id.btnProfileAvatar);
-        etSearchCameras = findViewById(R.id.etSearchCameras);
+        etSearchCamaras = findViewById(R.id.etSearchCamaras);
 
         chipTodas = findViewById(R.id.chipTodas);
         chipDentroFaixa = findViewById(R.id.chipDentroFaixa);
@@ -113,7 +113,7 @@ public class CamerasActivity extends AppCompatActivity {
         chipAbaixoMin.setOnClickListener(v -> selectFilter(FilterType.ABAIXO_DA_MIN));
 
         // Busca em tempo real
-        etSearchCameras.addTextChangedListener(new TextWatcher() {
+        etSearchCamaras.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
@@ -143,7 +143,7 @@ public class CamerasActivity extends AppCompatActivity {
         });
 
         navRelatorios.setOnClickListener(v -> {
-            // TODO: Navegar para Relatórios
+            startActivity(new Intent(this, ReportsActivity.class));
         });
 
         navTrimmy.setOnClickListener(v -> {
@@ -202,9 +202,9 @@ public class CamerasActivity extends AppCompatActivity {
         filterCard(cardCamara521, "câmara 521", FilterType.DENTRO_DA_FAIXA);
     }
 
-    private void filterCard(View card, String cameraName, FilterType cardCategory) {
+    private void filterCard(View card, String camaraName, FilterType cardCategory) {
         boolean matchesFilter = (currentFilter == FilterType.TODAS) || (currentFilter == cardCategory);
-        boolean matchesSearch = currentSearchQuery.isEmpty() || cameraName.contains(currentSearchQuery);
+        boolean matchesSearch = currentSearchQuery.isEmpty() || camaraName.contains(currentSearchQuery);
 
         card.setVisibility((matchesFilter && matchesSearch) ? View.VISIBLE : View.GONE);
     }

@@ -85,7 +85,7 @@ public class HomeActivity extends AppCompatActivity {
 
         // Bottom Navigation
         navCamaras.setOnClickListener(v -> {
-            startActivity(new Intent(this, CamerasActivity.class));
+            startActivity(new Intent(this, CamarasActivity.class));
         });
 
         navAlertas.setOnClickListener(v -> {
@@ -97,7 +97,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         navRelatorios.setOnClickListener(v -> {
-            // TODO: Navegar para tela de Relatórios
+            startActivity(new Intent(this, ReportsActivity.class));
         });
 
         navTrimmy.setOnClickListener(v -> {

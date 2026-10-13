@@ -86,7 +86,7 @@ public class AlertsActivity extends AppCompatActivity {
 
         // Barra inferior de navegação
         navCamaras.setOnClickListener(v -> {
-            startActivity(new Intent(this, CamerasActivity.class));
+            startActivity(new Intent(this, CamarasActivity.class));
         });
 
         navAlertas.setOnClickListener(v -> {
@@ -102,7 +102,7 @@ public class AlertsActivity extends AppCompatActivity {
         });
 
         navRelatorios.setOnClickListener(v -> {
-            // TODO: Navegar para tela de Relatórios
+            startActivity(new Intent(this, ReportsActivity.class));
         });
 
         navTrimmy.setOnClickListener(v -> {

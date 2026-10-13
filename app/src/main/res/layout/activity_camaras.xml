@@ -8,7 +8,7 @@
 
     <!-- CONTEÚDO COM ROLAGEM -->
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/scrollCameras"
+        android:id="@+id/scrollCamaras"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
@@ -120,7 +120,7 @@
                     android:layout_marginBottom="16dp">
 
                     <EditText
-                        android:id="@+id/etSearchCameras"
+                        android:id="@+id/etSearchCamaras"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -229,7 +229,7 @@
 
                 <!-- LISTAGEM DAS CÂMARAS -->
                 <LinearLayout
-                    android:id="@+id/layoutCamerasList"
+                    android:id="@+id/layoutCamarasList"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
