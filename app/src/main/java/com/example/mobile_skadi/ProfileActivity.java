@@ -62,6 +62,13 @@ public class ProfileActivity extends AppCompatActivity {
             Toast.makeText(this, "Nenhuma nova notificação no momento.", Toast.LENGTH_SHORT).show();
         });
 
+        MaterialCardView btnChangeProfilePhoto = findViewById(R.id.btnChangeProfilePhoto);
+        if (btnChangeProfilePhoto != null) {
+            btnChangeProfilePhoto.setOnClickListener(v -> {
+                Toast.makeText(this, "Alterar foto de perfil em breve", Toast.LENGTH_SHORT).show();
+            });
+        }
+
         // 1. Preferências do sistema
         cardPreferences.setOnClickListener(v -> {
             startActivity(new Intent(this, PreferencesActivity.class));

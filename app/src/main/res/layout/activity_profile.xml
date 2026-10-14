@@ -128,17 +128,17 @@
                 android:paddingEnd="20dp"
                 android:paddingTop="24dp">
 
-                <!-- FOTO DE PERFIL COM BADGE GD -->
+                <!-- FOTO DE PERFIL COM ÍCONE DE CÂMERA / BADGE SOBREPOSTO CORRETAMENTE -->
                 <FrameLayout
-                    android:layout_width="88dp"
-                    android:layout_height="88dp">
+                    android:layout_width="96dp"
+                    android:layout_height="96dp">
 
                     <com.google.android.material.card.MaterialCardView
-                        android:layout_width="84dp"
-                        android:layout_height="84dp"
+                        android:layout_width="88dp"
+                        android:layout_height="88dp"
                         android:layout_gravity="center"
-                        app:cardCornerRadius="42dp"
-                        app:cardElevation="2dp"
+                        app:cardCornerRadius="44dp"
+                        app:cardElevation="0dp"
                         app:strokeWidth="2.5dp"
                         app:strokeColor="#CBD5E1">
 
@@ -148,22 +148,31 @@
                             android:src="@drawable/logo_skadi"
                             android:background="@color/primary_light"
                             android:scaleType="centerInside"
-                            android:padding="12dp"
+                            android:padding="14dp"
                             android:contentDescription="Foto de perfil" />
                     </com.google.android.material.card.MaterialCardView>
 
-                    <!-- BADGE GD (GESTOR DE DEPARTAMENTO) -->
-                    <TextView
-                        android:layout_width="26dp"
-                        android:layout_height="26dp"
+                    <!-- ÍCONE DE CÂMERA COM SOBREPOSIÇÃO E ELEVAÇÃO CORRETAS -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/btnChangeProfilePhoto"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_gravity="bottom|end"
-                        android:background="@drawable/bg_avatar_badge_blue"
-                        android:gravity="center"
-                        android:text="GD"
-                        android:textColor="@color/white"
-                        android:textSize="9.5sp"
-                        android:fontFamily="@font/manrope"
-                        android:textStyle="bold" />
+                        app:cardCornerRadius="15dp"
+                        app:cardElevation="6dp"
+                        app:cardBackgroundColor="#2E8FEA"
+                        app:strokeWidth="2.5dp"
+                        app:strokeColor="@color/white"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_camera_white"
+                            android:contentDescription="Alterar foto" />
+                    </com.google.android.material.card.MaterialCardView>
                 </FrameLayout>
 
                 <!-- NOME E CARGO -->

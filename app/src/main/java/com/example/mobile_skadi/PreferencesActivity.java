@@ -19,7 +19,7 @@ public class PreferencesActivity extends AppCompatActivity {
     private FrameLayout btnNotification;
     private MaterialCardView btnProfileAvatar;
 
-    private SwitchCompat switchDarkMode;
+    private LinearLayout cardDarkMode;
     private LinearLayout cardLanguage;
     private TextView tvSelectedLanguage;
     private SwitchCompat switchNotifications;
@@ -29,8 +29,6 @@ public class PreferencesActivity extends AppCompatActivity {
     private LinearLayout navInicio;
     private LinearLayout navRelatorios;
     private LinearLayout navTrimmy;
-
-    private final String[] languages = {"Português - BR", "English - US", "Español - ES"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +44,7 @@ public class PreferencesActivity extends AppCompatActivity {
         btnNotification = findViewById(R.id.btnNotification);
         btnProfileAvatar = findViewById(R.id.btnProfileAvatar);
 
-        switchDarkMode = findViewById(R.id.switchDarkMode);
+        cardDarkMode = findViewById(R.id.cardDarkMode);
         cardLanguage = findViewById(R.id.cardLanguage);
         tvSelectedLanguage = findViewById(R.id.tvSelectedLanguage);
         switchNotifications = findViewById(R.id.switchNotifications);
@@ -67,18 +65,12 @@ public class PreferencesActivity extends AppCompatActivity {
 
         btnProfileAvatar.setOnClickListener(v -> finish());
 
-        switchDarkMode.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            Toast.makeText(this, isChecked ? "Modo escuro ativado" : "Modo escuro desativado", Toast.LENGTH_SHORT).show();
+        cardDarkMode.setOnClickListener(v -> {
+            Toast.makeText(this, "Modo escuro em desenvolvimento.", Toast.LENGTH_SHORT).show();
         });
 
         cardLanguage.setOnClickListener(v -> {
-            new AlertDialog.Builder(this)
-                    .setTitle("Selecione o idioma")
-                    .setItems(languages, (dialog, which) -> {
-                        tvSelectedLanguage.setText(languages[which]);
-                        Toast.makeText(this, "Idioma alterado para " + languages[which], Toast.LENGTH_SHORT).show();
-                    })
-                    .show();
+            Toast.makeText(this, "Seleção de idioma em desenvolvimento.", Toast.LENGTH_SHORT).show();
         });
 
         switchNotifications.setOnCheckedChangeListener((buttonView, isChecked) -> {
