@@ -84,7 +84,7 @@ public class AlertDetailsActivity extends AppCompatActivity {
         });
 
         btnProfileAvatar.setOnClickListener(v -> {
-            // TODO: Abrir perfil
+            startActivity(new Intent(this, ProfileActivity.class));
         });
 
         // Ação 1: Justificar alerta (Abre modal de Justificativa - Frame 204)

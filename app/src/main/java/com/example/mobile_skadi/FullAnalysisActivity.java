@@ -55,7 +55,7 @@ public class FullAnalysisActivity extends AppCompatActivity {
         });
 
         btnProfileAvatar.setOnClickListener(v -> {
-            // TODO: Abrir perfil
+            startActivity(new Intent(this, ProfileActivity.class));
         });
 
         // Baixar / Visualizar PDF (Abre Foto 3 - Relatório de Monitoramento Skadi)

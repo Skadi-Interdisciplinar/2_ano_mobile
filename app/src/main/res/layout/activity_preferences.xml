@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".PreferencesActivity">
+
+    <!-- CONTEÚDO COM ROLAGEM -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollPreferences"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="120dp">
+
+            <!-- CABEÇALHO AZUL ESCURO ARREDONDADO -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_header_rounded_bottom"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:paddingTop="50dp"
+                android:paddingBottom="24dp">
+
+                <!-- BOTÃO VOLTAR -->
+                <FrameLayout
+                    android:id="@+id/btnBack"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/bg_circle_notif"
+                    android:layout_marginEnd="12dp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_back_arrow_white"
+                        android:contentDescription="Voltar" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Preferências"
+                        android:textColor="@color/white"
+                        android:textSize="22sp"
+                        android:fontFamily="@font/manrope"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ajuste suas preferências"
+                        android:textColor="#A8C4DC"
+                        android:textSize="12.5sp"
+                        android:fontFamily="@font/manrope"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+
+                <!-- BOTÃO NOTIFICAÇÃO -->
+                <FrameLayout
+                    android:id="@+id/btnNotification"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/bg_circle_notif"
+                    android:layout_marginEnd="10dp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_bell_rounded"
+                        android:contentDescription="Notificações" />
+                </FrameLayout>
+
+                <!-- AVATAR HEADER -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/btnProfileAvatar"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1.5dp"
+                    app:strokeColor="@color/white">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/logo_skadi"
+                        android:background="@color/primary_light"
+                        android:scaleType="centerInside"
+                        android:padding="4dp"
+                        android:contentDescription="Perfil" />
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!-- CORPO DAS PREFERÊNCIAS -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:paddingTop="20dp">
+
+                <!-- SEÇÃO: GERAIS -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="Gerais"
+                    android:textColor="#0F2851"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/manrope"
+                    android:textStyle="bold" />
+
+                <!-- ITEM 1: MODO ESCURO (BLOQUEADO COM CADEADO) -->
+                <LinearLayout
+                    android:id="@+id/cardDarkMode"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/bg_profile_option_card"
+                    android:gravity="center_vertical"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/ic_moon"
+                        android:contentDescription="Modo escuro" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="14dp"
+                        android:text="Modo escuro"
+                        android:textColor="#0F2851"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/manrope"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_lock"
+                        android:contentDescription="Opção bloqueada" />
+                </LinearLayout>
+
+                <!-- ITEM 2: IDIOMA (BLOQUEADO COM CADEADO) -->
+                <LinearLayout
+                    android:id="@+id/cardLanguage"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginBottom="24dp"
+                    android:background="@drawable/bg_profile_option_card"
+                    android:gravity="center_vertical"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/ic_translate"
+                        android:contentDescription="Idioma" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="14dp"
+                        android:text="Idioma"
+                        android:textColor="#0F2851"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/manrope"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvSelectedLanguage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Português - BR"
+                        android:textColor="#94A3B8"
+                        android:textSize="13sp"
+                        android:fontFamily="@font/manrope" />
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginStart="8dp"
+                        android:src="@drawable/ic_lock"
+                        android:contentDescription="Opção bloqueada" />
+                </LinearLayout>
+
+                <!-- SEÇÃO: NOTIFICAÇÕES -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="Notificações"
+                    android:textColor="#0F2851"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/manrope"
+                    android:textStyle="bold" />
+
+                <!-- ITEM 3: ATIVAR NOTIFICAÇÕES -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/bg_profile_option_card"
+                    android:gravity="center_vertical"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/ic_bell_rounded"
+                        android:contentDescription="Notificações" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="14dp"
+                        android:text="Ativar notificações"
+                        android:textColor="#0F2851"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/manrope"
+                        android:textStyle="bold" />
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/switchNotifications"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- TOOLBAR FLUTUANTE EM PÍLULA -->
+    <LinearLayout
+        android:id="@+id/bottomNavFloating"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/bg_floating_bottom_bar"
+        android:elevation="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <!-- 1. Câmaras -->
+        <LinearLayout
+            android:id="@+id/navCamaras"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_snowflake"
+                android:contentDescription="Câmaras" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Câmaras"
+                android:textColor="@color/primary_dark"
+                android:textSize="11sp"
+                android:fontFamily="@font/manrope"
+                android:layout_marginTop="3dp" />
+        </LinearLayout>
+
+        <!-- 2. Alertas -->
+        <LinearLayout
+            android:id="@+id/navAlertas"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_megaphone"
+                android:contentDescription="Alertas" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Alertas"
+                android:textColor="@color/primary_dark"
+                android:textSize="11sp"
+                android:fontFamily="@font/manrope"
+                android:layout_marginTop="3dp" />
+        </LinearLayout>
+
+        <!-- 3. Início -->
+        <LinearLayout
+            android:id="@+id/navInicio"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_home_navy"
+                android:contentDescription="Início" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Início"
+                android:textColor="@color/primary_dark"
+                android:textSize="11sp"
+                android:fontFamily="@font/manrope"
+                android:layout_marginTop="3dp" />
+        </LinearLayout>
+
+        <!-- 4. Relatórios -->
+        <LinearLayout
+            android:id="@+id/navRelatorios"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_doc_report"
+                android:contentDescription="Relatórios" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Relatórios"
+                android:textColor="@color/primary_dark"
+                android:textSize="11sp"
+                android:fontFamily="@font/manrope"
+                android:layout_marginTop="3dp" />
+        </LinearLayout>
+
+        <!-- 5. Trimmy (IA) -->
+        <LinearLayout
+            android:id="@+id/navTrimmy"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_sparkle_trimmy"
+                android:contentDescription="Trimmy" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Trimmy"
+                android:textColor="@color/primary_dark"
+                android:textSize="11sp"
+                android:fontFamily="@font/manrope"
+                android:layout_marginTop="3dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
