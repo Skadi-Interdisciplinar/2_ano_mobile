@@ -86,7 +86,7 @@ public class CamarasActivity extends AppCompatActivity {
         });
 
         btnProfileAvatar.setOnClickListener(v -> {
-            // TODO: Navegar para tela de Perfil
+            startActivity(new Intent(this, ProfileActivity.class));
         });
 
         // Detalhes das câmaras

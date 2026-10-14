@@ -60,7 +60,7 @@ public class HomeActivity extends AppCompatActivity {
 
         // Perfil
         btnProfileAvatar.setOnClickListener(v -> {
-            // TODO: Navegar para tela de Perfil do Gestor
+            startActivity(new Intent(this, ProfileActivity.class));
         });
 
         // Ver todos os alertas

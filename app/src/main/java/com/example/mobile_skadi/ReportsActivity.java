@@ -69,7 +69,7 @@ public class ReportsActivity extends AppCompatActivity {
         });
 
         btnProfileAvatar.setOnClickListener(v -> {
-            // TODO: Abrir perfil
+            startActivity(new Intent(this, ProfileActivity.class));
         });
 
         // Seleção de câmara

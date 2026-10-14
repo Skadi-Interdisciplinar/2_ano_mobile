@@ -57,7 +57,7 @@ public class AlertsActivity extends AppCompatActivity {
 
         // Perfil
         btnProfileAvatar.setOnClickListener(v -> {
-            // TODO: Navegar para tela de Perfil do Gestor
+            startActivity(new Intent(this, ProfileActivity.class));
         });
 
         // Detalhes dos alertas

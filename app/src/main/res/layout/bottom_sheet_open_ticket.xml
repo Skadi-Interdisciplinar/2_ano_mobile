@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_bottom_sheet_dialog"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <!-- CABEÇALHO COM BOTÃO FECHAR E TÍTULO -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:id="@+id/btnCloseTicket"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@drawable/bg_circle_close"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_close_gray"
+                android:contentDescription="Fechar" />
+        </FrameLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:text="Abrir chamado"
+            android:textColor="#0F2851"
+            android:textSize="18sp"
+            android:fontFamily="@font/manrope"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- TIPO DO CHAMADO -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Tipo do chamado"
+        android:textColor="#0F2851"
+        android:textSize="13sp"
+        android:fontFamily="@font/manrope"
+        android:textStyle="bold" />
+
+    <FrameLayout
+        android:id="@+id/btnSelectTicketType"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_spinner_box"
+        android:clickable="true"
+        android:focusable="true">
+
+        <TextView
+            android:id="@+id/tvTicketTypeSelected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|start"
+            android:layout_marginStart="14dp"
+            android:text="Escolha opção"
+            android:textColor="#64748B"
+            android:textSize="14sp"
+            android:fontFamily="@font/manrope" />
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginEnd="14dp"
+            android:src="@drawable/ic_chevron_down"
+            android:contentDescription="Selecionar opção" />
+    </FrameLayout>
+
+    <!-- DESCRIÇÃO -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Descrição"
+        android:textColor="#0F2851"
+        android:textSize="13sp"
+        android:fontFamily="@font/manrope"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/etTicketDescription"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_input_box"
+        android:fontFamily="@font/manrope"
+        android:gravity="top|start"
+        android:hint="Descreva o chamado..."
+        android:inputType="textMultiLine"
+        android:padding="14dp"
+        android:textColor="#0F2851"
+        android:textColorHint="#94A3B8"
+        android:textSize="13.5sp" />
+
+    <!-- BOTÃO ENVIAR -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnSubmitTicket"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/bg_btn_navy_rounded"
+        android:fontFamily="@font/manrope"
+        android:text="Enviar"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+</LinearLayout>
