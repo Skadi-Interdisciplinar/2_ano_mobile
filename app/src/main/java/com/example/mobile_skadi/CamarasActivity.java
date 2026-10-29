@@ -147,7 +147,7 @@ public class CamarasActivity extends AppCompatActivity {
         });
 
         navTrimmy.setOnClickListener(v -> {
-            // TODO: Navegar para Trimmy
+            startActivity(new Intent(this, TrimmyActivity.class));
         });
     }
 

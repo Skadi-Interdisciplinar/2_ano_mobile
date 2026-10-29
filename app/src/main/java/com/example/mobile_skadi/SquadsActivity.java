@@ -120,7 +120,8 @@ public class SquadsActivity extends AppCompatActivity {
         });
 
         navTrimmy.setOnClickListener(v -> {
-            Toast.makeText(this, "Assistente Trimmy em desenvolvimento.", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, TrimmyActivity.class));
+            finish();
         });
     }
 
