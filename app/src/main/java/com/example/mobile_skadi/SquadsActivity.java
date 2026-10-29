@@ -149,10 +149,20 @@ public class SquadsActivity extends AppCompatActivity {
     }
 
     private void filterCard(View card, String text, String query) {
-        if (query.isEmpty() || text.contains(query)) {
+        if (matchesMemberSearch(text, query)) {
             card.setVisibility(View.VISIBLE);
         } else {
             card.setVisibility(View.GONE);
         }
+    }
+
+    static boolean matchesMemberSearch(String memberSearchableText, String query) {
+        if (query == null || query.trim().isEmpty()) {
+            return true;
+        }
+        if (memberSearchableText == null) {
+            return false;
+        }
+        return memberSearchableText.toLowerCase().contains(query.trim().toLowerCase());
     }
 }

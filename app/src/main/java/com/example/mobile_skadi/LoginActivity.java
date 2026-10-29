@@ -82,7 +82,14 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
-    // Helper para evitar boilerplate de TextWatcher
+        // Helper para evitar boilerplate de TextWatcher
+    static boolean isUsernameValid(String username) {
+        return username != null && !username.trim().isEmpty();
+    }
+
+    static boolean isPasswordValid(String password) {
+        return password != null && !password.trim().isEmpty();
+    }
     private static class SimpleTextWatcher implements TextWatcher {
         private final Runnable action;
         SimpleTextWatcher(Runnable action) { this.action = action; }

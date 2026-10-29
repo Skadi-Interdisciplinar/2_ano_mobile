@@ -48,7 +48,7 @@ public class ErrorStateActivity extends AppCompatActivity {
             case TYPE_SOMETHING_WRONG:
                 btnBackTop.setVisibility(View.VISIBLE);
                 ivErrorIcon.setImageResource(R.drawable.ic_error_circle_x);
-                tvErrorTitle.setText("Algo deu errado");
+                tvErrorTitle.setText(getErrorTitleForType(type));
                 tvErrorDescription.setText("Não foi possível carregar as informações no momento. Tente novamente em instantes.");
                 btnRetryError.setVisibility(View.VISIBLE);
                 break;
@@ -56,7 +56,7 @@ public class ErrorStateActivity extends AppCompatActivity {
             case TYPE_NOT_FOUND:
                 btnBackTop.setVisibility(View.VISIBLE);
                 ivErrorIcon.setImageResource(R.drawable.ic_error_not_found);
-                tvErrorTitle.setText("Página não encontrada");
+                tvErrorTitle.setText(getErrorTitleForType(type));
                 tvErrorDescription.setText("A página que você está procurando não existe ou foi movida.");
                 btnRetryError.setVisibility(View.GONE);
                 break;
@@ -65,10 +65,19 @@ public class ErrorStateActivity extends AppCompatActivity {
             default:
                 btnBackTop.setVisibility(View.GONE);
                 ivErrorIcon.setImageResource(R.drawable.ic_error_wifi_off);
-                tvErrorTitle.setText("Conecte-se à internet");
+                tvErrorTitle.setText(getErrorTitleForType(type));
                 tvErrorDescription.setText("Você está offline. Verifique sua conexão e tente novamente.");
                 btnRetryError.setVisibility(View.VISIBLE);
                 break;
         }
+    }
+
+    static String getErrorTitleForType(String type) {
+        if (TYPE_SOMETHING_WRONG.equals(type)) {
+            return "Algo deu errado";
+        } else if (TYPE_NOT_FOUND.equals(type)) {
+            return "Página não encontrada";
+        }
+        return "Conecte-se à internet";
     }
 }

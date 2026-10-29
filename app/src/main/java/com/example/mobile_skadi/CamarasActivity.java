@@ -41,7 +41,7 @@ public class CamarasActivity extends AppCompatActivity {
     private LinearLayout navRelatorios;
     private LinearLayout navTrimmy;
 
-    private enum FilterType {
+    enum FilterType {
         TODAS, DENTRO_DA_FAIXA, ACIMA_DA_MAX, ABAIXO_DA_MIN
     }
 
@@ -212,9 +212,14 @@ public class CamarasActivity extends AppCompatActivity {
     }
 
     private void filterCard(View card, String camaraName, FilterType cardCategory) {
-        boolean matchesFilter = (currentFilter == FilterType.TODAS) || (currentFilter == cardCategory);
-        boolean matchesSearch = currentSearchQuery.isEmpty() || camaraName.contains(currentSearchQuery);
+        boolean visible = shouldShowCamara(camaraName, cardCategory, currentFilter, currentSearchQuery);
+        card.setVisibility(visible ? View.VISIBLE : View.GONE);
+    }
 
-        card.setVisibility((matchesFilter && matchesSearch) ? View.VISIBLE : View.GONE);
+    static boolean shouldShowCamara(String camaraName, FilterType cardCategory, FilterType activeFilter, String searchQuery) {
+        boolean matchesFilter = (activeFilter == FilterType.TODAS) || (activeFilter == cardCategory);
+        String normalizedQuery = searchQuery != null ? searchQuery.trim().toLowerCase() : "";
+        boolean matchesSearch = normalizedQuery.isEmpty() || (camaraName != null && camaraName.toLowerCase().contains(normalizedQuery));
+        return matchesFilter && matchesSearch;
     }
 }
