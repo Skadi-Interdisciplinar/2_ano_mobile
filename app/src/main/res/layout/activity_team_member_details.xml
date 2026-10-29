@@ -1,0 +1,547 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <!-- CONTEÚDO COM ROLAGEM -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollTeamMemberDetails"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="120dp">
+
+            <!-- CABEÇALHO AZUL ESCURO ARREDONDADO -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_header_rounded_bottom"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:paddingTop="50dp"
+                android:paddingBottom="24dp">
+
+                <!-- BOTÃO VOLTAR -->
+                <FrameLayout
+                    android:id="@+id/btnBack"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/bg_circle_notif"
+                    android:layout_marginEnd="12dp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_back_arrow_white"
+                        android:contentDescription="Voltar" />
+                </FrameLayout>
+
+                <!-- TÍTULO E SUBTÍTULO -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Detalhes do colaborador"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:fontFamily="@font/manrope"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Acompanhe seus colaboradores"
+                        android:textColor="#A8C4DC"
+                        android:textSize="12sp"
+                        android:fontFamily="@font/manrope"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+
+                <!-- BOTÃO NOTIFICAÇÃO -->
+                <FrameLayout
+                    android:id="@+id/btnNotification"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/bg_circle_notif"
+                    android:layout_marginEnd="10dp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_bell_rounded"
+                        android:contentDescription="Notificações" />
+                </FrameLayout>
+
+                <!-- AVATAR HEADER -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/btnProfileAvatar"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1.5dp"
+                    app:strokeColor="@color/white">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/logo_skadi"
+                        android:background="@color/primary_light"
+                        android:scaleType="centerInside"
+                        android:padding="4dp"
+                        android:contentDescription="Perfil" />
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!-- CORPO DA TELA -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:paddingTop="24dp">
+
+                <!-- BLOCO SUPERIOR: AVATAR + NOME E CARGO AO LADO (FIEL AO FIGMA) -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="16dp">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="76dp"
+                        android:layout_height="76dp"
+                        app:cardCornerRadius="38dp"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="2dp"
+                        app:strokeColor="#CBD5E1">
+
+                        <TextView
+                            android:id="@+id/tvMemberInitials"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="#0F2851"
+                            android:gravity="center"
+                            android:text="DV"
+                            android:textColor="@color/white"
+                            android:textSize="24sp"
+                            android:fontFamily="@font/manrope"
+                            android:textStyle="bold" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvMemberName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Diego Valadares"
+                            android:textColor="#0F2851"
+                            android:textSize="19sp"
+                            android:fontFamily="@font/manrope"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvMemberRole"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:text="Operador(a)"
+                            android:textColor="#64748B"
+                            android:textSize="13.5sp"
+                            android:fontFamily="@font/manrope" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- METADADOS: USUÁRIO E UNIDADE -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="22dp">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_user_circle"
+                        android:contentDescription="Usuário" />
+
+                    <TextView
+                        android:id="@+id/tvMemberUsername"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:text="diego.valadares"
+                        android:textColor="#64748B"
+                        android:textSize="12.5sp"
+                        android:fontFamily="@font/manrope" />
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_marginStart="18dp"
+                        android:src="@drawable/ic_building"
+                        android:contentDescription="Unidade" />
+
+                    <TextView
+                        android:id="@+id/tvMemberUnit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:text="JBS Belterra"
+                        android:textColor="#64748B"
+                        android:textSize="12.5sp"
+                        android:fontFamily="@font/manrope" />
+                </LinearLayout>
+
+                <!-- LINHA DE 2 CARDS KPI DO COLABORADOR -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="16dp">
+
+                    <!-- CARD 1: EM ANDAMENTO -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="#E2E8F0"
+                        android:layout_marginEnd="6dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="14dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical"
+                                android:layout_marginBottom="8dp">
+
+                                <ImageView
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    android:src="@drawable/ic_alert_triangle_orange"
+                                    android:contentDescription="Em andamento" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Em andamento"
+                                    android:textColor="@color/alert_orange"
+                                    android:textSize="11sp"
+                                    android:fontFamily="@font/manrope"
+                                    android:textStyle="bold"
+                                    android:layout_marginStart="6dp" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/tvOpenAlertsCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="3"
+                                android:textColor="@color/primary_dark"
+                                android:textSize="26sp"
+                                android:fontFamily="@font/manrope"
+                                android:textStyle="bold"
+                                android:layout_marginBottom="4dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Alertas"
+                                android:textColor="@color/secondary_gray"
+                                android:textSize="11sp"
+                                android:fontFamily="@font/manrope" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- CARD 2: RESOLVIDOS -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="#E2E8F0"
+                        android:layout_marginStart="6dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="14dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical"
+                                android:layout_marginBottom="8dp">
+
+                                <ImageView
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    android:src="@drawable/ic_check_circle_green"
+                                    android:contentDescription="Resolvidos" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Resolvidos"
+                                    android:textColor="@color/alert_success"
+                                    android:textSize="11sp"
+                                    android:fontFamily="@font/manrope"
+                                    android:textStyle="bold"
+                                    android:layout_marginStart="6dp" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/tvResolvedAlertsCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="3"
+                                android:textColor="@color/primary_dark"
+                                android:textSize="26sp"
+                                android:fontFamily="@font/manrope"
+                                android:textStyle="bold"
+                                android:layout_marginBottom="4dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Alertas"
+                                android:textColor="@color/secondary_gray"
+                                android:textSize="11sp"
+                                android:fontFamily="@font/manrope" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+
+                <!-- QUADRO DE OBSERVAÇÕES / NOTAS DO COLABORADOR -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="#E2E8F0">
+
+                    <EditText
+                        android:id="@+id/etMemberNotes"
+                        android:layout_width="match_parent"
+                        android:layout_height="130dp"
+                        android:background="@null"
+                        android:gravity="top|start"
+                        android:padding="16dp"
+                        android:hint="Adicione uma observação sobre o colaborador..."
+                        android:textColorHint="#94A3B8"
+                        android:textColor="@color/primary_dark"
+                        android:textSize="13sp"
+                        android:fontFamily="@font/manrope"
+                        android:inputType="textMultiLine" />
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- TOOLBAR FLUTUANTE EM PÍLULA -->
+    <LinearLayout
+        android:id="@+id/bottomNavContainer"
+        android:layout_width="0dp"
+        android:layout_height="76dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal"
+        android:background="@drawable/bg_floating_bottom_bar"
+        android:elevation="10dp"
+        android:gravity="center_vertical"
+        android:paddingStart="6dp"
+        android:paddingEnd="6dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- 1. Câmaras -->
+        <LinearLayout
+            android:id="@+id/navCamaras"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_snowflake"
+                android:contentDescription="Câmaras" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Câmaras"
+                android:textColor="@color/primary_dark"
+                android:textSize="11sp"
+                android:fontFamily="@font/manrope"
+                android:layout_marginTop="3dp" />
+        </LinearLayout>
+
+        <!-- 2. Alertas -->
+        <LinearLayout
+            android:id="@+id/navAlertas"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_megaphone"
+                android:contentDescription="Alertas" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Alertas"
+                android:textColor="@color/primary_dark"
+                android:textSize="11sp"
+                android:fontFamily="@font/manrope"
+                android:layout_marginTop="3dp" />
+        </LinearLayout>
+
+        <!-- 3. Início -->
+        <LinearLayout
+            android:id="@+id/navInicio"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_home_navy"
+                android:contentDescription="Início" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Início"
+                android:textColor="@color/primary_dark"
+                android:textSize="11sp"
+                android:fontFamily="@font/manrope"
+                android:layout_marginTop="3dp" />
+        </LinearLayout>
+
+        <!-- 4. Relatórios -->
+        <LinearLayout
+            android:id="@+id/navRelatorios"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_doc_report"
+                android:contentDescription="Relatórios" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Relatórios"
+                android:textColor="@color/primary_dark"
+                android:textSize="11sp"
+                android:fontFamily="@font/manrope"
+                android:layout_marginTop="3dp" />
+        </LinearLayout>
+
+        <!-- 5. Trimmy (IA) -->
+        <LinearLayout
+            android:id="@+id/navTrimmy"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_sparkle_trimmy"
+                android:contentDescription="Trimmy" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Trimmy"
+                android:textColor="@color/primary_dark"
+                android:textSize="11sp"
+                android:fontFamily="@font/manrope"
+                android:layout_marginTop="3dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
