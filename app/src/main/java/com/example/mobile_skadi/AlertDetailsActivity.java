@@ -80,7 +80,7 @@ public class AlertDetailsActivity extends AppCompatActivity {
 
         // Notificações e Perfil
         btnNotification.setOnClickListener(v -> {
-            // TODO: Abrir tela/modal de Notificações
+            startActivity(new Intent(this, NotificationsActivity.class));
         });
 
         btnProfileAvatar.setOnClickListener(v -> {

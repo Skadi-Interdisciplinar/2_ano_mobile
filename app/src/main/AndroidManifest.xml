@@ -75,6 +75,12 @@
         <activity
             android:name=".CamaraDetailsActivity"
             android:exported="false" />
+        <activity
+            android:name=".NotificationsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TeamMemberDetailsActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -55,7 +55,7 @@ public class HomeActivity extends AppCompatActivity {
     private void setupListeners() {
         // Notificações
         btnNotification.setOnClickListener(v -> {
-            // TODO: Abrir tela/modal de Notificações
+            startActivity(new Intent(this, NotificationsActivity.class));
         });
 
         // Perfil

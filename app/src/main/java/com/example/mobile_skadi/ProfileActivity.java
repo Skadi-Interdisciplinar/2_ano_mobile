@@ -59,7 +59,7 @@ public class ProfileActivity extends AppCompatActivity {
         btnBack.setOnClickListener(v -> finish());
 
         btnNotification.setOnClickListener(v -> {
-            Toast.makeText(this, "Nenhuma nova notificação no momento.", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, NotificationsActivity.class));
         });
 
         MaterialCardView btnChangeProfilePhoto = findViewById(R.id.btnChangeProfilePhoto);

@@ -75,7 +75,7 @@ public class TrimmyActivity extends AppCompatActivity {
 
     private void setupListeners() {
         btnNotification.setOnClickListener(v -> {
-            Toast.makeText(this, "Nenhuma nova notificação no momento.", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, NotificationsActivity.class));
         });
 
         btnProfileAvatar.setOnClickListener(v -> {

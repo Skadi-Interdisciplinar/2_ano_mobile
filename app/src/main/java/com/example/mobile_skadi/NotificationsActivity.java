@@ -62,14 +62,14 @@ public class NotificationsActivity extends AppCompatActivity {
         notifItem1.setOnClickListener(v -> {
             markAsRead(notifItem1, dotUnread1);
             Intent intent = new Intent(this, AlertDetailsActivity.class);
-            intent.putExtra(AlertDetailsActivity.EXTRA_ALERT_TYPE, "CRITICAL");
+            intent.putExtra(AlertDetailsActivity.EXTRA_IS_RESOLVED, false);
             startActivity(intent);
         });
 
         notifItem2.setOnClickListener(v -> {
             markAsRead(notifItem2, dotUnread2);
             Intent intent = new Intent(this, AlertDetailsActivity.class);
-            intent.putExtra(AlertDetailsActivity.EXTRA_ALERT_TYPE, "WARNING");
+            intent.putExtra(AlertDetailsActivity.EXTRA_IS_RESOLVED, false);
             startActivity(intent);
         });
 
