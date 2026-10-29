@@ -75,7 +75,7 @@ public class HomeActivity extends AppCompatActivity {
 
         // Mapa das unidades
         btnMapaUnidades.setOnClickListener(v -> {
-            // TODO: Abrir BottomSheet / Tela do Mapa
+            startActivity(new Intent(this, CdMapActivity.class));
         });
 
         // Níveis de alerta

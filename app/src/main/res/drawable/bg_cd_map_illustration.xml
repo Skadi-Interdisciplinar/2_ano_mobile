@@ -1,0 +1,27 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="320dp"
+    android:height="220dp"
+    android:viewportWidth="320"
+    android:viewportHeight="220">
+    <!-- Fundo azul claro do mapa -->
+    <path
+        android:fillColor="#CFE8FF"
+        android:pathData="M0,0h320v220h-320z" />
+    <!-- Quadras / áreas secundárias sutis -->
+    <path
+        android:fillColor="#DCEEFF"
+        android:pathData="M0,0 L140,0 L95,220 L0,220 Z" />
+    <path
+        android:fillColor="#DCEEFF"
+        android:pathData="M210,0 L320,0 L320,130 L175,130 Z" />
+    <!-- Estrada diagonal principal (preta/chumbo fiel ao Figma) -->
+    <path
+        android:fillColor="#111827"
+        android:pathData="M168,0 L204,0 L144,220 L108,220 Z" />
+    <!-- Faixas tracejadas brancas da pista -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:pathData="M183,14 L177,36 M171,58 L165,80 M159,102 L153,124 M147,146 L141,168 M135,190 L129,212" />
+</vector>
