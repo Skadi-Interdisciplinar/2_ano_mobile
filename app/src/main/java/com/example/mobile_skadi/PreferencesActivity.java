@@ -60,7 +60,7 @@ public class PreferencesActivity extends AppCompatActivity {
         btnBack.setOnClickListener(v -> finish());
 
         btnNotification.setOnClickListener(v -> {
-            Toast.makeText(this, "Nenhuma nova notificação no momento.", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, NotificationsActivity.class));
         });
 
         btnProfileAvatar.setOnClickListener(v -> finish());

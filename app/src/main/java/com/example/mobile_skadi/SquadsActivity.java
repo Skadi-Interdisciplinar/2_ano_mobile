@@ -69,18 +69,18 @@ public class SquadsActivity extends AppCompatActivity {
         btnBack.setOnClickListener(v -> finish());
 
         btnNotification.setOnClickListener(v -> {
-            Toast.makeText(this, "Nenhuma nova notificação no momento.", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, NotificationsActivity.class));
         });
 
         btnProfileAvatar.setOnClickListener(v -> finish());
 
-        // Ações nos colaboradores
-        setupMemberClick(cardMemberDiego, "Diego Valadares - Operador(a)");
-        setupMemberClick(cardMemberMarise, "Marise Peres - Gestor(a)");
-        setupMemberClick(cardMemberRoberta, "Roberta Furtado - Operador(a)");
-        setupMemberClick(cardMemberSergio, "Sérgio Silva - Operador(a)");
-        setupMemberClick(cardMemberCaio, "Caio Pinheiro - Operador(a)");
-        setupMemberClick(cardMemberJoao, "João Paulo Silveira - Operador(a)");
+        // Ações nos colaboradores -> abre Detalhes do Colaborador
+        setupMemberClick(cardMemberDiego, "Diego Valadares", "Operador(a)", "DV", "diego.valadares", "#0F2851", "3", "3");
+        setupMemberClick(cardMemberMarise, "Marise Peres", "Gestor(a)", "MP", "marise.peres", "#2E8FEA", "1", "8");
+        setupMemberClick(cardMemberRoberta, "Roberta Furtado", "Operador(a)", "RF", "roberta.furtado", "#55D8FF", "2", "5");
+        setupMemberClick(cardMemberSergio, "Sérgio Silva", "Operador(a)", "SS", "sergio.silva", "#0F2E4F", "0", "6");
+        setupMemberClick(cardMemberCaio, "Caio Pinheiro", "Operador(a)", "CP", "caio.pinheiro", "#718096", "1", "4");
+        setupMemberClick(cardMemberJoao, "João Paulo Silveira", "Operador(a)", "JP", "joao.silveira", "#2D3748", "2", "7");
 
         // Busca em tempo real
         etSearchTeam.addTextChangedListener(new TextWatcher() {
@@ -125,9 +125,17 @@ public class SquadsActivity extends AppCompatActivity {
         });
     }
 
-    private void setupMemberClick(View card, String details) {
+    private void setupMemberClick(View card, String name, String role, String initials, String username, String bgColor, String openAlerts, String resolvedAlerts) {
         card.setOnClickListener(v -> {
-            Toast.makeText(this, details, Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, TeamMemberDetailsActivity.class);
+            intent.putExtra(TeamMemberDetailsActivity.EXTRA_MEMBER_NAME, name);
+            intent.putExtra(TeamMemberDetailsActivity.EXTRA_MEMBER_ROLE, role);
+            intent.putExtra(TeamMemberDetailsActivity.EXTRA_MEMBER_INITIALS, initials);
+            intent.putExtra(TeamMemberDetailsActivity.EXTRA_MEMBER_USERNAME, username);
+            intent.putExtra(TeamMemberDetailsActivity.EXTRA_MEMBER_BG_COLOR, bgColor);
+            intent.putExtra(TeamMemberDetailsActivity.EXTRA_OPEN_ALERTS, openAlerts);
+            intent.putExtra(TeamMemberDetailsActivity.EXTRA_RESOLVED_ALERTS, resolvedAlerts);
+            startActivity(intent);
         });
     }
 

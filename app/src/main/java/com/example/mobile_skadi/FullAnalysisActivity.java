@@ -51,7 +51,7 @@ public class FullAnalysisActivity extends AppCompatActivity {
 
         // Notificações e Perfil
         btnNotification.setOnClickListener(v -> {
-            // TODO: Abrir notificações
+            startActivity(new Intent(this, NotificationsActivity.class));
         });
 
         btnProfileAvatar.setOnClickListener(v -> {
