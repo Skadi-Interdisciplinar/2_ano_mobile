@@ -81,6 +81,12 @@
         <activity
             android:name=".TeamMemberDetailsActivity"
             android:exported="false" />
+        <activity
+            android:name=".CdMapActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ErrorStateActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
