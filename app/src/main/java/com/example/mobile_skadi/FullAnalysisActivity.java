@@ -84,7 +84,8 @@ public class FullAnalysisActivity extends AppCompatActivity {
         navRelatorios.setOnClickListener(v -> finish());
 
         navTrimmy.setOnClickListener(v -> {
-            // TODO: Navegar para Trimmy
+            startActivity(new Intent(this, TrimmyActivity.class));
+            finish();
         });
     }
 }

@@ -101,7 +101,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         navTrimmy.setOnClickListener(v -> {
-            // TODO: Navegar para tela do Trimmy (Chat de IA no Gestor Empresarial)
+            startActivity(new Intent(this, TrimmyActivity.class));
         });
     }
 }

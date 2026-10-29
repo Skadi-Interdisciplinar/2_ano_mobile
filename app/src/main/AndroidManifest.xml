@@ -68,6 +68,10 @@
         <activity
             android:name=".SquadsActivity"
             android:exported="false" />
+        <activity
+            android:name=".TrimmyActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>

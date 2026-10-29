@@ -106,7 +106,7 @@ public class AlertsActivity extends AppCompatActivity {
         });
 
         navTrimmy.setOnClickListener(v -> {
-            // TODO: Navegar para tela do Trimmy
+            startActivity(new Intent(this, TrimmyActivity.class));
         });
     }
 }
