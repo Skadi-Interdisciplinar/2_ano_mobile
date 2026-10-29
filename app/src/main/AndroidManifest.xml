@@ -72,6 +72,9 @@
             android:name=".TrimmyActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".CamaraDetailsActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

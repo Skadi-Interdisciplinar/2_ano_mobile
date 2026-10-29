@@ -91,19 +91,19 @@ public class CamarasActivity extends AppCompatActivity {
 
         // Detalhes das câmaras
         cardCamara291.setOnClickListener(v -> {
-            // TODO: Navegar para tela de Detalhes da Câmara 291
+            openCamaraDetails("Câmara 291", "8,4°C", "0°C — 4°C", true);
         });
 
         cardCamara61.setOnClickListener(v -> {
-            // TODO: Navegar para tela de Detalhes da Câmara 61
+            openCamaraDetails("Câmara 61", "2,3°C", "0°C — 2°C", true);
         });
 
         cardCamara1.setOnClickListener(v -> {
-            // TODO: Navegar para tela de Detalhes da Câmara 1
+            openCamaraDetails("Câmara 1", "1,4°C", "0°C — 4°C", false);
         });
 
         cardCamara521.setOnClickListener(v -> {
-            // TODO: Navegar para tela de Detalhes da Câmara 521
+            openCamaraDetails("Câmara 521", "3,7°C", "0°C — 4°C", false);
         });
 
         // Filtros (Chips)
@@ -149,6 +149,15 @@ public class CamarasActivity extends AppCompatActivity {
         navTrimmy.setOnClickListener(v -> {
             startActivity(new Intent(this, TrimmyActivity.class));
         });
+    }
+
+    private void openCamaraDetails(String name, String currentTemp, String tempRange, boolean isCritical) {
+        Intent intent = new Intent(this, CamaraDetailsActivity.class);
+        intent.putExtra(CamaraDetailsActivity.EXTRA_CAMARA_NAME, name);
+        intent.putExtra(CamaraDetailsActivity.EXTRA_CURRENT_TEMP, currentTemp);
+        intent.putExtra(CamaraDetailsActivity.EXTRA_TEMP_RANGE, tempRange);
+        intent.putExtra(CamaraDetailsActivity.EXTRA_IS_CRITICAL, isCritical);
+        startActivity(intent);
     }
 
     private void selectFilter(FilterType filter) {
