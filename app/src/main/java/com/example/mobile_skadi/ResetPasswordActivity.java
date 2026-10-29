@@ -114,4 +114,14 @@ public class ResetPasswordActivity extends AppCompatActivity {
             finish();
         });
     }
+
+    static boolean arePasswordFieldsFilled(String current, String newPass, String confirmPass) {
+        return current != null && !current.trim().isEmpty()
+                && newPass != null && !newPass.trim().isEmpty()
+                && confirmPass != null && !confirmPass.trim().isEmpty();
+    }
+
+    static boolean doPasswordsMatch(String newPass, String confirmPass) {
+        return newPass != null && newPass.trim().equals(confirmPass != null ? confirmPass.trim() : null);
+    }
 }
