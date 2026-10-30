@@ -418,6 +418,23 @@
                         android:textStyle="bold" />
                 </LinearLayout>
 
+                <!-- OPÇÃO 6: EXCLUIR CONTA (FIGMA) -->
+                <TextView
+                    android:id="@+id/btnDeleteAccount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="16dp"
+                    android:padding="8dp"
+                    android:text="Excluir conta"
+                    android:textColor="#EF4444"
+                    android:textSize="13sp"
+                    android:fontFamily="@font/manrope"
+                    android:textStyle="bold"
+                    android:clickable="true"
+                    android:focusable="true" />
+
             </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

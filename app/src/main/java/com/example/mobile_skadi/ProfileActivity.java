@@ -105,6 +105,14 @@ public class ProfileActivity extends AppCompatActivity {
             LogoutDialog.show(this);
         });
 
+        // 6. Excluir conta
+        android.widget.TextView btnDeleteAccount = findViewById(R.id.btnDeleteAccount);
+        if (btnDeleteAccount != null) {
+            btnDeleteAccount.setOnClickListener(v -> {
+                DeleteAccountDialog.show(this);
+            });
+        }
+
         // Bottom Navigation
         navCamaras.setOnClickListener(v -> {
             startActivity(new Intent(this, CamarasActivity.class));
