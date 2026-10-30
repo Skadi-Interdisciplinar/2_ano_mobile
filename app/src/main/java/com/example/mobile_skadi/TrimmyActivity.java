@@ -76,7 +76,30 @@ public class TrimmyActivity extends AppCompatActivity {
         if (tvTrimmyGreeting != null) {
             tvTrimmyGreeting.setText("Como podemos te ajudar hoje,\n" + UserRoleManager.getFirstNameForGreeting() + "?");
         }
+        applyPlanState();
         UserRoleManager.applyBottomNavForRole(this);
+    }
+
+    private void applyPlanState() {
+        View layoutTrimmyBlocked = findViewById(R.id.layoutTrimmyBlocked);
+        View layoutChatInputBar = findViewById(R.id.layoutChatInputBar);
+
+        if (UserRoleManager.isBasicoPlan()) {
+            if (layoutTrimmyBlocked != null) layoutTrimmyBlocked.setVisibility(View.VISIBLE);
+            if (layoutTrimmyWelcome != null) layoutTrimmyWelcome.setVisibility(View.GONE);
+            if (scrollTrimmyChat != null) scrollTrimmyChat.setVisibility(View.GONE);
+            if (layoutChatInputBar != null) layoutChatInputBar.setVisibility(View.GONE);
+        } else {
+            if (layoutTrimmyBlocked != null) layoutTrimmyBlocked.setVisibility(View.GONE);
+            if (layoutChatInputBar != null) layoutChatInputBar.setVisibility(View.VISIBLE);
+            if (isChatStarted) {
+                if (layoutTrimmyWelcome != null) layoutTrimmyWelcome.setVisibility(View.GONE);
+                if (scrollTrimmyChat != null) scrollTrimmyChat.setVisibility(View.VISIBLE);
+            } else {
+                if (layoutTrimmyWelcome != null) layoutTrimmyWelcome.setVisibility(View.VISIBLE);
+                if (scrollTrimmyChat != null) scrollTrimmyChat.setVisibility(View.GONE);
+            }
+        }
     }
 
     private void setupListeners() {
@@ -87,6 +110,15 @@ public class TrimmyActivity extends AppCompatActivity {
         btnProfileAvatar.setOnClickListener(v -> {
             startActivity(new Intent(this, ProfileActivity.class));
         });
+
+        View btnUpgradeTrimmy = findViewById(R.id.btnUpgradeTrimmy);
+        if (btnUpgradeTrimmy != null) {
+            btnUpgradeTrimmy.setOnClickListener(v -> {
+                UserRoleManager.setCurrentPlan(UserRoleManager.Plan.EMPRESARIAL);
+                android.widget.Toast.makeText(this, "Upgrade realizado para o Plano Empresarial!", android.widget.Toast.LENGTH_SHORT).show();
+                applyPlanState();
+            });
+        }
 
         // Sugestões rápidas na tela inicial do Trimmy
         chipSuggest1.setOnClickListener(v -> startChatWithPrompt("Quais câmaras estão críticas hoje?"));

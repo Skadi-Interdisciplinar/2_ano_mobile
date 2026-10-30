@@ -12,6 +12,7 @@ public class UserRoleManagerUnitTest {
     @After
     public void tearDown() {
         UserRoleManager.setCurrentRole(UserRoleManager.Role.GESTOR);
+        UserRoleManager.setCurrentPlan(UserRoleManager.Plan.EMPRESARIAL);
     }
 
     @Test
@@ -38,5 +39,14 @@ public class UserRoleManagerUnitTest {
         assertEquals("Maria Eduarda Rosa", UserRoleManager.getFullName());
         assertEquals("Gestor(a)", UserRoleManager.getRoleLabel());
         assertEquals("maria.rosa0912", UserRoleManager.getUsernameHandle());
+    }
+
+    @Test
+    public void setRoleFromUsername_withBasicoPlan_setsBasicoPlan() {
+        UserRoleManager.setRoleFromUsername("maria.basico");
+        assertTrue(UserRoleManager.isBasicoPlan());
+
+        UserRoleManager.setRoleFromUsername("maria.rosa0912");
+        assertFalse(UserRoleManager.isBasicoPlan());
     }
 }

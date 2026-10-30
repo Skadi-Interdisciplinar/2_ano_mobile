@@ -10,9 +10,27 @@ public final class UserRoleManager {
         FUNCIONARIO
     }
 
+    public enum Plan {
+        BASICO,
+        EMPRESARIAL
+    }
+
     private static Role currentRole = Role.GESTOR;
+    private static Plan currentPlan = Plan.EMPRESARIAL;
 
     private UserRoleManager() {
+    }
+
+    public static Plan getCurrentPlan() {
+        return currentPlan;
+    }
+
+    public static void setCurrentPlan(Plan plan) {
+        currentPlan = (plan != null) ? plan : Plan.EMPRESARIAL;
+    }
+
+    public static boolean isBasicoPlan() {
+        return currentPlan == Plan.BASICO;
     }
 
     public static Role getCurrentRole() {
@@ -29,6 +47,13 @@ public final class UserRoleManager {
         } else {
             currentRole = Role.GESTOR;
         }
+
+        if (username != null && username.toLowerCase().contains("basico")) {
+            currentPlan = Plan.BASICO;
+        } else {
+            currentPlan = Plan.EMPRESARIAL;
+        }
+
         return currentRole;
     }
 

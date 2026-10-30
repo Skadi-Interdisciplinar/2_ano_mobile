@@ -87,6 +87,90 @@
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 
+    <!-- ESTADO BLOQUEADO: PLANO BÁSICO (FIGMA GESTOR E FUNCIONÁRIO BÁSICO V1) -->
+    <LinearLayout
+        android:id="@+id/layoutTrimmyBlocked"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerTrimmy">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeColor="#CBD5E1"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:padding="24dp">
+
+                <FrameLayout
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/bg_circle_light_blue">
+
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_gravity="center"
+                        android:contentDescription="Bloqueado"
+                        android:src="@drawable/ic_lock"
+                        app:tint="@color/primary_dark" />
+                </FrameLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/manrope"
+                    android:gravity="center"
+                    android:text="Funcionalidade do Plano Empresarial"
+                    android:textColor="@color/primary_dark"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="22dp"
+                    android:fontFamily="@font/manrope"
+                    android:gravity="center"
+                    android:lineSpacingMultiplier="1.2"
+                    android:text="O assistente de inteligência artificial Trimmy é exclusivo do plano Empresarial. Faça upgrade para desbloquear diagnósticos preditivos e suporte em tempo real."
+                    android:textColor="@color/secondary_gray"
+                    android:textSize="13sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnUpgradeTrimmy"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:fontFamily="@font/manrope"
+                    android:text="Fazer upgrade"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="14.5sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/primary_dark"
+                    app:cornerRadius="12dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+
     <!-- ESTADO 1: TELA INICIAL DE BOAS-VINDAS (FIGMA TELA 1 DO TRIMMY) -->
     <LinearLayout
         android:id="@+id/layoutTrimmyWelcome"
