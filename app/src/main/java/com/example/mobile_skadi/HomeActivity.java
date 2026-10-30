@@ -50,6 +50,16 @@ public class HomeActivity extends AppCompatActivity {
         navInicio = findViewById(R.id.navInicio);
         navRelatorios = findViewById(R.id.navRelatorios);
         navTrimmy = findViewById(R.id.navTrimmy);
+
+        TextView tvGreeting = findViewById(R.id.tvGreeting);
+        if (tvGreeting != null) {
+            tvGreeting.setText("Olá, " + UserRoleManager.getFirstNameForGreeting() + "!");
+        }
+        View layoutManagerExtraSection = findViewById(R.id.layoutManagerExtraSection);
+        if (layoutManagerExtraSection != null) {
+            layoutManagerExtraSection.setVisibility(UserRoleManager.isEmployee() ? View.GONE : View.VISIBLE);
+        }
+        UserRoleManager.applyBottomNavForRole(this);
     }
 
     private void setupListeners() {

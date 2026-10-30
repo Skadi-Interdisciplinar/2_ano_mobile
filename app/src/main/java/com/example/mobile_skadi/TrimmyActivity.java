@@ -71,6 +71,12 @@ public class TrimmyActivity extends AppCompatActivity {
         navInicio = findViewById(R.id.navInicio);
         navRelatorios = findViewById(R.id.navRelatorios);
         navTrimmy = findViewById(R.id.navTrimmy);
+
+        TextView tvTrimmyGreeting = findViewById(R.id.tvTrimmyGreeting);
+        if (tvTrimmyGreeting != null) {
+            tvTrimmyGreeting.setText("Como podemos te ajudar hoje,\n" + UserRoleManager.getFirstNameForGreeting() + "?");
+        }
+        UserRoleManager.applyBottomNavForRole(this);
     }
 
     private void setupListeners() {
