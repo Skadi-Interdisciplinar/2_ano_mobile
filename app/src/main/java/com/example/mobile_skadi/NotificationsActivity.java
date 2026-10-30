@@ -50,6 +50,7 @@ public class NotificationsActivity extends AppCompatActivity {
         navInicio = findViewById(R.id.navInicio);
         navRelatorios = findViewById(R.id.navRelatorios);
         navTrimmy = findViewById(R.id.navTrimmy);
+        UserRoleManager.applyBottomNavForRole(this);
     }
 
     private void setupListeners() {

@@ -72,6 +72,10 @@ public class AlertDetailsActivity extends AppCompatActivity {
         navInicio = findViewById(R.id.navInicio);
         navRelatorios = findViewById(R.id.navRelatorios);
         navTrimmy = findViewById(R.id.navTrimmy);
+        if (btnJustificar != null) {
+            btnJustificar.setVisibility(UserRoleManager.isEmployee() ? View.GONE : View.VISIBLE);
+        }
+        UserRoleManager.applyBottomNavForRole(this);
     }
 
     private void setupListeners() {

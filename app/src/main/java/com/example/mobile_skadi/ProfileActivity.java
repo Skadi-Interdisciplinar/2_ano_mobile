@@ -53,6 +53,17 @@ public class ProfileActivity extends AppCompatActivity {
         navInicio = findViewById(R.id.navInicio);
         navRelatorios = findViewById(R.id.navRelatorios);
         navTrimmy = findViewById(R.id.navTrimmy);
+
+        android.widget.TextView tvProfileName = findViewById(R.id.tvProfileName);
+        android.widget.TextView tvProfileRole = findViewById(R.id.tvProfileRole);
+        android.widget.TextView tvProfileUsername = findViewById(R.id.tvProfileUsername);
+        if (tvProfileName != null) tvProfileName.setText(UserRoleManager.getFullName());
+        if (tvProfileRole != null) tvProfileRole.setText(UserRoleManager.getRoleLabel());
+        if (tvProfileUsername != null) tvProfileUsername.setText(UserRoleManager.getUsernameHandle());
+        if (cardMyTeam != null) {
+            cardMyTeam.setVisibility(UserRoleManager.isEmployee() ? android.view.View.GONE : android.view.View.VISIBLE);
+        }
+        UserRoleManager.applyBottomNavForRole(this);
     }
 
     private void setupListeners() {

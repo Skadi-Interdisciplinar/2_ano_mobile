@@ -76,7 +76,8 @@ public class LoginActivity extends AppCompatActivity {
         // TODO: chamar API de autenticacao
         // Ex: authViewModel.login(usuario, senha);
 
-        // Navega para a Home
+        // Define o perfil (Gestor ou Funcionário) e navega para a Home
+        UserRoleManager.setRoleFromUsername(usuario);
         Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
         finish();

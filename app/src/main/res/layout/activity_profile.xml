@@ -177,6 +177,7 @@
 
                 <!-- NOME E CARGO -->
                 <TextView
+                    android:id="@+id/tvProfileName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
@@ -187,6 +188,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tvProfileRole"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
@@ -211,6 +213,7 @@
                         android:contentDescription="Usuário" />
 
                     <TextView
+                        android:id="@+id/tvProfileUsername"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="6dp"
