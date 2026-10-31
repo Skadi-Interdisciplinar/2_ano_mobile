@@ -9,8 +9,17 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.example.mobile_skadi.network.RetrofitClient;
+import com.example.mobile_skadi.network.SkadiApiService;
+import com.example.mobile_skadi.network.dto.ColdRoomResponse;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class CamaraDetailsActivity extends AppCompatActivity {
 
+    public static final String EXTRA_CAMARA_ID = "extra_camara_id";
     public static final String EXTRA_CAMARA_NAME = "extra_camara_name";
     public static final String EXTRA_CURRENT_TEMP = "extra_current_temp";
     public static final String EXTRA_TEMP_RANGE = "extra_temp_range";
@@ -18,6 +27,7 @@ public class CamaraDetailsActivity extends AppCompatActivity {
 
     private FrameLayout btnBack;
     private TextView tvCamaraTitle;
+    private TextView tvCamaraSubtitle;
     private TextView tvCamaraStatusBadge;
     private TextView tvCurrentTemp;
     private TextView tvTempRange;
@@ -42,6 +52,7 @@ public class CamaraDetailsActivity extends AppCompatActivity {
     private void initViews() {
         btnBack = findViewById(R.id.btnBack);
         tvCamaraTitle = findViewById(R.id.tvCamaraTitle);
+        tvCamaraSubtitle = findViewById(R.id.tvCamaraSubtitle);
         tvCamaraStatusBadge = findViewById(R.id.tvCamaraStatusBadge);
         tvCurrentTemp = findViewById(R.id.tvCurrentTemp);
         tvTempRange = findViewById(R.id.tvTempRange);
@@ -59,6 +70,7 @@ public class CamaraDetailsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent == null) return;
 
+        long camaraId = intent.getLongExtra(EXTRA_CAMARA_ID, -1L);
         String camaraName = intent.getStringExtra(EXTRA_CAMARA_NAME);
         String currentTemp = intent.getStringExtra(EXTRA_CURRENT_TEMP);
         String tempRange = intent.getStringExtra(EXTRA_TEMP_RANGE);
@@ -86,6 +98,42 @@ public class CamaraDetailsActivity extends AppCompatActivity {
             tvCamaraStatusBadge.setBackgroundResource(R.drawable.bg_badge_stable);
             tvCurrentTemp.setTextColor(ContextCompat.getColor(this, R.color.primary_dark));
         }
+
+        if (camaraId > 0) {
+            loadCamaraDetailsFromApi(camaraId);
+        }
+    }
+
+    private void loadCamaraDetailsFromApi(long id) {
+        SkadiApiService apiService = RetrofitClient.getApiService(this);
+        apiService.getColdRoomById(id).enqueue(new Callback<ColdRoomResponse>() {
+            @Override
+            public void onResponse(Call<ColdRoomResponse> call, Response<ColdRoomResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    ColdRoomResponse camara = response.body();
+                    if (camara.getModel() != null && !camara.getModel().isEmpty()) {
+                        tvCamaraTitle.setText(camara.getModel());
+                    }
+                    if (camara.getDistributionCenterName() != null && !camara.getDistributionCenterName().isEmpty()) {
+                        if (tvCamaraSubtitle != null) {
+                            tvCamaraSubtitle.setText(camara.getDistributionCenterName());
+                        }
+                    } else if (camara.getLocation() != null && !camara.getLocation().isEmpty()) {
+                        if (tvCamaraSubtitle != null) {
+                            tvCamaraSubtitle.setText(camara.getLocation());
+                        }
+                    }
+                    if (camara.getMinimumTemperature() != null && camara.getMaximumTemperature() != null) {
+                        tvTempRange.setText(String.format("%s°C — %s°C", camara.getMinimumTemperature(), camara.getMaximumTemperature()));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ColdRoomResponse> call, Throwable t) {
+                // Modo offline/resiliente: preserva os dados recebidos via Intent
+            }
+        });
     }
 
     private void setupListeners() {
