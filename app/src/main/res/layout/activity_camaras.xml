@@ -274,6 +274,7 @@
                                 android:layout_marginTop="3dp" />
 
                             <TextView
+                                android:id="@+id/tvTempCamara291"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="8,4°C"
@@ -284,6 +285,7 @@
                                 android:layout_marginTop="2dp" />
 
                             <TextView
+                                android:id="@+id/tvRangeCamara291"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Mín. 0°C | Máx. 4°C"
@@ -334,6 +336,7 @@
                                 android:layout_marginTop="3dp" />
 
                             <TextView
+                                android:id="@+id/tvTempCamara61"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="2,3°C"
@@ -344,6 +347,7 @@
                                 android:layout_marginTop="2dp" />
 
                             <TextView
+                                android:id="@+id/tvRangeCamara61"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Mín. 0°C | Máx. 2°C"
@@ -394,6 +398,7 @@
                                 android:layout_marginTop="3dp" />
 
                             <TextView
+                                android:id="@+id/tvTempCamara1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="1,4°C"
@@ -404,6 +409,7 @@
                                 android:layout_marginTop="2dp" />
 
                             <TextView
+                                android:id="@+id/tvRangeCamara1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Mín. 0°C | Máx. 4°C"
@@ -454,6 +460,7 @@
                                 android:layout_marginTop="3dp" />
 
                             <TextView
+                                android:id="@+id/tvTempCamara521"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="3,7°C"
@@ -464,6 +471,7 @@
                                 android:layout_marginTop="2dp" />
 
                             <TextView
+                                android:id="@+id/tvRangeCamara521"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Mín. 0°C | Máx. 4°C"

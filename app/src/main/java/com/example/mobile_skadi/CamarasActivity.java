@@ -12,12 +12,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
+import com.example.mobile_skadi.network.RetrofitClient;
+import com.example.mobile_skadi.network.SkadiApiService;
+import com.example.mobile_skadi.network.dto.ColdRoomResponse;
 import com.google.android.material.card.MaterialCardView;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CamarasActivity extends AppCompatActivity {
 
@@ -34,6 +39,11 @@ public class CamarasActivity extends AppCompatActivity {
     private MaterialCardView cardCamara61;
     private MaterialCardView cardCamara1;
     private MaterialCardView cardCamara521;
+
+    private TextView tvNameCamara291, tvTempCamara291, tvRangeCamara291;
+    private TextView tvNameCamara61, tvTempCamara61, tvRangeCamara61;
+    private TextView tvNameCamara1, tvTempCamara1, tvRangeCamara1;
+    private TextView tvNameCamara521, tvTempCamara521, tvRangeCamara521;
 
     private LinearLayout navCamaras;
     private LinearLayout navAlertas;
@@ -55,6 +65,7 @@ public class CamarasActivity extends AppCompatActivity {
 
         initViews();
         setupListeners();
+        loadCamarasFromApi();
     }
 
     private void initViews() {
@@ -71,6 +82,22 @@ public class CamarasActivity extends AppCompatActivity {
         cardCamara61 = findViewById(R.id.cardCamara61);
         cardCamara1 = findViewById(R.id.cardCamara1);
         cardCamara521 = findViewById(R.id.cardCamara521);
+
+        tvNameCamara291 = findViewById(R.id.tvNameCamara291);
+        tvTempCamara291 = findViewById(R.id.tvTempCamara291);
+        tvRangeCamara291 = findViewById(R.id.tvRangeCamara291);
+
+        tvNameCamara61 = findViewById(R.id.tvNameCamara61);
+        tvTempCamara61 = findViewById(R.id.tvTempCamara61);
+        tvRangeCamara61 = findViewById(R.id.tvRangeCamara61);
+
+        tvNameCamara1 = findViewById(R.id.tvNameCamara1);
+        tvTempCamara1 = findViewById(R.id.tvTempCamara1);
+        tvRangeCamara1 = findViewById(R.id.tvRangeCamara1);
+
+        tvNameCamara521 = findViewById(R.id.tvNameCamara521);
+        tvTempCamara521 = findViewById(R.id.tvTempCamara521);
+        tvRangeCamara521 = findViewById(R.id.tvRangeCamara521);
 
         navCamaras = findViewById(R.id.navCamaras);
         navAlertas = findViewById(R.id.navAlertas);
@@ -90,21 +117,21 @@ public class CamarasActivity extends AppCompatActivity {
             startActivity(new Intent(this, ProfileActivity.class));
         });
 
-        // Detalhes das câmaras
+        // Detalhes das câmaras (padrão com fallback)
         cardCamara291.setOnClickListener(v -> {
-            openCamaraDetails("Câmara 291", "8,4°C", "0°C — 4°C", true);
+            openCamaraDetails(null, "Câmara 291", "8,4°C", "0°C — 4°C", true);
         });
 
         cardCamara61.setOnClickListener(v -> {
-            openCamaraDetails("Câmara 61", "2,3°C", "0°C — 2°C", true);
+            openCamaraDetails(null, "Câmara 61", "2,3°C", "0°C — 2°C", true);
         });
 
         cardCamara1.setOnClickListener(v -> {
-            openCamaraDetails("Câmara 1", "1,4°C", "0°C — 4°C", false);
+            openCamaraDetails(null, "Câmara 1", "1,4°C", "0°C — 4°C", false);
         });
 
         cardCamara521.setOnClickListener(v -> {
-            openCamaraDetails("Câmara 521", "3,7°C", "0°C — 4°C", false);
+            openCamaraDetails(null, "Câmara 521", "3,7°C", "0°C — 4°C", false);
         });
 
         // Filtros (Chips)
@@ -152,13 +179,75 @@ public class CamarasActivity extends AppCompatActivity {
         });
     }
 
-    private void openCamaraDetails(String name, String currentTemp, String tempRange, boolean isCritical) {
+    private void loadCamarasFromApi() {
+        SkadiApiService apiService = RetrofitClient.getApiService(this);
+        apiService.getColdRooms().enqueue(new Callback<List<ColdRoomResponse>>() {
+            @Override
+            public void onResponse(Call<List<ColdRoomResponse>> call, Response<List<ColdRoomResponse>> response) {
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                    bindColdRoomsFromApi(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ColdRoomResponse>> call, Throwable t) {
+                // Silencioso: mantém os cards de fallback intactos
+            }
+        });
+    }
+
+    private void bindColdRoomsFromApi(List<ColdRoomResponse> coldRooms) {
+        if (coldRooms.size() > 0) {
+            ColdRoomResponse cr0 = coldRooms.get(0);
+            if (tvNameCamara291 != null && cr0.getModel() != null) tvNameCamara291.setText(cr0.getModel());
+            if (tvRangeCamara291 != null && cr0.getMinimumTemperature() != null && cr0.getMaximumTemperature() != null) {
+                tvRangeCamara291.setText("Mín. " + cr0.getMinimumTemperature() + "°C | Máx. " + cr0.getMaximumTemperature() + "°C");
+            }
+            cardCamara291.setOnClickListener(v -> openCamaraDetails(cr0.getId(), cr0.getModel() != null ? cr0.getModel() : "Câmara 291", "8,4°C", cr0.getMinimumTemperature() + "°C — " + cr0.getMaximumTemperature() + "°C", true));
+        }
+
+        if (coldRooms.size() > 1) {
+            ColdRoomResponse cr1 = coldRooms.get(1);
+            if (tvNameCamara61 != null && cr1.getModel() != null) tvNameCamara61.setText(cr1.getModel());
+            if (tvRangeCamara61 != null && cr1.getMinimumTemperature() != null && cr1.getMaximumTemperature() != null) {
+                tvRangeCamara61.setText("Mín. " + cr1.getMinimumTemperature() + "°C | Máx. " + cr1.getMaximumTemperature() + "°C");
+            }
+            cardCamara61.setOnClickListener(v -> openCamaraDetails(cr1.getId(), cr1.getModel() != null ? cr1.getModel() : "Câmara 61", "2,3°C", cr1.getMinimumTemperature() + "°C — " + cr1.getMaximumTemperature() + "°C", true));
+        }
+
+        if (coldRooms.size() > 2) {
+            ColdRoomResponse cr2 = coldRooms.get(2);
+            if (tvNameCamara1 != null && cr2.getModel() != null) tvNameCamara1.setText(cr2.getModel());
+            if (tvRangeCamara1 != null && cr2.getMinimumTemperature() != null && cr2.getMaximumTemperature() != null) {
+                tvRangeCamara1.setText("Mín. " + cr2.getMinimumTemperature() + "°C | Máx. " + cr2.getMaximumTemperature() + "°C");
+            }
+            cardCamara1.setOnClickListener(v -> openCamaraDetails(cr2.getId(), cr2.getModel() != null ? cr2.getModel() : "Câmara 1", "1,4°C", cr2.getMinimumTemperature() + "°C — " + cr2.getMaximumTemperature() + "°C", false));
+        }
+
+        if (coldRooms.size() > 3) {
+            ColdRoomResponse cr3 = coldRooms.get(3);
+            if (tvNameCamara521 != null && cr3.getModel() != null) tvNameCamara521.setText(cr3.getModel());
+            if (tvRangeCamara521 != null && cr3.getMinimumTemperature() != null && cr3.getMaximumTemperature() != null) {
+                tvRangeCamara521.setText("Mín. " + cr3.getMinimumTemperature() + "°C | Máx. " + cr3.getMaximumTemperature() + "°C");
+            }
+            cardCamara521.setOnClickListener(v -> openCamaraDetails(cr3.getId(), cr3.getModel() != null ? cr3.getModel() : "Câmara 521", "3,7°C", cr3.getMinimumTemperature() + "°C — " + cr3.getMaximumTemperature() + "°C", false));
+        }
+    }
+
+    private void openCamaraDetails(Long id, String name, String currentTemp, String tempRange, boolean isCritical) {
         Intent intent = new Intent(this, CamaraDetailsActivity.class);
+        if (id != null) {
+            intent.putExtra(CamaraDetailsActivity.EXTRA_CAMARA_ID, id);
+        }
         intent.putExtra(CamaraDetailsActivity.EXTRA_CAMARA_NAME, name);
         intent.putExtra(CamaraDetailsActivity.EXTRA_CURRENT_TEMP, currentTemp);
         intent.putExtra(CamaraDetailsActivity.EXTRA_TEMP_RANGE, tempRange);
         intent.putExtra(CamaraDetailsActivity.EXTRA_IS_CRITICAL, isCritical);
         startActivity(intent);
+    }
+
+    private void openCamaraDetails(String name, String currentTemp, String tempRange, boolean isCritical) {
+        openCamaraDetails(null, name, currentTemp, tempRange, isCritical);
     }
 
     private void selectFilter(FilterType filter) {
@@ -200,16 +289,10 @@ public class CamarasActivity extends AppCompatActivity {
     }
 
     private void applyFilters() {
-        // Câmaras e suas classificações:
-        // 291: Acima da máx (8,4°C)
-        // 61:  Acima da máx (2,3°C)
-        // 1:   Dentro da faixa (1,4°C)
-        // 521: Dentro da faixa (3,7°C)
-
-        filterCard(cardCamara291, "câmara 291", FilterType.ACIMA_DA_MAX);
-        filterCard(cardCamara61, "câmara 61", FilterType.ACIMA_DA_MAX);
-        filterCard(cardCamara1, "câmara 1", FilterType.DENTRO_DA_FAIXA);
-        filterCard(cardCamara521, "câmara 521", FilterType.DENTRO_DA_FAIXA);
+        filterCard(cardCamara291, tvNameCamara291 != null ? tvNameCamara291.getText().toString() : "câmara 291", FilterType.ACIMA_DA_MAX);
+        filterCard(cardCamara61, tvNameCamara61 != null ? tvNameCamara61.getText().toString() : "câmara 61", FilterType.ACIMA_DA_MAX);
+        filterCard(cardCamara1, tvNameCamara1 != null ? tvNameCamara1.getText().toString() : "câmara 1", FilterType.DENTRO_DA_FAIXA);
+        filterCard(cardCamara521, tvNameCamara521 != null ? tvNameCamara521.getText().toString() : "câmara 521", FilterType.DENTRO_DA_FAIXA);
     }
 
     private void filterCard(View card, String camaraName, FilterType cardCategory) {

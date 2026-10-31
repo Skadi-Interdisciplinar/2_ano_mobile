@@ -70,6 +70,7 @@ public class CamarasFilterUnitTest {
 
     @Test
     public void camaraDetailsExtras_constantsAreDefinedCorrectly() {
+        assertEquals("extra_camara_id", CamaraDetailsActivity.EXTRA_CAMARA_ID);
         assertEquals("extra_camara_name", CamaraDetailsActivity.EXTRA_CAMARA_NAME);
         assertEquals("extra_current_temp", CamaraDetailsActivity.EXTRA_CURRENT_TEMP);
         assertEquals("extra_temp_range", CamaraDetailsActivity.EXTRA_TEMP_RANGE);
