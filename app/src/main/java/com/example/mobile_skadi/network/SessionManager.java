@@ -38,6 +38,14 @@ public class SessionManager {
         preferences.edit().putString(KEY_TOKEN, token).apply();
     }
 
+    public void saveUsername(String username) {
+        preferences.edit().putString(KEY_USERNAME, username).apply();
+    }
+
+    public void saveRole(String role) {
+        preferences.edit().putString(KEY_ROLE, role).apply();
+    }
+
     public String getToken() {
         return preferences.getString(KEY_TOKEN, null);
     }

@@ -45,6 +45,9 @@ public interface SkadiApiService {
     @GET("notifications")
     Call<List<NotificationResponse>> getNotifications();
 
+    @PATCH("notifications/{id}/read")
+    Call<NotificationResponse> markNotificationAsRead(@Path("id") Integer id);
+
     @GET("distribution-centers")
     Call<List<DistributionCenterResponse>> getDistributionCenters();
 
