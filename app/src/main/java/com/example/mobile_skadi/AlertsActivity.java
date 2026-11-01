@@ -285,7 +285,7 @@ public class AlertsActivity extends AppCompatActivity {
             } else {
                 totalAtivos++;
                 String sev = alert.getSeverityLevel() != null ? alert.getSeverityLevel().toUpperCase() : "";
-                if (sev.contains("CRITIC")) {
+                if (sev.contains("CRITIC") || sev.contains("URGENT")) {
                     totalCriticos++;
                 }
             }
@@ -367,7 +367,7 @@ public class AlertsActivity extends AppCompatActivity {
         // Badge
         if (tvBadge != null) {
             String sev = alert.getSeverityLevel() != null ? alert.getSeverityLevel().toUpperCase() : "";
-            if (sev.contains("CRITIC")) {
+            if (sev.contains("CRITIC") || sev.contains("URGENT")) {
                 tvBadge.setText("● Crítico");
             } else if (sev.contains("BAIX") || sev.contains("ATEN")) {
                 tvBadge.setText("● Atenção");

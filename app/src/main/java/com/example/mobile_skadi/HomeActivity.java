@@ -279,7 +279,7 @@ public class HomeActivity extends AppCompatActivity {
             if (!isResolved) {
                 totalAtivos++;
                 String sev = alert.getSeverityLevel() != null ? alert.getSeverityLevel().toUpperCase() : "";
-                if (sev.contains("CRITIC")) {
+                if (sev.contains("CRITIC") || sev.contains("URGENT")) {
                     totalCriticos++;
                     if (topAlert == null) topAlert = alert;
                 } else if (topAlert == null) {
