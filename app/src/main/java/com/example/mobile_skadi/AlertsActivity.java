@@ -51,6 +51,7 @@ public class AlertsActivity extends AppCompatActivity {
     private MaterialCardView cardAlertWarning;
     private MaterialCardView cardAlertStable;
     private TextView btnEntendaNiveis;
+    private TextView tvEmptyAlerts;
 
     // Resumo de contadores
     private TextView tvCountAtivos;
@@ -117,6 +118,7 @@ public class AlertsActivity extends AppCompatActivity {
         cardAlertWarning = findViewById(R.id.cardAlertWarning);
         cardAlertStable = findViewById(R.id.cardAlertStable);
         btnEntendaNiveis = findViewById(R.id.btnEntendaNiveis);
+        tvEmptyAlerts = findViewById(R.id.tvEmptyAlerts);
 
         tvCountAtivos = findViewById(R.id.tvCountAtivos);
         tvCountCriticos = findViewById(R.id.tvCountCriticos);
@@ -292,6 +294,10 @@ public class AlertsActivity extends AppCompatActivity {
         if (tvCountAtivos != null) tvCountAtivos.setText(String.valueOf(totalAtivos));
         if (tvCountCriticos != null) tvCountCriticos.setText(String.valueOf(totalCriticos));
         if (tvCountResolvidos != null) tvCountResolvidos.setText(String.valueOf(totalResolvidos));
+
+        if (tvEmptyAlerts != null) {
+            tvEmptyAlerts.setVisibility(alerts.isEmpty() ? View.VISIBLE : View.GONE);
+        }
 
         if (!alerts.isEmpty()) {
             AlertResponse a0 = alerts.get(0);
