@@ -199,7 +199,7 @@ public class CamarasActivity extends AppCompatActivity {
     private void bindColdRoomsFromApi(List<ColdRoomResponse> coldRooms) {
         if (coldRooms.size() > 0) {
             ColdRoomResponse cr0 = coldRooms.get(0);
-            if (tvNameCamara291 != null && cr0.getModel() != null) tvNameCamara291.setText(cr0.getModel());
+            if (tvNameCamara291 != null) { String t0 = cr0.getLocation() != null ? cr0.getLocation() : cr0.getModel(); if (t0 != null) tvNameCamara291.setText(t0); }
             if (tvRangeCamara291 != null && cr0.getMinimumTemperature() != null && cr0.getMaximumTemperature() != null) {
                 tvRangeCamara291.setText("Mín. " + cr0.getMinimumTemperature() + "°C | Máx. " + cr0.getMaximumTemperature() + "°C");
             }
