@@ -11,6 +11,7 @@ public class SessionManager {
     private static final String KEY_ROLE = "role";
     private static final String KEY_UNIT = "unit";
     private static final String KEY_NAME = "user_name";
+    private static final String KEY_REMEMBER_ME = "remember_me";
 
     private static SessionManager instance;
     private final SharedPreferences preferences;
@@ -76,7 +77,15 @@ public class SessionManager {
         return preferences.getString(KEY_UNIT, "Belterra");
     }
 
+    public void setRememberMe(boolean rememberMe) {
+        preferences.edit().putBoolean(KEY_REMEMBER_ME, rememberMe).apply();
+    }
+
+    public boolean isRememberMe() {
+        return preferences.getBoolean(KEY_REMEMBER_ME, false);
+    }
+
     public void clear() {
-        preferences.edit().clear().apply();
+        preferences.edit().clear().commit();
     }
 }

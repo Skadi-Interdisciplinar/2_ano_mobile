@@ -37,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         SessionManager sessionManager = SessionManager.getInstance(this);
-        if (sessionManager.hasToken()) {
+        if (sessionManager.isRememberMe() && sessionManager.hasToken()) {
             startActivity(new Intent(this, HomeActivity.class));
             finish();
             return;
@@ -50,6 +50,9 @@ public class LoginActivity extends AppCompatActivity {
 
         if (!sessionManager.getUsername().isEmpty() && etUsuario != null) {
             etUsuario.setText(sessionManager.getUsername());
+            if (cbLembrar != null) {
+                cbLembrar.setChecked(sessionManager.isRememberMe());
+            }
         }
     }
 
@@ -111,6 +114,7 @@ public class LoginActivity extends AppCompatActivity {
                     SessionManager sessionManager = SessionManager.getInstance(LoginActivity.this);
                     sessionManager.saveToken(tokenResponse.getToken());
                     sessionManager.saveUsername(usuario);
+                    sessionManager.setRememberMe(cbLembrar != null && cbLembrar.isChecked());
 
                     // Buscar perfil do usuário (/me) para sincronizar papel e dados
                     fetchUserProfileAndNavigate(apiService, usuario);
