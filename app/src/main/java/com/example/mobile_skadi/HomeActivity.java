@@ -142,8 +142,16 @@ public class HomeActivity extends AppCompatActivity {
                 name = SessionManager.getInstance(this).getUsername();
             }
             if (name != null && !name.trim().isEmpty()) {
-                String firstName = name.trim().split(" ")[0];
-                tvGreeting.setText("Olá, " + firstName + "!");
+                String clean = name.trim();
+                if (clean.contains(".")) {
+                    clean = clean.split("\\.")[0];
+                } else if (clean.contains(" ")) {
+                    clean = clean.split(" ")[0];
+                }
+                if (!clean.isEmpty()) {
+                    clean = clean.substring(0, 1).toUpperCase() + clean.substring(1).toLowerCase();
+                }
+                tvGreeting.setText("Olá, " + clean + "!");
             } else {
                 tvGreeting.setText("Olá, " + UserRoleManager.getFirstNameForGreeting() + "!");
             }

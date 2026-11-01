@@ -57,9 +57,33 @@ public class ProfileActivity extends AppCompatActivity {
         android.widget.TextView tvProfileName = findViewById(R.id.tvProfileName);
         android.widget.TextView tvProfileRole = findViewById(R.id.tvProfileRole);
         android.widget.TextView tvProfileUsername = findViewById(R.id.tvProfileUsername);
-        if (tvProfileName != null) tvProfileName.setText(UserRoleManager.getFullName());
+
+        String sessionName = com.example.mobile_skadi.network.SessionManager.getInstance(this).getName();
+        String sessionUser = com.example.mobile_skadi.network.SessionManager.getInstance(this).getUsername();
+        if (sessionName == null || sessionName.trim().isEmpty()) {
+            sessionName = sessionUser;
+        }
+
+        if (sessionName != null && !sessionName.trim().isEmpty()) {
+            String[] parts = sessionName.replace("_", " ").replace(".", " ").split("\\s+");
+            StringBuilder formatted = new StringBuilder();
+            for (String p : parts) {
+                if (!p.isEmpty()) {
+                    formatted.append(Character.toUpperCase(p.charAt(0))).append(p.substring(1).toLowerCase()).append(" ");
+                }
+            }
+            if (tvProfileName != null) tvProfileName.setText(formatted.toString().trim());
+        } else {
+            if (tvProfileName != null) tvProfileName.setText(UserRoleManager.getFullName());
+        }
+
+        if (sessionUser != null && !sessionUser.trim().isEmpty()) {
+            if (tvProfileUsername != null) tvProfileUsername.setText("@" + sessionUser);
+        } else {
+            if (tvProfileUsername != null) tvProfileUsername.setText(UserRoleManager.getUsernameHandle());
+        }
+
         if (tvProfileRole != null) tvProfileRole.setText(UserRoleManager.getRoleLabel());
-        if (tvProfileUsername != null) tvProfileUsername.setText(UserRoleManager.getUsernameHandle());
         if (cardMyTeam != null) {
             cardMyTeam.setVisibility(UserRoleManager.isEmployee() ? android.view.View.GONE : android.view.View.VISIBLE);
         }
