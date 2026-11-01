@@ -13,8 +13,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class TrimmyApiClient {
 
-    private static final String DEFAULT_AI_BASE_URL = "http://127.0.0.1:8000/";
-
     private static Retrofit retrofit;
 
     private TrimmyApiClient() {
@@ -33,8 +31,16 @@ public class TrimmyApiClient {
                     .writeTimeout(30, TimeUnit.SECONDS)
                     .build();
 
+            String baseUrl = BuildConfig.AI_BASE_URL;
+            if (baseUrl == null || baseUrl.trim().isEmpty()) {
+                baseUrl = "http://127.0.0.1:8000/";
+            }
+            if (!baseUrl.endsWith("/")) {
+                baseUrl += "/";
+            }
+
             retrofit = new Retrofit.Builder()
-                    .baseUrl(DEFAULT_AI_BASE_URL)
+                    .baseUrl(baseUrl)
                     .client(okHttpClient)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
