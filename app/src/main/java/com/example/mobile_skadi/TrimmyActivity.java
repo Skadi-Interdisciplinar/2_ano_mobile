@@ -18,7 +18,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.widget.NestedScrollView;
 
+import com.example.mobile_skadi.network.SessionManager;
+import com.example.mobile_skadi.network.TrimmyApiClient;
+import com.example.mobile_skadi.network.dto.ChatRequest;
+import com.example.mobile_skadi.network.dto.ChatResponse;
 import com.google.android.material.card.MaterialCardView;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class TrimmyActivity extends AppCompatActivity {
 
@@ -166,12 +174,11 @@ public class TrimmyActivity extends AppCompatActivity {
     private void startChatWithPrompt(String promptText) {
         if (!isChatStarted) {
             isChatStarted = true;
-            tvInitialUserPrompt.setText(promptText);
             layoutTrimmyWelcome.setVisibility(View.GONE);
             scrollTrimmyChat.setVisibility(View.VISIBLE);
-        } else {
-            appendUserAndAiMessages(promptText);
+            layoutChatMessages.removeAllViews();
         }
+        sendChatToAi(promptText);
     }
 
     private void handleSendMessage() {
@@ -183,7 +190,7 @@ public class TrimmyActivity extends AppCompatActivity {
         startChatWithPrompt(text);
     }
 
-    private void appendUserAndAiMessages(String userText) {
+    private void sendChatToAi(String userText) {
         // Balão do usuário
         LinearLayout userRow = new LinearLayout(this);
         userRow.setOrientation(LinearLayout.HORIZONTAL);
@@ -213,7 +220,7 @@ public class TrimmyActivity extends AppCompatActivity {
         userRow.addView(tvUser);
         layoutChatMessages.addView(userRow);
 
-        // Resposta simulada da Trimmy IA
+        // Balão de resposta da Trimmy IA
         LinearLayout aiRow = new LinearLayout(this);
         aiRow.setOrientation(LinearLayout.HORIZONTAL);
         aiRow.setGravity(Gravity.START | Gravity.TOP);
@@ -232,8 +239,8 @@ public class TrimmyActivity extends AppCompatActivity {
         aiAvatar.addView(ivLogo);
 
         TextView tvAi = new TextView(this);
-        tvAi.setText("As câmaras 1 (1,4°C) e 521 (3,7°C) permanecem estáveis e dentro dos parâmetros da RDC nº 216/2004 da ANVISA. Recomendo manter o acompanhamento prioritário na Câmara 291.");
-        tvAi.setTextColor(Color.parseColor("#334155"));
+        tvAi.setText("Trimmy está analisando os dados...");
+        tvAi.setTextColor(Color.parseColor("#64748B"));
         tvAi.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12.5f);
         tvAi.setTypeface(ResourcesCompat.getFont(this, R.font.manrope));
         tvAi.setBackgroundResource(R.drawable.bg_chat_bubble_ai);
@@ -252,6 +259,34 @@ public class TrimmyActivity extends AppCompatActivity {
         layoutChatMessages.addView(aiRow);
 
         scrollTrimmyChat.post(() -> scrollTrimmyChat.fullScroll(View.FOCUS_DOWN));
+
+        // Chamada real ao backend de IA
+        String token = SessionManager.getInstance(this).getToken();
+        if (token == null || token.trim().isEmpty()) {
+            token = "skadi-token";
+        }
+
+        ChatRequest request = new ChatRequest(userText, token);
+        TrimmyApiClient.getApiService(this).chat(request).enqueue(new Callback<ChatResponse>() {
+            @Override
+            public void onResponse(Call<ChatResponse> call, Response<ChatResponse> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().getResposta() != null) {
+                    tvAi.setText(response.body().getResposta());
+                    tvAi.setTextColor(Color.parseColor("#334155"));
+                } else {
+                    tvAi.setText("Não foi possível gerar uma resposta no momento. Status: " + response.code());
+                    tvAi.setTextColor(Color.parseColor("#EF4444"));
+                }
+                scrollTrimmyChat.post(() -> scrollTrimmyChat.fullScroll(View.FOCUS_DOWN));
+            }
+
+            @Override
+            public void onFailure(Call<ChatResponse> call, Throwable t) {
+                tvAi.setText("Não foi possível conectar ao servidor do Trimmy IA (porta 8000). Verifique se o serviço está ativo.");
+                tvAi.setTextColor(Color.parseColor("#EF4444"));
+                scrollTrimmyChat.post(() -> scrollTrimmyChat.fullScroll(View.FOCUS_DOWN));
+            }
+        });
     }
 
     private int dpToPx(int dp) {

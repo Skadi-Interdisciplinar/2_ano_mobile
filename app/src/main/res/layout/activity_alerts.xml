@@ -10,7 +10,8 @@
         android:id="@+id/scrollAlerts"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:fillViewport="true"
+        android:fillViewport="false"
+        android:clipToPadding="false"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -573,6 +574,7 @@
                 <!-- LINK DO RODAPÉ -->
                 <TextView
                     android:id="@+id/btnEntendaNiveis"
+                    android:layout_marginTop="16dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"

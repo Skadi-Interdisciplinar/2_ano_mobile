@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mobile_skadi.data.SkadiDatabaseHelper;
 import com.example.mobile_skadi.network.RetrofitClient;
 import com.example.mobile_skadi.network.SessionManager;
 import com.example.mobile_skadi.network.SkadiApiService;
@@ -167,6 +168,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private void loadHomeData() {
         SkadiApiService apiService = RetrofitClient.getApiService(this);
+        SkadiDatabaseHelper dbHelper = SkadiDatabaseHelper.getInstance(this);
 
         // 1. Carrega câmaras
         apiService.getColdRooms().enqueue(new Callback<List<ColdRoomResponse>>() {
@@ -177,63 +179,82 @@ public class HomeActivity extends AppCompatActivity {
                     for (ColdRoomResponse cr : response.body()) {
                         coldRoomsMap.put(cr.getId(), cr);
                     }
+                    dbHelper.saveColdRooms(response.body());
+                } else {
+                    coldRoomsMap.clear();
+                    coldRoomsMap.putAll(dbHelper.getCachedColdRoomsMap());
                 }
-                loadReadings(apiService);
+                loadReadings(apiService, dbHelper);
             }
 
             @Override
             public void onFailure(Call<List<ColdRoomResponse>> call, Throwable t) {
-                loadReadings(apiService);
+                coldRoomsMap.clear();
+                coldRoomsMap.putAll(dbHelper.getCachedColdRoomsMap());
+                loadReadings(apiService, dbHelper);
             }
         });
     }
 
-    private void loadReadings(SkadiApiService apiService) {
+    private void loadReadings(SkadiApiService apiService, SkadiDatabaseHelper dbHelper) {
         // 2. Carrega leituras de temperatura
         apiService.getAllReadings().enqueue(new Callback<List<TemperatureReadingResponse>>() {
             @Override
             public void onResponse(Call<List<TemperatureReadingResponse>> call, Response<List<TemperatureReadingResponse>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    readingsMap.clear();
-                    BigDecimal totalTemp = BigDecimal.ZERO;
-                    int count = 0;
-                    for (TemperatureReadingResponse tr : response.body()) {
-                        if (tr.getColdRoomId() != null) {
-                            readingsMap.put(tr.getColdRoomId(), tr);
-                        }
-                        if (tr.getTemperature() != null) {
-                            totalTemp = totalTemp.add(tr.getTemperature());
-                            count++;
-                        }
-                    }
-                    if (count > 0 && tvHomeTempMedia != null) {
-                        BigDecimal avg = totalTemp.divide(BigDecimal.valueOf(count), 1, RoundingMode.HALF_UP);
-                        tvHomeTempMedia.setText(String.format(Locale.getDefault(), "%.1f °C", avg));
-                    }
+                    dbHelper.saveReadings(response.body());
+                    processReadings(response.body());
+                } else {
+                    processReadings(dbHelper.getCachedReadings());
                 }
-                loadAlerts(apiService);
+                loadAlerts(apiService, dbHelper);
             }
 
             @Override
             public void onFailure(Call<List<TemperatureReadingResponse>> call, Throwable t) {
-                loadAlerts(apiService);
+                processReadings(dbHelper.getCachedReadings());
+                loadAlerts(apiService, dbHelper);
             }
         });
     }
 
-    private void loadAlerts(SkadiApiService apiService) {
+    private void processReadings(List<TemperatureReadingResponse> readings) {
+        readingsMap.clear();
+        BigDecimal totalTemp = BigDecimal.ZERO;
+        int count = 0;
+        for (TemperatureReadingResponse tr : readings) {
+            if (tr.getColdRoomId() != null) {
+                readingsMap.put(tr.getColdRoomId(), tr);
+            }
+            if (tr.getTemperature() != null) {
+                totalTemp = totalTemp.add(tr.getTemperature());
+                count++;
+            }
+        }
+        if (count > 0 && tvHomeTempMedia != null) {
+            BigDecimal avg = totalTemp.divide(BigDecimal.valueOf(count), 1, RoundingMode.HALF_UP);
+            tvHomeTempMedia.setText(String.format(Locale.getDefault(), "%.1f °C", avg));
+        }
+    }
+
+    private void loadAlerts(SkadiApiService apiService, SkadiDatabaseHelper dbHelper) {
         // 3. Carrega alertas
         apiService.getAlerts(null).enqueue(new Callback<List<AlertResponse>>() {
             @Override
             public void onResponse(Call<List<AlertResponse>> call, Response<List<AlertResponse>> response) {
                 if (response.isSuccessful() && response.body() != null) {
+                    dbHelper.saveAlerts(response.body());
                     bindAlerts(response.body());
+                } else {
+                    List<AlertResponse> cached = dbHelper.getCachedAlerts();
+                    if (!cached.isEmpty()) bindAlerts(cached);
                 }
             }
 
             @Override
             public void onFailure(Call<List<AlertResponse>> call, Throwable t) {
-                // Silencioso
+                List<AlertResponse> cached = dbHelper.getCachedAlerts();
+                if (!cached.isEmpty()) bindAlerts(cached);
             }
         });
     }

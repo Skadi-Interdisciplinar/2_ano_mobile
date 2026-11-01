@@ -8,8 +8,11 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.mobile_skadi.data.SkadiDatabaseHelper;
 
 import com.example.mobile_skadi.network.RetrofitClient;
 import com.example.mobile_skadi.network.SkadiApiService;
@@ -182,6 +185,7 @@ public class AlertsActivity extends AppCompatActivity {
 
     private void loadAlertsFromApi() {
         SkadiApiService apiService = RetrofitClient.getApiService(this);
+        SkadiDatabaseHelper dbHelper = SkadiDatabaseHelper.getInstance(this);
 
         // 1. Carrega as câmaras para cruzar nome e faixa de temperatura
         apiService.getColdRooms().enqueue(new Callback<List<ColdRoomResponse>>() {
@@ -192,18 +196,24 @@ public class AlertsActivity extends AppCompatActivity {
                     for (ColdRoomResponse cr : response.body()) {
                         coldRoomsMap.put(cr.getId(), cr);
                     }
+                    dbHelper.saveColdRooms(response.body());
+                } else {
+                    coldRoomsMap.clear();
+                    coldRoomsMap.putAll(dbHelper.getCachedColdRoomsMap());
                 }
-                loadReadingsAndAlerts(apiService);
+                loadReadingsAndAlerts(apiService, dbHelper);
             }
 
             @Override
             public void onFailure(Call<List<ColdRoomResponse>> call, Throwable t) {
-                loadReadingsAndAlerts(apiService);
+                coldRoomsMap.clear();
+                coldRoomsMap.putAll(dbHelper.getCachedColdRoomsMap());
+                loadReadingsAndAlerts(apiService, dbHelper);
             }
         });
     }
 
-    private void loadReadingsAndAlerts(SkadiApiService apiService) {
+    private void loadReadingsAndAlerts(SkadiApiService apiService, SkadiDatabaseHelper dbHelper) {
         // 2. Carrega as leituras de temperatura atuais
         apiService.getAllReadings().enqueue(new Callback<List<TemperatureReadingResponse>>() {
             @Override
@@ -215,31 +225,48 @@ public class AlertsActivity extends AppCompatActivity {
                             readingsMap.put(tr.getColdRoomId(), tr);
                         }
                     }
+                    dbHelper.saveReadings(response.body());
+                } else {
+                    readingsMap.clear();
+                    readingsMap.putAll(dbHelper.getCachedReadingsMap());
                 }
-                fetchAlerts(apiService);
+                fetchAlerts(apiService, dbHelper);
             }
 
             @Override
             public void onFailure(Call<List<TemperatureReadingResponse>> call, Throwable t) {
-                fetchAlerts(apiService);
+                readingsMap.clear();
+                readingsMap.putAll(dbHelper.getCachedReadingsMap());
+                fetchAlerts(apiService, dbHelper);
             }
         });
     }
 
-    private void fetchAlerts(SkadiApiService apiService) {
+    private void fetchAlerts(SkadiApiService apiService, SkadiDatabaseHelper dbHelper) {
         apiService.getAlerts(null).enqueue(new Callback<List<AlertResponse>>() {
             @Override
             public void onResponse(Call<List<AlertResponse>> call, Response<List<AlertResponse>> response) {
                 if (response.isSuccessful() && response.body() != null) {
+                    dbHelper.saveAlerts(response.body());
                     bindAlertsFromApi(response.body());
+                } else {
+                    loadAlertsFromCache(dbHelper);
                 }
             }
 
             @Override
             public void onFailure(Call<List<AlertResponse>> call, Throwable t) {
-                // Silencioso: fallback local ativo
+                loadAlertsFromCache(dbHelper);
             }
         });
+    }
+
+    private void loadAlertsFromCache(SkadiDatabaseHelper dbHelper) {
+        List<AlertResponse> cached = dbHelper.getCachedAlerts();
+        if (!cached.isEmpty()) {
+            bindAlertsFromApi(cached);
+            Toast.makeText(this, "Modo offline: exibindo alertas do SQLite.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void bindAlertsFromApi(List<AlertResponse> alerts) {

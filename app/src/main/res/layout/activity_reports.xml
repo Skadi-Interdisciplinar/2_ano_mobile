@@ -11,7 +11,8 @@
         android:id="@+id/scrollReports"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:fillViewport="true"
+        android:fillViewport="false"
+        android:clipToPadding="false"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="120dp">
+            android:paddingBottom="140dp">
 
             <!-- CABEÇALHO AZUL ESCURO ARREDONDADO -->
             <LinearLayout
@@ -345,341 +346,26 @@
                                 android:focusable="true" />
                         </RelativeLayout>
 
-                        <!-- ITEM 1: CÂMARA 291 -->
-                        <RelativeLayout
+                        <!-- LISTA DINÂMICA DE ALERTAS -->
+                        <LinearLayout
+                            android:id="@+id/layoutAlertsHistoryList"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="12dp">
+                            android:orientation="vertical" />
 
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentStart="true"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Câmara 291 atingiu 3,4 ºC"
-                                    android:textColor="@color/primary_dark"
-                                    android:textSize="13sp"
-                                    android:fontFamily="@font/manrope"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="15/08 · 22:14"
-                                    android:textColor="@color/secondary_gray"
-                                    android:textSize="11.5sp"
-                                    android:fontFamily="@font/manrope"
-                                    android:layout_marginTop="2dp" />
-                            </LinearLayout>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"
-                                android:text="● Crítico"
-                                android:textColor="@color/alert_danger"
-                                android:textSize="11sp"
-                                android:fontFamily="@font/manrope"
-                                android:textStyle="bold"
-                                android:background="@drawable/bg_badge_critical"
-                                android:paddingStart="10dp"
-                                android:paddingEnd="10dp"
-                                android:paddingTop="3dp"
-                                android:paddingBottom="3dp" />
-                        </RelativeLayout>
-
-                        <!-- ITEM 2: CÂMARA 67 -->
-                        <RelativeLayout
+                        <!-- ESTADO VAZIO -->
+                        <TextView
+                            android:id="@+id/tvEmptyAlertsHistory"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="12dp">
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentStart="true"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Câmara 67 atingiu 2,7 ºC"
-                                    android:textColor="@color/primary_dark"
-                                    android:textSize="13sp"
-                                    android:fontFamily="@font/manrope"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="14/08 · 16:51"
-                                    android:textColor="@color/secondary_gray"
-                                    android:textSize="11.5sp"
-                                    android:fontFamily="@font/manrope"
-                                    android:layout_marginTop="2dp" />
-                            </LinearLayout>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"
-                                android:text="● Crítico"
-                                android:textColor="#E65100"
-                                android:textSize="11sp"
-                                android:fontFamily="@font/manrope"
-                                android:textStyle="bold"
-                                android:background="@drawable/bg_badge_warning"
-                                android:paddingStart="10dp"
-                                android:paddingEnd="10dp"
-                                android:paddingTop="3dp"
-                                android:paddingBottom="3dp" />
-                        </RelativeLayout>
-
-                        <!-- ITEM 3: CÂMARA 03 -->
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="12dp">
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentStart="true"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Câmara 03 atingiu 1,8 ºC"
-                                    android:textColor="@color/primary_dark"
-                                    android:textSize="13sp"
-                                    android:fontFamily="@font/manrope"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="12/08 · 11:11"
-                                    android:textColor="@color/secondary_gray"
-                                    android:textSize="11.5sp"
-                                    android:fontFamily="@font/manrope"
-                                    android:layout_marginTop="2dp" />
-                            </LinearLayout>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"
-                                android:text="● Crítico"
-                                android:textColor="#D97706"
-                                android:textSize="11sp"
-                                android:fontFamily="@font/manrope"
-                                android:textStyle="bold"
-                                android:background="@drawable/bg_badge_warning"
-                                android:paddingStart="10dp"
-                                android:paddingEnd="10dp"
-                                android:paddingTop="3dp"
-                                android:paddingBottom="3dp" />
-                        </RelativeLayout>
-
-                        <!-- ITEM 4: CÂMARA 521 -->
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="12dp">
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentStart="true"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Câmara 521 atingiu 3,5 ºC"
-                                    android:textColor="@color/primary_dark"
-                                    android:textSize="13sp"
-                                    android:fontFamily="@font/manrope"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="15/08 · 15:48"
-                                    android:textColor="@color/secondary_gray"
-                                    android:textSize="11.5sp"
-                                    android:fontFamily="@font/manrope"
-                                    android:layout_marginTop="2dp" />
-                            </LinearLayout>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"
-                                android:text="● Crítico"
-                                android:textColor="@color/alert_danger"
-                                android:textSize="11sp"
-                                android:fontFamily="@font/manrope"
-                                android:textStyle="bold"
-                                android:background="@drawable/bg_badge_critical"
-                                android:paddingStart="10dp"
-                                android:paddingEnd="10dp"
-                                android:paddingTop="3dp"
-                                android:paddingBottom="3dp" />
-                        </RelativeLayout>
-
-                        <!-- ITEM 5: CÂMARA 67 -->
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="12dp">
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentStart="true"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Câmara 67 atingiu 2.2 ºC"
-                                    android:textColor="@color/primary_dark"
-                                    android:textSize="13sp"
-                                    android:fontFamily="@font/manrope"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="14/08 · 17:57"
-                                    android:textColor="@color/secondary_gray"
-                                    android:textSize="11.5sp"
-                                    android:fontFamily="@font/manrope"
-                                    android:layout_marginTop="2dp" />
-                            </LinearLayout>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"
-                                android:text="● Crítico"
-                                android:textColor="#E65100"
-                                android:textSize="11sp"
-                                android:fontFamily="@font/manrope"
-                                android:textStyle="bold"
-                                android:background="@drawable/bg_badge_warning"
-                                android:paddingStart="10dp"
-                                android:paddingEnd="10dp"
-                                android:paddingTop="3dp"
-                                android:paddingBottom="3dp" />
-                        </RelativeLayout>
-
-                        <!-- ITEM 6: CÂMARA 521 -->
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="12dp">
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentStart="true"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Câmara 521 atingiu 0,9 ºC"
-                                    android:textColor="@color/primary_dark"
-                                    android:textSize="13sp"
-                                    android:fontFamily="@font/manrope"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="12/08 · 23:14"
-                                    android:textColor="@color/secondary_gray"
-                                    android:textSize="11.5sp"
-                                    android:fontFamily="@font/manrope"
-                                    android:layout_marginTop="2dp" />
-                            </LinearLayout>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"
-                                android:text="● Crítico"
-                                android:textColor="#D97706"
-                                android:textSize="11sp"
-                                android:fontFamily="@font/manrope"
-                                android:textStyle="bold"
-                                android:background="@drawable/bg_badge_warning"
-                                android:paddingStart="10dp"
-                                android:paddingEnd="10dp"
-                                android:paddingTop="3dp"
-                                android:paddingBottom="3dp" />
-                        </RelativeLayout>
-
-                        <!-- ITEM 7: CÂMARA 03 -->
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentStart="true"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Câmara 03 atingiu 1,9 ºC"
-                                    android:textColor="@color/primary_dark"
-                                    android:textSize="13sp"
-                                    android:fontFamily="@font/manrope"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="14/08 · 10:22"
-                                    android:textColor="@color/secondary_gray"
-                                    android:textSize="11.5sp"
-                                    android:fontFamily="@font/manrope"
-                                    android:layout_marginTop="2dp" />
-                            </LinearLayout>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"
-                                android:text="● Crítico"
-                                android:textColor="#E65100"
-                                android:textSize="11sp"
-                                android:fontFamily="@font/manrope"
-                                android:textStyle="bold"
-                                android:background="@drawable/bg_badge_warning"
-                                android:paddingStart="10dp"
-                                android:paddingEnd="10dp"
-                                android:paddingTop="3dp"
-                                android:paddingBottom="3dp" />
-                        </RelativeLayout>
-
+                            android:text="Nenhum alerta registrado no período."
+                            android:textColor="@color/secondary_gray"
+                            android:textSize="13sp"
+                            android:fontFamily="@font/manrope"
+                            android:gravity="center"
+                            android:paddingTop="20dp"
+                            android:paddingBottom="20dp"
+                            android:visibility="gone" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 

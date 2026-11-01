@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mobile_skadi.data.SkadiDatabaseHelper;
 import com.example.mobile_skadi.network.RetrofitClient;
 import com.example.mobile_skadi.network.SkadiApiService;
 import com.example.mobile_skadi.network.dto.ColdRoomResponse;
@@ -185,6 +186,7 @@ public class CamarasActivity extends AppCompatActivity {
 
     private void loadCamarasFromApi() {
         SkadiApiService apiService = RetrofitClient.getApiService(this);
+        SkadiDatabaseHelper dbHelper = SkadiDatabaseHelper.getInstance(this);
 
         // Carrega as leituras de temperatura primeiro ou em paralelo
         apiService.getAllReadings().enqueue(new Callback<List<TemperatureReadingResponse>>() {
@@ -197,29 +199,44 @@ public class CamarasActivity extends AppCompatActivity {
                             readingsMap.put(tr.getColdRoomId(), tr);
                         }
                     }
+                    dbHelper.saveReadings(response.body());
+                } else {
+                    readingsMap.clear();
+                    readingsMap.putAll(dbHelper.getCachedReadingsMap());
                 }
-                fetchColdRooms(apiService);
+                fetchColdRooms(apiService, dbHelper);
             }
 
             @Override
             public void onFailure(Call<List<TemperatureReadingResponse>> call, Throwable t) {
-                fetchColdRooms(apiService);
+                readingsMap.clear();
+                readingsMap.putAll(dbHelper.getCachedReadingsMap());
+                fetchColdRooms(apiService, dbHelper);
             }
         });
     }
 
-    private void fetchColdRooms(SkadiApiService apiService) {
+    private void fetchColdRooms(SkadiApiService apiService, SkadiDatabaseHelper dbHelper) {
         apiService.getColdRooms().enqueue(new Callback<List<ColdRoomResponse>>() {
             @Override
             public void onResponse(Call<List<ColdRoomResponse>> call, Response<List<ColdRoomResponse>> response) {
                 if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                    dbHelper.saveColdRooms(response.body());
                     bindColdRoomsFromApi(response.body());
+                } else {
+                    List<ColdRoomResponse> cached = dbHelper.getCachedColdRooms();
+                    if (!cached.isEmpty()) {
+                        bindColdRoomsFromApi(cached);
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<List<ColdRoomResponse>> call, Throwable t) {
-                // Silencioso: mantém os cards de fallback intactos
+                List<ColdRoomResponse> cached = dbHelper.getCachedColdRooms();
+                if (!cached.isEmpty()) {
+                    bindColdRoomsFromApi(cached);
+                }
             }
         });
     }

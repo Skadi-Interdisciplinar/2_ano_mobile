@@ -12,7 +12,7 @@ import androidx.appcompat.widget.AppCompatButton;
 
 import com.google.android.material.card.MaterialCardView;
 
-public class ResetPasswordActivity extends AppCompatActivity {
+public class    ResetPasswordActivity extends AppCompatActivity {
 
     private FrameLayout btnBack;
     private FrameLayout btnNotification;
