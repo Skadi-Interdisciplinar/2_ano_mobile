@@ -8,7 +8,16 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mobile_skadi.network.RetrofitClient;
+import com.example.mobile_skadi.network.SkadiApiService;
+import com.example.mobile_skadi.network.dto.AlertResponse;
 import com.google.android.material.card.MaterialCardView;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AlertsActivity extends AppCompatActivity {
 
@@ -32,6 +41,7 @@ public class AlertsActivity extends AppCompatActivity {
 
         initViews();
         setupListeners();
+        loadAlertsFromApi();
     }
 
     private void initViews() {
@@ -61,7 +71,7 @@ public class AlertsActivity extends AppCompatActivity {
             startActivity(new Intent(this, ProfileActivity.class));
         });
 
-        // Detalhes dos alertas
+        // Detalhes dos alertas (Fallback padrão)
         cardAlertCritical.setOnClickListener(v -> {
             Intent intent = new Intent(this, AlertDetailsActivity.class);
             intent.putExtra(AlertDetailsActivity.EXTRA_IS_RESOLVED, false);
@@ -99,7 +109,6 @@ public class AlertsActivity extends AppCompatActivity {
             Intent intent = new Intent(this, HomeActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
-            finish();
         });
 
         navRelatorios.setOnClickListener(v -> {
@@ -109,5 +118,54 @@ public class AlertsActivity extends AppCompatActivity {
         navTrimmy.setOnClickListener(v -> {
             startActivity(new Intent(this, TrimmyActivity.class));
         });
+    }
+
+    private void loadAlertsFromApi() {
+        SkadiApiService apiService = RetrofitClient.getApiService(this);
+        apiService.getAlerts(null).enqueue(new Callback<List<AlertResponse>>() {
+            @Override
+            public void onResponse(Call<List<AlertResponse>> call, Response<List<AlertResponse>> response) {
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                    bindAlertsFromApi(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<AlertResponse>> call, Throwable t) {
+                // Silencioso: fallback local ativo
+            }
+        });
+    }
+
+    private void bindAlertsFromApi(List<AlertResponse> alerts) {
+        if (alerts.size() > 0) {
+            AlertResponse a0 = alerts.get(0);
+            cardAlertCritical.setOnClickListener(v -> {
+                Intent intent = new Intent(this, AlertDetailsActivity.class);
+                intent.putExtra(AlertDetailsActivity.EXTRA_ALERT_ID, a0.getId());
+                intent.putExtra(AlertDetailsActivity.EXTRA_IS_RESOLVED, "RESOLVED".equalsIgnoreCase(a0.getStatus()) || "RECOGNIZED".equalsIgnoreCase(a0.getStatus()));
+                startActivity(intent);
+            });
+        }
+
+        if (alerts.size() > 1) {
+            AlertResponse a1 = alerts.get(1);
+            cardAlertWarning.setOnClickListener(v -> {
+                Intent intent = new Intent(this, AlertDetailsActivity.class);
+                intent.putExtra(AlertDetailsActivity.EXTRA_ALERT_ID, a1.getId());
+                intent.putExtra(AlertDetailsActivity.EXTRA_IS_RESOLVED, "RESOLVED".equalsIgnoreCase(a1.getStatus()) || "RECOGNIZED".equalsIgnoreCase(a1.getStatus()));
+                startActivity(intent);
+            });
+        }
+
+        if (alerts.size() > 2) {
+            AlertResponse a2 = alerts.get(2);
+            cardAlertStable.setOnClickListener(v -> {
+                Intent intent = new Intent(this, AlertDetailsActivity.class);
+                intent.putExtra(AlertDetailsActivity.EXTRA_ALERT_ID, a2.getId());
+                intent.putExtra(AlertDetailsActivity.EXTRA_IS_RESOLVED, true);
+                startActivity(intent);
+            });
+        }
     }
 }

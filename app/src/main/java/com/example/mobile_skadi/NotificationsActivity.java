@@ -9,7 +9,16 @@ import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mobile_skadi.network.RetrofitClient;
+import com.example.mobile_skadi.network.SkadiApiService;
+import com.example.mobile_skadi.network.dto.NotificationResponse;
 import com.google.android.material.card.MaterialCardView;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class NotificationsActivity extends AppCompatActivity {
 
@@ -34,6 +43,7 @@ public class NotificationsActivity extends AppCompatActivity {
 
         initViews();
         setupListeners();
+        loadNotificationsFromApi();
     }
 
     private void initViews() {
@@ -60,6 +70,7 @@ public class NotificationsActivity extends AppCompatActivity {
             startActivity(new Intent(this, ProfileActivity.class));
         });
 
+        // Fallback inicial
         notifItem1.setOnClickListener(v -> {
             markAsRead(notifItem1, dotUnread1);
             Intent intent = new Intent(this, AlertDetailsActivity.class);
@@ -95,6 +106,71 @@ public class NotificationsActivity extends AppCompatActivity {
         navTrimmy.setOnClickListener(v -> {
             startActivity(new Intent(this, TrimmyActivity.class));
         });
+    }
+
+    private void loadNotificationsFromApi() {
+        SkadiApiService apiService = RetrofitClient.getApiService(this);
+        apiService.getNotifications().enqueue(new Callback<List<NotificationResponse>>() {
+            @Override
+            public void onResponse(Call<List<NotificationResponse>> call, Response<List<NotificationResponse>> response) {
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                    bindNotificationsFromApi(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<NotificationResponse>> call, Throwable t) {
+                // Silencioso: fallback local ativo
+            }
+        });
+    }
+
+    private void bindNotificationsFromApi(List<NotificationResponse> notifications) {
+        if (notifications.size() > 0) {
+            NotificationResponse n0 = notifications.get(0);
+            if (n0.getReadAt() != null && !n0.getReadAt().isEmpty()) {
+                dotUnread1.setVisibility(View.GONE);
+                notifItem1.setBackgroundColor(Color.parseColor("#E2E8F0"));
+            }
+            notifItem1.setOnClickListener(v -> {
+                markAsRead(notifItem1, dotUnread1, n0.getId());
+                Intent intent = new Intent(this, AlertDetailsActivity.class);
+                if (n0.getAlertId() != null) {
+                    intent.putExtra(AlertDetailsActivity.EXTRA_ALERT_ID, n0.getAlertId());
+                }
+                intent.putExtra(AlertDetailsActivity.EXTRA_IS_RESOLVED, false);
+                startActivity(intent);
+            });
+        }
+
+        if (notifications.size() > 1) {
+            NotificationResponse n1 = notifications.get(1);
+            if (n1.getReadAt() != null && !n1.getReadAt().isEmpty()) {
+                dotUnread2.setVisibility(View.GONE);
+                notifItem2.setBackgroundColor(Color.parseColor("#E2E8F0"));
+            }
+            notifItem2.setOnClickListener(v -> {
+                markAsRead(notifItem2, dotUnread2, n1.getId());
+                Intent intent = new Intent(this, AlertDetailsActivity.class);
+                if (n1.getAlertId() != null) {
+                    intent.putExtra(AlertDetailsActivity.EXTRA_ALERT_ID, n1.getAlertId());
+                }
+                intent.putExtra(AlertDetailsActivity.EXTRA_IS_RESOLVED, false);
+                startActivity(intent);
+            });
+        }
+    }
+
+    private void markAsRead(LinearLayout item, View dot, Integer notifId) {
+        markAsRead(item, dot);
+        if (notifId != null && notifId > 0) {
+            RetrofitClient.getApiService(this).markNotificationAsRead(notifId).enqueue(new Callback<NotificationResponse>() {
+                @Override
+                public void onResponse(Call<NotificationResponse> call, Response<NotificationResponse> response) {}
+                @Override
+                public void onFailure(Call<NotificationResponse> call, Throwable t) {}
+            });
+        }
     }
 
     private void markAsRead(LinearLayout item, View dot) {

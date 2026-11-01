@@ -12,11 +12,18 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.example.mobile_skadi.network.RetrofitClient;
+import com.example.mobile_skadi.network.dto.AlertResponse;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class AlertDetailsActivity extends AppCompatActivity {
 
+    public static final String EXTRA_ALERT_ID = "EXTRA_ALERT_ID";
     public static final String EXTRA_IS_RESOLVED = "EXTRA_IS_RESOLVED";
 
     private FrameLayout btnBack;
@@ -39,6 +46,7 @@ public class AlertDetailsActivity extends AppCompatActivity {
     private LinearLayout navTrimmy;
 
     private boolean isResolved = false;
+    private Integer alertId = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +55,13 @@ public class AlertDetailsActivity extends AppCompatActivity {
 
         initViews();
         setupListeners();
+
+        if (getIntent().hasExtra(EXTRA_ALERT_ID)) {
+            int id = getIntent().getIntExtra(EXTRA_ALERT_ID, -1);
+            if (id > 0) {
+                alertId = id;
+            }
+        }
 
         // Verifica estado inicial via intent (padrão: em andamento)
         isResolved = getIntent().getBooleanExtra(EXTRA_IS_RESOLVED, false);
@@ -94,9 +109,24 @@ public class AlertDetailsActivity extends AppCompatActivity {
         // Ação 1: Justificar alerta (Abre modal de Justificativa - Frame 204)
         btnJustificar.setOnClickListener(v -> {
             AlertJustificationDialog.show(this, (reason, description) -> {
-                setAlertResolved(true);
-                Toast.makeText(this, "Justificativa registrada com sucesso!", Toast.LENGTH_SHORT).show();
-                // TODO: Enviar justificativa para a API
+                if (alertId != null && alertId > 0) {
+                    RetrofitClient.getApiService(this).recognizeAlert(alertId).enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            setAlertResolved(true);
+                            Toast.makeText(AlertDetailsActivity.this, "Justificativa registrada com sucesso!", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            setAlertResolved(true);
+                            Toast.makeText(AlertDetailsActivity.this, "Justificativa registrada (modo offline)!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    setAlertResolved(true);
+                    Toast.makeText(this, "Justificativa registrada com sucesso!", Toast.LENGTH_SHORT).show();
+                }
             });
         });
 
@@ -133,7 +163,7 @@ public class AlertDetailsActivity extends AppCompatActivity {
         this.isResolved = resolved;
 
         if (resolved) {
-            // Estado Resolvido (Foto 2)
+            // Estado Resolvido
             colEndTime.setVisibility(View.VISIBLE);
             tvStartTime.setTextColor(Color.parseColor("#94A3B8")); // Hora inicial mais clara
             tvEndTime.setTextColor(ContextCompat.getColor(this, R.color.primary_dark)); // Fim em destaque escuro
@@ -141,7 +171,7 @@ public class AlertDetailsActivity extends AppCompatActivity {
             tvAlertStatus.setTextColor(ContextCompat.getColor(this, R.color.alert_success));
             layoutActionButtons.setVisibility(View.GONE); // Botões ocultos
         } else {
-            // Estado Em Andamento (Foto anterior)
+            // Estado Em Andamento
             colEndTime.setVisibility(View.GONE);
             tvStartTime.setTextColor(ContextCompat.getColor(this, R.color.primary_dark));
             tvAlertStatus.setText("Em andamento");

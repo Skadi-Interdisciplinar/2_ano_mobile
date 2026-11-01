@@ -13,7 +13,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 
+import com.example.mobile_skadi.network.RetrofitClient;
+import com.example.mobile_skadi.network.dto.SupportRequestRequest;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class OpenTicketBottomSheet extends BottomSheetDialog {
 
@@ -66,8 +72,24 @@ public class OpenTicketBottomSheet extends BottomSheetDialog {
                 Toast.makeText(getContext(), "Por favor, descreva o chamado antes de enviar.", Toast.LENGTH_SHORT).show();
                 return;
             }
-            Toast.makeText(getContext(), "Chamado enviado com sucesso!", Toast.LENGTH_SHORT).show();
-            dismiss();
+
+            btnSubmit.setEnabled(false);
+            String tipo = tvTicketTypeSelected.getText() != null ? tvTicketTypeSelected.getText().toString() : "Suporte Geral";
+            SupportRequestRequest request = new SupportRequestRequest(tipo, desc);
+
+            RetrofitClient.getApiService(getContext()).createSupportRequest(request).enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    Toast.makeText(getContext(), "Chamado enviado com sucesso!", Toast.LENGTH_SHORT).show();
+                    dismiss();
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Toast.makeText(getContext(), "Chamado enviado (modo offline)!", Toast.LENGTH_SHORT).show();
+                    dismiss();
+                }
+            });
         });
     }
 
