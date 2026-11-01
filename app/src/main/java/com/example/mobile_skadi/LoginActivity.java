@@ -35,10 +35,22 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SessionManager sessionManager = SessionManager.getInstance(this);
+        if (sessionManager.hasToken()) {
+            startActivity(new Intent(this, HomeActivity.class));
+            finish();
+            return;
+        }
+
         setContentView(R.layout.activity_login);
 
         initViews();
         setupListeners();
+
+        if (!sessionManager.getUsername().isEmpty() && etUsuario != null) {
+            etUsuario.setText(sessionManager.getUsername());
+        }
     }
 
     private void initViews() {

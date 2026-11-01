@@ -134,7 +134,7 @@
                             android:paddingTop="14dp"
                             android:paddingBottom="14dp">
 
-                            <TextView
+                            <TextView android:id="@+id/tvCountAtivos"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="3"
@@ -175,7 +175,7 @@
                             android:paddingTop="14dp"
                             android:paddingBottom="14dp">
 
-                            <TextView
+                            <TextView android:id="@+id/tvCountCriticos"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="1"
@@ -215,7 +215,7 @@
                             android:paddingTop="14dp"
                             android:paddingBottom="14dp">
 
-                            <TextView
+                            <TextView android:id="@+id/tvCountResolvidos"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="1"
@@ -281,7 +281,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="● Crítico"
+                                    android:id="@+id/tvAlertBadgeCritical" android:text="● Crítico"
                                     android:textColor="@color/alert_danger"
                                     android:textSize="11sp"
                                     android:fontFamily="@font/manrope"
@@ -296,7 +296,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="11h11"
+                                    android:id="@+id/tvAlertTimeCritical" android:text="11h11"
                                     android:textColor="@color/secondary_gray"
                                     android:textSize="12sp"
                                     android:fontFamily="@font/manrope"
@@ -305,7 +305,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="8,4°C"
+                                    android:id="@+id/tvAlertTempCritical" android:text="8,4°C"
                                     android:textColor="@color/alert_danger"
                                     android:textSize="22sp"
                                     android:fontFamily="@font/manrope"
@@ -315,7 +315,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Câmara 291"
+                                android:id="@+id/tvAlertTitleCritical" android:text="Câmara 291"
                                 android:textColor="@color/primary_dark"
                                 android:textSize="17sp"
                                 android:fontFamily="@font/manrope"
@@ -333,7 +333,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="Mín. 0°C | Máx. 4°C"
+                                    android:id="@+id/tvAlertRangeCritical" android:text="Mín. 0°C | Máx. 4°C"
                                     android:textColor="@color/secondary_gray"
                                     android:textSize="12sp"
                                     android:fontFamily="@font/manrope" />
@@ -392,7 +392,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="● Atenção"
+                                    android:id="@+id/tvAlertBadgeWarning" android:text="● Atenção"
                                     android:textColor="#E5A100"
                                     android:textSize="11sp"
                                     android:fontFamily="@font/manrope"
@@ -407,7 +407,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="9h56"
+                                    android:id="@+id/tvAlertTimeWarning" android:text="9h56"
                                     android:textColor="@color/secondary_gray"
                                     android:textSize="12sp"
                                     android:fontFamily="@font/manrope"
@@ -416,7 +416,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="2,3°C"
+                                    android:id="@+id/tvAlertTempWarning" android:text="2,3°C"
                                     android:textColor="#E5A100"
                                     android:textSize="22sp"
                                     android:fontFamily="@font/manrope"
@@ -426,7 +426,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Câmara 61"
+                                android:id="@+id/tvAlertTitleWarning" android:text="Câmara 61"
                                 android:textColor="@color/primary_dark"
                                 android:textSize="17sp"
                                 android:fontFamily="@font/manrope"
@@ -444,7 +444,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="Mín. 0°C | Máx. 2°C"
+                                    android:id="@+id/tvAlertRangeWarning" android:text="Mín. 0°C | Máx. 2°C"
                                     android:textColor="@color/secondary_gray"
                                     android:textSize="12sp"
                                     android:fontFamily="@font/manrope" />
@@ -503,7 +503,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="● Estável"
+                                    android:id="@+id/tvAlertBadgeStable" android:text="● Estável"
                                     android:textColor="@color/alert_success"
                                     android:textSize="11sp"
                                     android:fontFamily="@font/manrope"
@@ -518,7 +518,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="5h12"
+                                    android:id="@+id/tvAlertTimeStable" android:text="5h12"
                                     android:textColor="@color/secondary_gray"
                                     android:textSize="12sp"
                                     android:fontFamily="@font/manrope"
@@ -527,7 +527,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="1,4°C"
+                                    android:id="@+id/tvAlertTempStable" android:text="1,4°C"
                                     android:textColor="@color/alert_success"
                                     android:textSize="22sp"
                                     android:fontFamily="@font/manrope"
@@ -537,7 +537,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Câmara 1"
+                                android:id="@+id/tvAlertTitleStable" android:text="Câmara 1"
                                 android:textColor="@color/primary_dark"
                                 android:textSize="17sp"
                                 android:fontFamily="@font/manrope"
@@ -555,7 +555,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="Mín. 0°C | Máx. 4°C"
+                                    android:id="@+id/tvAlertRangeStable" android:text="Mín. 0°C | Máx. 4°C"
                                     android:textColor="@color/secondary_gray"
                                     android:textSize="12sp"
                                     android:fontFamily="@font/manrope" />
