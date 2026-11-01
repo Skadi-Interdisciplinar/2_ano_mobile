@@ -206,31 +206,37 @@ public class CamarasActivity extends AppCompatActivity {
             cardCamara291.setOnClickListener(v -> openCamaraDetails(cr0.getId(), cr0.getModel() != null ? cr0.getModel() : "Câmara 291", "8,4°C", cr0.getMinimumTemperature() + "°C — " + cr0.getMaximumTemperature() + "°C", true));
         }
 
-        if (coldRooms.size() > 1) {
+                if (coldRooms.size() > 1) {
             ColdRoomResponse cr1 = coldRooms.get(1);
-            if (tvNameCamara61 != null && cr1.getModel() != null) tvNameCamara61.setText(cr1.getModel());
+            if (tvNameCamara61 != null) { String t1 = cr1.getLocation() != null ? cr1.getLocation() : cr1.getModel(); if (t1 != null) tvNameCamara61.setText(t1); }
             if (tvRangeCamara61 != null && cr1.getMinimumTemperature() != null && cr1.getMaximumTemperature() != null) {
                 tvRangeCamara61.setText("Mín. " + cr1.getMinimumTemperature() + "°C | Máx. " + cr1.getMaximumTemperature() + "°C");
             }
-            cardCamara61.setOnClickListener(v -> openCamaraDetails(cr1.getId(), cr1.getModel() != null ? cr1.getModel() : "Câmara 61", "2,3°C", cr1.getMinimumTemperature() + "°C — " + cr1.getMaximumTemperature() + "°C", true));
+            cardCamara61.setOnClickListener(v -> openCamaraDetails(cr1.getId(), cr1.getLocation() != null ? cr1.getLocation() : "Câmara 61", "2,3°C", cr1.getMinimumTemperature() + "°C — " + cr1.getMaximumTemperature() + "°C", true));
+        } else {
+            if (cardCamara61 != null) cardCamara61.setVisibility(View.GONE);
         }
 
         if (coldRooms.size() > 2) {
             ColdRoomResponse cr2 = coldRooms.get(2);
-            if (tvNameCamara1 != null && cr2.getModel() != null) tvNameCamara1.setText(cr2.getModel());
+            if (tvNameCamara1 != null) { String t2 = cr2.getLocation() != null ? cr2.getLocation() : cr2.getModel(); if (t2 != null) tvNameCamara1.setText(t2); }
             if (tvRangeCamara1 != null && cr2.getMinimumTemperature() != null && cr2.getMaximumTemperature() != null) {
                 tvRangeCamara1.setText("Mín. " + cr2.getMinimumTemperature() + "°C | Máx. " + cr2.getMaximumTemperature() + "°C");
             }
-            cardCamara1.setOnClickListener(v -> openCamaraDetails(cr2.getId(), cr2.getModel() != null ? cr2.getModel() : "Câmara 1", "1,4°C", cr2.getMinimumTemperature() + "°C — " + cr2.getMaximumTemperature() + "°C", false));
+            cardCamara1.setOnClickListener(v -> openCamaraDetails(cr2.getId(), cr2.getLocation() != null ? cr2.getLocation() : "Câmara 1", "1,4°C", cr2.getMinimumTemperature() + "°C — " + cr2.getMaximumTemperature() + "°C", false));
+        } else {
+            if (cardCamara1 != null) cardCamara1.setVisibility(View.GONE);
         }
 
         if (coldRooms.size() > 3) {
             ColdRoomResponse cr3 = coldRooms.get(3);
-            if (tvNameCamara521 != null && cr3.getModel() != null) tvNameCamara521.setText(cr3.getModel());
+            if (tvNameCamara521 != null) { String t3 = cr3.getLocation() != null ? cr3.getLocation() : cr3.getModel(); if (t3 != null) tvNameCamara521.setText(t3); }
             if (tvRangeCamara521 != null && cr3.getMinimumTemperature() != null && cr3.getMaximumTemperature() != null) {
                 tvRangeCamara521.setText("Mín. " + cr3.getMinimumTemperature() + "°C | Máx. " + cr3.getMaximumTemperature() + "°C");
             }
-            cardCamara521.setOnClickListener(v -> openCamaraDetails(cr3.getId(), cr3.getModel() != null ? cr3.getModel() : "Câmara 521", "3,7°C", cr3.getMinimumTemperature() + "°C — " + cr3.getMaximumTemperature() + "°C", false));
+            cardCamara521.setOnClickListener(v -> openCamaraDetails(cr3.getId(), cr3.getLocation() != null ? cr3.getLocation() : "Câmara 521", "3,7°C", cr3.getMinimumTemperature() + "°C — " + cr3.getMaximumTemperature() + "°C", false));
+        } else {
+            if (cardCamara521 != null) cardCamara521.setVisibility(View.GONE);
         }
     }
 

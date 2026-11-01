@@ -2,6 +2,7 @@ package com.example.mobile_skadi;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -156,6 +157,9 @@ public class AlertsActivity extends AppCompatActivity {
                 intent.putExtra(AlertDetailsActivity.EXTRA_IS_RESOLVED, "RESOLVED".equalsIgnoreCase(a1.getStatus()) || "RECOGNIZED".equalsIgnoreCase(a1.getStatus()));
                 startActivity(intent);
             });
+        } else {
+            if (cardAlertWarning != null) cardAlertWarning.setVisibility(View.GONE);
+            if (cardAlertStable != null) cardAlertStable.setVisibility(View.GONE);
         }
 
         if (alerts.size() > 2) {

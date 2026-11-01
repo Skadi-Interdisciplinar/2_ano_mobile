@@ -10,6 +10,7 @@ public class SessionManager {
     private static final String KEY_USERNAME = "username";
     private static final String KEY_ROLE = "role";
     private static final String KEY_UNIT = "unit";
+    private static final String KEY_NAME = "user_name";
 
     private static SessionManager instance;
     private final SharedPreferences preferences;
@@ -36,6 +37,14 @@ public class SessionManager {
 
     public void saveToken(String token) {
         preferences.edit().putString(KEY_TOKEN, token).apply();
+    }
+
+    public void saveName(String name) {
+        preferences.edit().putString(KEY_NAME, name).apply();
+    }
+
+    public String getName() {
+        return preferences.getString(KEY_NAME, "");
     }
 
     public void saveUsername(String username) {

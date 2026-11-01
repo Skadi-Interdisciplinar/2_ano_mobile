@@ -51,9 +51,18 @@ public class HomeActivity extends AppCompatActivity {
         navRelatorios = findViewById(R.id.navRelatorios);
         navTrimmy = findViewById(R.id.navTrimmy);
 
-        TextView tvGreeting = findViewById(R.id.tvGreeting);
+                TextView tvGreeting = findViewById(R.id.tvGreeting);
         if (tvGreeting != null) {
-            tvGreeting.setText("Olá, " + UserRoleManager.getFirstNameForGreeting() + "!");
+            String name = com.example.mobile_skadi.network.SessionManager.getInstance(this).getName();
+            if (name == null || name.trim().isEmpty()) {
+                name = com.example.mobile_skadi.network.SessionManager.getInstance(this).getUsername();
+            }
+            if (name != null && !name.trim().isEmpty()) {
+                String firstName = name.trim().split(" ")[0];
+                tvGreeting.setText("Olá, " + firstName + "!");
+            } else {
+                tvGreeting.setText("Olá, " + UserRoleManager.getFirstNameForGreeting() + "!");
+            }
         }
         View layoutManagerExtraSection = findViewById(R.id.layoutManagerExtraSection);
         if (layoutManagerExtraSection != null) {

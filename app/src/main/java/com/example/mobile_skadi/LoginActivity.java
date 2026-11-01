@@ -125,6 +125,9 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     UserResponse user = response.body();
+                    if (user.getNome() != null && !user.getNome().trim().isEmpty()) {
+                        SessionManager.getInstance(LoginActivity.this).saveName(user.getNome());
+                    }
                     SessionManager.getInstance(LoginActivity.this).saveRole(user.getRole());
                     if (user.getRole() != null && (user.getRole().equalsIgnoreCase("ROLE_USER") || user.getRole().equalsIgnoreCase("FUNCIONARIO") || user.getRole().equalsIgnoreCase("OPERADOR"))) {
                         UserRoleManager.setCurrentRole(UserRoleManager.Role.FUNCIONARIO);
