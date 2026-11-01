@@ -2,6 +2,7 @@ package com.example.mobile_skadi.network;
 
 import com.example.mobile_skadi.network.dto.ChatRequest;
 import com.example.mobile_skadi.network.dto.ChatResponse;
+import com.example.mobile_skadi.network.dto.EncerrarChatResponse;
 import com.example.mobile_skadi.network.dto.RelatorioPdfRequest;
 
 import okhttp3.ResponseBody;
@@ -13,6 +14,9 @@ public interface TrimmyApiService {
 
     @POST("chat")
     Call<ChatResponse> chat(@Body ChatRequest request);
+
+    @POST("chat/encerrar")
+    Call<EncerrarChatResponse> encerrarChat();
 
     @POST("relatorios/pdf")
     Call<ResponseBody> downloadPdfReport(@Body RelatorioPdfRequest request);

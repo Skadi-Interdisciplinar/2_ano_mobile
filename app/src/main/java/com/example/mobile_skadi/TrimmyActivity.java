@@ -22,6 +22,7 @@ import com.example.mobile_skadi.network.SessionManager;
 import com.example.mobile_skadi.network.TrimmyApiClient;
 import com.example.mobile_skadi.network.dto.ChatRequest;
 import com.example.mobile_skadi.network.dto.ChatResponse;
+import com.example.mobile_skadi.network.dto.EncerrarChatResponse;
 import com.google.android.material.card.MaterialCardView;
 
 import retrofit2.Call;
@@ -260,13 +261,8 @@ public class TrimmyActivity extends AppCompatActivity {
 
         scrollTrimmyChat.post(() -> scrollTrimmyChat.fullScroll(View.FOCUS_DOWN));
 
-        // Chamada real ao backend de IA
-        String token = SessionManager.getInstance(this).getToken();
-        if (token == null || token.trim().isEmpty()) {
-            token = "skadi-token";
-        }
-
-        ChatRequest request = new ChatRequest(userText, token);
+        // Chamada real ao backend de IA (o cabeçalho Authorization: Bearer <token> é adicionado pelo AuthInterceptor)
+        ChatRequest request = new ChatRequest(userText);
         TrimmyApiClient.getApiService(this).chat(request).enqueue(new Callback<ChatResponse>() {
             @Override
             public void onResponse(Call<ChatResponse> call, Response<ChatResponse> response) {
@@ -274,7 +270,22 @@ public class TrimmyActivity extends AppCompatActivity {
                     tvAi.setText(response.body().getResposta());
                     tvAi.setTextColor(Color.parseColor("#334155"));
                 } else {
-                    tvAi.setText("Não foi possível gerar uma resposta no momento. Status: " + response.code());
+                    int code = response.code();
+                    String msg;
+                    if (code == 401) {
+                        msg = "Sua sessão expirou. Faça login novamente no aplicativo.";
+                    } else if (code == 403) {
+                        msg = "Acesso negado para o seu perfil ou câmara solicitada.";
+                    } else if (code == 409) {
+                        msg = "A sessão foi alterada durante a consulta. Tente novamente.";
+                    } else if (code == 422) {
+                        msg = "Parâmetros da requisição inválidos.";
+                    } else if (code == 502 || code == 503) {
+                        msg = "O serviço de inteligência artificial Trimmy está temporariamente indisponível.";
+                    } else {
+                        msg = "Não foi possível gerar uma resposta no momento (Erro " + code + ").";
+                    }
+                    tvAi.setText(msg);
                     tvAi.setTextColor(Color.parseColor("#EF4444"));
                 }
                 scrollTrimmyChat.post(() -> scrollTrimmyChat.fullScroll(View.FOCUS_DOWN));
@@ -287,6 +298,20 @@ public class TrimmyActivity extends AppCompatActivity {
                 scrollTrimmyChat.post(() -> scrollTrimmyChat.fullScroll(View.FOCUS_DOWN));
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (isChatStarted) {
+            TrimmyApiClient.getApiService(this).encerrarChat().enqueue(new Callback<EncerrarChatResponse>() {
+                @Override
+                public void onResponse(Call<EncerrarChatResponse> call, Response<EncerrarChatResponse> response) {}
+
+                @Override
+                public void onFailure(Call<EncerrarChatResponse> call, Throwable t) {}
+            });
+        }
     }
 
     private int dpToPx(int dp) {

@@ -26,6 +26,7 @@ public class TrimmyApiClient {
             logging.setLevel(BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE);
 
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                    .addInterceptor(new AuthInterceptor(context))
                     .addInterceptor(logging)
                     .connectTimeout(30, TimeUnit.SECONDS)
                     .readTimeout(60, TimeUnit.SECONDS)

@@ -3,10 +3,9 @@ package com.example.mobile_skadi.network.dto;
 import com.google.gson.annotations.SerializedName;
 
 public class RelatorioPdfRequest {
-    private String token;
 
-    @SerializedName("distribuicao_id")
-    private Long distribuicaoId;
+    @SerializedName("cd_id")
+    private Long cdId;
 
     @SerializedName("camara_id")
     private Long camaraId;
@@ -20,28 +19,19 @@ public class RelatorioPdfRequest {
     public RelatorioPdfRequest() {
     }
 
-    public RelatorioPdfRequest(String token, Long distribuicaoId, Long camaraId, String dataInicial, String dataFinal) {
-        this.token = token;
-        this.distribuicaoId = distribuicaoId;
+    public RelatorioPdfRequest(Long cdId, Long camaraId, String dataInicial, String dataFinal) {
+        this.cdId = cdId;
         this.camaraId = camaraId;
         this.dataInicial = dataInicial;
         this.dataFinal = dataFinal;
     }
 
-    public String getToken() {
-        return token;
+    public Long getCdId() {
+        return cdId;
     }
 
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public Long getDistribuicaoId() {
-        return distribuicaoId;
-    }
-
-    public void setDistribuicaoId(Long distribuicaoId) {
-        this.distribuicaoId = distribuicaoId;
+    public void setCdId(Long cdId) {
+        this.cdId = cdId;
     }
 
     public Long getCamaraId() {
