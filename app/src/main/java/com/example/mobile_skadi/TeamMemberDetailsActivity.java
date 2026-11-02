@@ -39,6 +39,12 @@ public class TeamMemberDetailsActivity extends AppCompatActivity {
     private LinearLayout navTrimmy;
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        com.example.mobile_skadi.utils.AvatarManager.applyAvatar(this, btnProfileAvatar);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_team_member_details);

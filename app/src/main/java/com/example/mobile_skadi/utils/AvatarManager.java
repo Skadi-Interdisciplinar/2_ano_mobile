@@ -5,15 +5,22 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Shader;
+import android.graphics.Typeface;
 import android.view.View;
 import android.widget.ImageView;
 
+import androidx.core.content.res.ResourcesCompat;
+
+import com.example.mobile_skadi.R;
+import com.example.mobile_skadi.network.SessionManager;
 import com.google.android.material.card.MaterialCardView;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.Locale;
 
 public class AvatarManager {
 
@@ -92,6 +99,58 @@ public class AvatarManager {
         return output;
     }
 
+    public static String getUserInitial(Context context) {
+        if (context == null) return "U";
+        String name = SessionManager.getInstance(context).getName();
+        if (name == null || name.trim().isEmpty()) {
+            name = SessionManager.getInstance(context).getUsername();
+        }
+        if (name != null && !name.trim().isEmpty()) {
+            String trimmed = name.trim();
+            for (int i = 0; i < trimmed.length(); i++) {
+                char c = trimmed.charAt(i);
+                if (Character.isLetterOrDigit(c)) {
+                    return String.valueOf(c).toUpperCase(Locale.getDefault());
+                }
+            }
+        }
+        return "U";
+    }
+
+    public static Bitmap createInitialAvatar(Context context, String initial, int size) {
+        if (size <= 0) size = 256;
+        Bitmap bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+
+        // Fundo circular elegante (azul refinado com excelente contraste)
+        Paint bgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        bgPaint.setColor(Color.parseColor("#2563EB"));
+        float radius = size / 2f;
+        canvas.drawCircle(radius, radius, radius, bgPaint);
+
+        // Letra inicial em branco
+        Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        textPaint.setColor(Color.WHITE);
+        textPaint.setTextSize(size * 0.48f);
+        textPaint.setTextAlign(Paint.Align.CENTER);
+        try {
+            Typeface typeface = ResourcesCompat.getFont(context, R.font.manrope);
+            if (typeface != null) {
+                textPaint.setTypeface(Typeface.create(typeface, Typeface.BOLD));
+            } else {
+                textPaint.setTypeface(Typeface.DEFAULT_BOLD);
+            }
+        } catch (Exception e) {
+            textPaint.setTypeface(Typeface.DEFAULT_BOLD);
+        }
+
+        Paint.FontMetrics fontMetrics = textPaint.getFontMetrics();
+        float baseline = radius - (fontMetrics.ascent + fontMetrics.descent) / 2f;
+        canvas.drawText(initial, radius, baseline, textPaint);
+
+        return bitmap;
+    }
+
     public static void applyAvatar(Context context, View view) {
         if (context == null || view == null) return;
         ImageView targetIv = null;
@@ -108,8 +167,18 @@ public class AvatarManager {
         Bitmap avatar = loadAvatar(context);
         if (avatar != null) {
             targetIv.setImageBitmap(avatar);
-            targetIv.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            targetIv.setBackground(null);
             targetIv.setPadding(0, 0, 0, 0);
+            targetIv.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        } else {
+            // Enquanto o usuário não colocou foto personalizada, exibe a inicial do nome/usuário
+            String initial = getUserInitial(context);
+            int size = targetIv.getWidth() > 0 ? targetIv.getWidth() : 256;
+            Bitmap initialBmp = createInitialAvatar(context, initial, size);
+            targetIv.setImageBitmap(initialBmp);
+            targetIv.setBackground(null);
+            targetIv.setPadding(0, 0, 0, 0);
+            targetIv.setScaleType(ImageView.ScaleType.CENTER_CROP);
         }
     }
 }
