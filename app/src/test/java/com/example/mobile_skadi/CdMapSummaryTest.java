@@ -15,9 +15,9 @@ public class CdMapSummaryTest {
         return gson.fromJson("{\"id\":" + id + ",\"distributionCenterId\":" + cd
                 + ",\"minimumTemperature\":-2,\"maximumTemperature\":2}", ColdRoomResponse.class);
     }
-    private TemperatureReadingViewResponse reading(long id, String temperature, String time) {
+    private TemperatureReadingResponse reading(long id, String temperature, String time) {
         return gson.fromJson("{\"coldRoomId\":" + id + ",\"temperature\":" + temperature
-                + ",\"measuredAt\":\"" + time + "\"}", TemperatureReadingViewResponse.class);
+                + ",\"measuredAt\":\"" + time + "\"}", TemperatureReadingResponse.class);
     }
     private AlertResponse alert(int id, int room, String status) {
         return gson.fromJson("{\"id\":" + id + ",\"coldRoomId\":" + room + ",\"status\":\"" + status + "\"}", AlertResponse.class);
