@@ -14,7 +14,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp">
+        android:layout_marginBottom="28dp">
 
         <FrameLayout
             android:id="@+id/btnCloseDialog"
@@ -45,23 +45,23 @@
             android:textStyle="bold" />
     </RelativeLayout>
 
-    <!-- NÍVEL 1: ESTÁVEL / BAIXA -->
+    <!-- NÍVEL 1: ESTÁVEL -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="top"
-        android:layout_marginBottom="20dp">
+        android:layout_marginBottom="24dp">
 
         <FrameLayout
-            android:layout_width="44dp"
-            android:layout_height="44dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:background="@drawable/bg_icon_square_green"
             android:layout_marginEnd="16dp">
 
             <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_check_circle_green"
                 android:contentDescription="Estável" />
@@ -76,9 +76,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Estável / Baixa"
+                android:text="Estável"
                 android:textColor="@color/alert_success"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:fontFamily="@font/manrope"
                 android:textStyle="bold"
                 android:layout_marginBottom="2dp" />
@@ -86,9 +86,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Dentro da faixa de operação • Operador"
+                android:text="Dentro do padrão • Nível Operador"
                 android:textColor="@color/secondary_dark"
-                android:textSize="12.5sp"
+                android:textSize="13sp"
                 android:fontFamily="@font/manrope"
                 android:textStyle="bold"
                 android:layout_marginBottom="2dp" />
@@ -96,7 +96,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nenhuma ação imediata necessária. Monitoramento contínuo padrão."
+                android:text="Não é necessária nenhuma ação no momento. Monitoramento contínuo regular."
                 android:textColor="@color/secondary_gray"
                 android:textSize="12sp"
                 android:fontFamily="@font/manrope"
@@ -110,17 +110,17 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="top"
-        android:layout_marginBottom="20dp">
+        android:layout_marginBottom="24dp">
 
         <FrameLayout
-            android:layout_width="44dp"
-            android:layout_height="44dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:background="@drawable/bg_icon_square_yellow"
             android:layout_marginEnd="16dp">
 
             <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_eye_warning"
                 android:contentDescription="Atenção" />
@@ -137,7 +137,7 @@
                 android:layout_height="wrap_content"
                 android:text="Atenção"
                 android:textColor="#E5A100"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:fontFamily="@font/manrope"
                 android:textStyle="bold"
                 android:layout_marginBottom="2dp" />
@@ -145,9 +145,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Variação preventiva • Operador / Gestor"
+                android:text="Pequena alteração • Nível Gestor"
                 android:textColor="@color/secondary_dark"
-                android:textSize="12.5sp"
+                android:textSize="13sp"
                 android:fontFamily="@font/manrope"
                 android:textStyle="bold"
                 android:layout_marginBottom="2dp" />
@@ -155,7 +155,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Pequena oscilação registrada. Recomenda-se acompanhar preventivamente."
+                android:text="Acompanhe durante alguns minutos. Verifique fechamento de portas e fluxo de ar."
                 android:textColor="@color/secondary_gray"
                 android:textSize="12sp"
                 android:fontFamily="@font/manrope"
@@ -163,66 +163,7 @@
         </LinearLayout>
     </LinearLayout>
 
-    <!-- NÍVEL 3: URGENTE -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="top"
-        android:layout_marginBottom="20dp">
-
-        <FrameLayout
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:background="@drawable/bg_notif_circle_yellow"
-            android:layout_marginEnd="16dp">
-
-            <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_alert_triangle_orange"
-                android:contentDescription="Urgente" />
-        </FrameLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Urgente"
-                android:textColor="#D97706"
-                android:textSize="16sp"
-                android:fontFamily="@font/manrope"
-                android:textStyle="bold"
-                android:layout_marginBottom="2dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Risco à vida útil da carga • Gestor CD"
-                android:textColor="@color/secondary_dark"
-                android:textSize="12.5sp"
-                android:fontFamily="@font/manrope"
-                android:textStyle="bold"
-                android:layout_marginBottom="2dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Oscilação relevante detectada. Exige verificação das portas e compressores."
-                android:textColor="@color/secondary_gray"
-                android:textSize="12sp"
-                android:fontFamily="@font/manrope"
-                android:lineSpacingMultiplier="1.1" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <!-- NÍVEL 4: CRÍTICO -->
+    <!-- NÍVEL 3: CRÍTICO -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -230,14 +171,14 @@
         android:gravity="top">
 
         <FrameLayout
-            android:layout_width="44dp"
-            android:layout_height="44dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:background="@drawable/bg_icon_square_red"
             android:layout_marginEnd="16dp">
 
             <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_alert_triangle_red"
                 android:contentDescription="Crítico" />
@@ -254,7 +195,7 @@
                 android:layout_height="wrap_content"
                 android:text="Crítico"
                 android:textColor="@color/alert_danger"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:fontFamily="@font/manrope"
                 android:textStyle="bold"
                 android:layout_marginBottom="2dp" />
@@ -262,9 +203,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Violação ANVISA RDC 216 • Gestor e Admin"
+                android:text="Temperatura fora do padrão • Nível Admin"
                 android:textColor="@color/secondary_dark"
-                android:textSize="12.5sp"
+                android:textSize="13sp"
                 android:fontFamily="@font/manrope"
                 android:textStyle="bold"
                 android:layout_marginBottom="2dp" />
@@ -272,7 +213,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Temperatura fora do limite aceitável. Acionamento emergencial de manutenção."
+                android:text="Verifique porta, carga e acione equipe técnica ou suporte para manutenção corretiva."
                 android:textColor="@color/secondary_gray"
                 android:textSize="12sp"
                 android:fontFamily="@font/manrope"
