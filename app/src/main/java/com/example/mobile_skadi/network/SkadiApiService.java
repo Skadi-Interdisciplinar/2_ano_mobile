@@ -1,6 +1,8 @@
 package com.example.mobile_skadi.network;
 
+import com.example.mobile_skadi.network.dto.AddressResponse;
 import com.example.mobile_skadi.network.dto.AlertResponse;
+import com.example.mobile_skadi.network.dto.ChangePasswordRequest;
 import com.example.mobile_skadi.network.dto.ColdRoomResponse;
 import com.example.mobile_skadi.network.dto.DistributionCenterResponse;
 import com.example.mobile_skadi.network.dto.LoginRequest;
@@ -11,7 +13,6 @@ import com.example.mobile_skadi.network.dto.SupportRequestRequest;
 import com.example.mobile_skadi.network.dto.TemperatureReadingResponse;
 import com.example.mobile_skadi.network.dto.TokenResponse;
 import com.example.mobile_skadi.network.dto.UserResponse;
-import com.example.mobile_skadi.network.dto.AddressResponse;
 
 import java.util.List;
 
@@ -33,6 +34,9 @@ public interface SkadiApiService {
 
     @POST("auth/verify-recovery-code")
     Call<Void> verifyRecoveryCode(@Body PasswordCodeVerificationRequest request);
+
+    @POST("auth/change-password")
+    Call<Void> changePassword(@Body ChangePasswordRequest request);
 
     @GET("me")
     Call<UserResponse> me();
