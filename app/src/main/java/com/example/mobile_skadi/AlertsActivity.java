@@ -99,7 +99,8 @@ public class AlertsActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        super.onResume();
+        super.onResume();
+
         com.example.mobile_skadi.utils.AvatarManager.applyAvatar(this, btnProfileAvatar);
         loadAlertsFromApi();
         refreshHandler.removeCallbacks(refreshRunnable);
@@ -357,12 +358,18 @@ public class AlertsActivity extends AppCompatActivity {
         if (tvTemp != null) {
             if (reading != null && reading.getTemperature() != null) {
                 tvTemp.setText(String.format(Locale.getDefault(), "%.1f°C", reading.getTemperature()));
+            } else {
+                tvTemp.setText("--°C");
             }
         }
 
         // Horário do alerta
-        if (tvTime != null && alert.getCreatedAt() != null) {
-            tvTime.setText(formatAlertTime(alert.getCreatedAt()));
+        if (tvTime != null) {
+            if (alert.getCreatedAt() != null) {
+                tvTime.setText(formatAlertTime(alert.getCreatedAt()));
+            } else {
+                tvTime.setText("--:--");
+            }
         }
 
         // Badge

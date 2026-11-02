@@ -245,7 +245,7 @@ public class CamarasActivity extends AppCompatActivity {
     private void bindColdRoomsFromApi(List<ColdRoomResponse> coldRooms) {
         if (!coldRooms.isEmpty()) {
             ColdRoomResponse cr0 = coldRooms.get(0);
-            bindRoomCard(cardCamara291, tvNameCamara291, tvTempCamara291, tvRangeCamara291, cr0, "8,4°C");
+            bindRoomCard(cardCamara291, tvNameCamara291, tvTempCamara291, tvRangeCamara291, cr0, "--°C");
             cardCamara291.setVisibility(View.VISIBLE);
         } else {
             if (cardCamara291 != null) cardCamara291.setVisibility(View.GONE);
@@ -253,7 +253,7 @@ public class CamarasActivity extends AppCompatActivity {
 
         if (coldRooms.size() > 1) {
             ColdRoomResponse cr1 = coldRooms.get(1);
-            bindRoomCard(cardCamara61, tvNameCamara61, tvTempCamara61, tvRangeCamara61, cr1, "2,3°C");
+            bindRoomCard(cardCamara61, tvNameCamara61, tvTempCamara61, tvRangeCamara61, cr1, "--°C");
             cardCamara61.setVisibility(View.VISIBLE);
         } else {
             if (cardCamara61 != null) cardCamara61.setVisibility(View.GONE);
@@ -261,7 +261,7 @@ public class CamarasActivity extends AppCompatActivity {
 
         if (coldRooms.size() > 2) {
             ColdRoomResponse cr2 = coldRooms.get(2);
-            bindRoomCard(cardCamara1, tvNameCamara1, tvTempCamara1, tvRangeCamara1, cr2, "1,4°C");
+            bindRoomCard(cardCamara1, tvNameCamara1, tvTempCamara1, tvRangeCamara1, cr2, "--°C");
             cardCamara1.setVisibility(View.VISIBLE);
         } else {
             if (cardCamara1 != null) cardCamara1.setVisibility(View.GONE);
@@ -269,7 +269,7 @@ public class CamarasActivity extends AppCompatActivity {
 
         if (coldRooms.size() > 3) {
             ColdRoomResponse cr3 = coldRooms.get(3);
-            bindRoomCard(cardCamara521, tvNameCamara521, tvTempCamara521, tvRangeCamara521, cr3, "3,7°C");
+            bindRoomCard(cardCamara521, tvNameCamara521, tvTempCamara521, tvRangeCamara521, cr3, "--°C");
             cardCamara521.setVisibility(View.VISIBLE);
         } else {
             if (cardCamara521 != null) cardCamara521.setVisibility(View.GONE);
