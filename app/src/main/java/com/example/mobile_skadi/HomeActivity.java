@@ -454,6 +454,12 @@ public class HomeActivity extends AppCompatActivity {
                     tvEmployeeNextStatusBadge.setTextColor(Color.parseColor(isRecognized ? "#0284C7" : "#D97706"));
                 }
 
+                if (tvEmployeeNextTimeElapsed != null) {
+                    String timeElapsed = formatTimeElapsed(next.getCreatedAt());
+                    tvEmployeeNextTimeElapsed.setText(timeElapsed);
+                    tvEmployeeNextTimeElapsed.setVisibility(timeElapsed.isEmpty() ? View.GONE : View.VISIBLE);
+                }
+
                 if (tvEmployeeNextCamaraTitle != null) {
                     tvEmployeeNextCamaraTitle.setText(next.getColdRoomName() != null ? next.getColdRoomName() : "Câmara " + next.getColdRoomId());
                 }
@@ -546,6 +552,12 @@ public class HomeActivity extends AppCompatActivity {
             tvStatusBadge.setTextColor(Color.parseColor(isRecognized ? "#0284C7" : "#D97706"));
         }
 
+        if (tvTimeElapsed != null) {
+            String timeElapsed = formatTimeElapsed(p.getCreatedAt());
+            tvTimeElapsed.setText(timeElapsed);
+            tvTimeElapsed.setVisibility(timeElapsed.isEmpty() ? View.GONE : View.VISIBLE);
+        }
+
         if (tvCamaraTitle != null) {
             tvCamaraTitle.setText(p.getColdRoomName() != null ? p.getColdRoomName() : "Câmara " + p.getColdRoomId());
         }
@@ -592,5 +604,20 @@ public class HomeActivity extends AppCompatActivity {
             return "Sem prazo de referência";
         }
         return (p.getRemainingMinutes() != null ? p.getRemainingMinutes() : 0) + " min restantes (No prazo)";
+    }
+
+    private String formatTimeElapsed(String isoDate) {
+        if (isoDate == null || isoDate.isEmpty()) return "";
+        try {
+            LocalDateTime ldt = LocalDateTime.parse(isoDate.length() > 19 ? isoDate.substring(0, 19) : isoDate);
+            long minutes = java.time.Duration.between(ldt, LocalDateTime.now()).toMinutes();
+            if (minutes < 1) return "Agora";
+            if (minutes < 60) return "Há " + minutes + " min";
+            long hours = minutes / 60;
+            if (hours < 24) return "Há " + hours + " h";
+            return "Há " + (hours / 24) + " d";
+        } catch (Exception e) {
+            return "";
+        }
     }
 }
