@@ -15,6 +15,9 @@ val apiBaseUrl: String = System.getenv("SKADI_API_BASE_URL")
     ?: localProperties.getProperty("SKADI_API_BASE_URL")
     ?: "http://10.0.2.2:8080/"
 
+val mapsApiKey = System.getenv("MAPS_API_KEY")?.trim()?.takeIf { it.isNotBlank() }
+    ?: localProperties.getProperty("MAPS_API_KEY", "").trim()
+
 android {
     namespace = "com.example.mobile_skadi"
     compileSdk {
@@ -31,6 +34,8 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "BASE_URL", "\"$apiBaseUrl\"")
+        buildConfigField("boolean", "MAPS_CONFIGURED", mapsApiKey.isNotBlank().toString())
+        manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
     }
 
     buildFeatures {
@@ -62,8 +67,12 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
     implementation(libs.okhttp.logging)
+    implementation(libs.play.services.maps)
+    implementation(libs.play.services.location)
 
     testImplementation(libs.junit)
+    testImplementation(libs.okhttp.mockwebserver)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(libs.okhttp.mockwebserver)
 }

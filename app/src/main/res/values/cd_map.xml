@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cd_map_title">Mapa de CDs Próximos</string>
+    <string name="cd_map_subtitle">Suas unidades no mapa</string>
+    <string name="cd_map_refresh">Atualizar</string>
+    <string name="cd_map_location">Minha posição</string>
+    <string name="cd_map_type">Tipo de mapa</string>
+    <string name="cd_map_normal">Normal</string>
+    <string name="cd_map_hybrid">Híbrido</string>
+    <string name="cd_map_units">Unidades</string>
+    <string name="cd_map_select">Selecione uma unidade no mapa ou na lista para visualizar os detalhes.</string>
+    <string name="cd_map_loading">Carregando suas unidades…</string>
+    <plurals name="cd_map_locating">
+        <item quantity="one">Localizando %1$d unidade…</item>
+        <item quantity="other">Localizando %1$d unidades…</item>
+    </plurals>
+    <plurals name="cd_map_loaded">
+        <item quantity="one">%1$d unidade disponível • %2$d sem localização</item>
+        <item quantity="other">%1$d unidades disponíveis • %2$d sem localização</item>
+    </plurals>
+    <string name="cd_map_empty">Nenhuma unidade disponível para sua conta.</string>
+    <string name="cd_map_error">Não foi possível atualizar os dados. Verifique sua conexão e tente novamente.</string>
+    <string name="cd_map_api_error">A API retornou erro %1$d ao carregar as unidades. Confira o backend e a conexão com o banco.</string>
+    <string name="cd_map_cached_error">Não foi possível atualizar. Exibindo os dados da última consulta.</string>
+    <string name="cd_map_forbidden">Você não tem permissão para visualizar estas unidades.</string>
+    <string name="cd_map_session_expired">Entre na sua conta para visualizar o mapa.</string>
+    <string name="cd_map_missing_key">O mapa está indisponível no momento. Consulte suas unidades pela lista.</string>
+    <string name="cd_map_play_services">Atualize os serviços do Google no aparelho para carregar o mapa. Você pode consultar as unidades pela lista.</string>
+    <string name="cd_map_legend">● Verde: normal   ● Vermelho: atenção   ● Violeta: dados incompletos</string>
+    <string name="cd_map_address_missing">Endereço indisponível</string>
+    <string name="cd_map_distance_missing">Distância indisponível • ative sua localização</string>
+    <string name="cd_map_position_missing">Localização da unidade indisponível</string>
+    <string name="cd_map_distance">%1$s • distância aproximada em linha reta</string>
+    <string name="cd_map_nearest">Mais próximo: %1$s • %2$s</string>
+    <string name="cd_map_location_denied">Você pode continuar usando o mapa sem compartilhar sua localização.</string>
+    <string name="cd_map_location_failed">Posição indisponível. Verifique se a localização do aparelho está ativa.</string>
+    <string name="cd_map_location_loading">Obtendo sua posição…</string>
+    <string name="cd_map_temperature">Temperatura média: %1$s</string>
+    <string name="cd_map_camera_count">Total de câmaras: %1$s</string>
+    <string name="cd_map_alert_count">Alertas pendentes: %1$s</string>
+    <string name="cd_map_outside_count">Câmaras fora da faixa: %1$s</string>
+    <string name="cd_map_unavailable">Indisponível</string>
+    <string name="cd_map_partial">Dados parciais • %1$d de %2$d câmaras com leitura</string>
+    <string name="cd_map_rooms_unavailable">Dados parciais • câmaras indisponíveis</string>
+    <string name="cd_map_no_rooms">Nenhuma câmara cadastrada nesta unidade</string>
+    <string name="cd_map_complete">Todas as câmaras com dados disponíveis</string>
+    <string name="cd_map_attention">● Atenção</string>
+    <string name="cd_map_stable">● Operando normal</string>
+    <string name="cd_map_incomplete">● Dados incompletos</string>
+    <string name="cd_map_updated_now">Leitura mais antiga: agora</string>
+    <string name="cd_map_updated_minutes">Leitura mais antiga: há %1$d min</string>
+    <string name="cd_map_updated_hours">Leitura mais antiga: há %1$d h</string>
+    <string name="cd_map_updated_days">Leitura mais antiga: há %1$d dia(s)</string>
+    <string name="cd_map_update_unknown">Horário das leituras indisponível</string>
+    <string name="cd_map_nearest_marker">%1$s • Mais próximo</string>
+    <style name="CdMapMeta">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/manrope</item>
+        <item name="android:textColor">@color/secondary_gray</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:layout_marginTop">6dp</item>
+    </style>
+    <style name="CdMapFloatingLabel">
+        <item name="android:background">@drawable/bg_map_floating_pill</item>
+        <item name="android:elevation">5dp</item>
+        <item name="android:fontFamily">@font/manrope</item>
+        <item name="android:paddingStart">11dp</item>
+        <item name="android:paddingEnd">11dp</item>
+        <item name="android:paddingTop">7dp</item>
+        <item name="android:paddingBottom">7dp</item>
+        <item name="android:textColor">@color/primary_dark</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="CdMapIconButton">
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:background">@drawable/bg_map_control</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:scaleType">centerInside</item>
+        <item name="android:elevation">3dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:tint">@color/primary_dark</item>
+    </style>
+    <style name="CdMapCardMeta">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/manrope</item>
+        <item name="android:textColor">@color/secondary_gray</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+    <style name="CdMapMetric">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/bg_map_metric</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:fontFamily">@font/manrope</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:minHeight">36dp</item>
+        <item name="android:paddingStart">9dp</item>
+        <item name="android:paddingEnd">9dp</item>
+        <item name="android:textColor">@color/primary_dark</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+    <style name="CdMapAction" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:fontFamily">@font/manrope</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/primary_dark</item>
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+    </style>
+</resources>
