@@ -15,6 +15,10 @@ val apiBaseUrl: String = System.getenv("SKADI_API_BASE_URL")
     ?: localProperties.getProperty("SKADI_API_BASE_URL")
     ?: "http://10.0.2.2:8080/"
 
+val aiApiBaseUrl: String = System.getenv("SKADI_AI_API_BASE_URL")
+    ?: localProperties.getProperty("SKADI_AI_API_BASE_URL")
+    ?: "http://localhost:8000/"
+
 android {
     namespace = "com.example.mobile_skadi"
     compileSdk {
@@ -31,6 +35,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "BASE_URL", "\"$apiBaseUrl\"")
+        buildConfigField("String", "AI_BASE_URL", "\"$aiApiBaseUrl\"")
     }
 
     buildFeatures {

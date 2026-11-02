@@ -60,7 +60,13 @@ public class FullAnalysisActivity extends AppCompatActivity {
 
         // Baixar / Visualizar PDF (Abre Foto 3 - Relatório de Monitoramento Skadi)
         btnBaixarPdf.setOnClickListener(v -> {
-            startActivity(new Intent(this, GeneratedReportActivity.class));
+            Intent intent = new Intent(this, GeneratedReportActivity.class);
+            if (getIntent().hasExtra("EXTRA_COLD_ROOM_ID")) {
+                intent.putExtra("EXTRA_COLD_ROOM_ID", getIntent().getLongExtra("EXTRA_COLD_ROOM_ID", 0L));
+            }
+            intent.putExtra("EXTRA_DATE_START", getIntent().getStringExtra("EXTRA_DATE_START"));
+            intent.putExtra("EXTRA_DATE_END", getIntent().getStringExtra("EXTRA_DATE_END"));
+            startActivity(intent);
         });
 
         // Bottom Navigation

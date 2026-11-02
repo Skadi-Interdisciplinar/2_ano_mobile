@@ -163,7 +163,7 @@
                             android:layout_marginBottom="12dp" />
 
                         <!-- TEMPERATURA -->
-                        <TextView
+                        <TextView android:id="@+id/tvAlertDetailTemp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="8,4°C"
@@ -176,7 +176,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Limite máximo: 4°"
+                            android:id="@+id/tvAlertDetailLimit" android:text="Limite máximo: 4°"
                             android:textColor="@color/secondary_gray"
                             android:textSize="12sp"
                             android:fontFamily="@font/manrope"
@@ -299,7 +299,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Unidade Belterra"
+                                android:id="@+id/tvAlertDetailUnitName" android:text="Unidade Belterra"
                                 android:textColor="@color/primary_dark"
                                 android:textSize="13sp"
                                 android:fontFamily="@font/manrope"
@@ -334,7 +334,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Câmara 02"
+                                android:id="@+id/tvAlertDetailCamaraName" android:text="Câmara 02"
                                 android:textColor="@color/primary_dark"
                                 android:textSize="13sp"
                                 android:fontFamily="@font/manrope"

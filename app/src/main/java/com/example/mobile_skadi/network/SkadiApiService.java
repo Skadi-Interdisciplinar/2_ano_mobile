@@ -6,6 +6,7 @@ import com.example.mobile_skadi.network.dto.DistributionCenterResponse;
 import com.example.mobile_skadi.network.dto.LoginRequest;
 import com.example.mobile_skadi.network.dto.NotificationResponse;
 import com.example.mobile_skadi.network.dto.SupportRequestRequest;
+import com.example.mobile_skadi.network.dto.TemperatureReadingResponse;
 import com.example.mobile_skadi.network.dto.TokenResponse;
 import com.example.mobile_skadi.network.dto.UserResponse;
 
@@ -39,6 +40,12 @@ public interface SkadiApiService {
     @GET("alerts/history")
     Call<List<AlertResponse>> getAlertsHistory(@Query("coldRoomId") Integer coldRoomId);
 
+    @GET("readings/cold-rooms/{coldRoomId}/current-temperature")
+    Call<TemperatureReadingResponse> getCurrentTemperature(@Path("coldRoomId") Long coldRoomId);
+
+    @GET("readings")
+    Call<List<TemperatureReadingResponse>> getAllReadings();
+
     @PATCH("alerts/{id}/recognize")
     Call<Void> recognizeAlert(@Path("id") Integer id);
 
@@ -48,7 +55,7 @@ public interface SkadiApiService {
     @PATCH("notifications/{id}/read")
     Call<NotificationResponse> markNotificationAsRead(@Path("id") Integer id);
 
-    @GET("distribution-centers")
+    @GET("cd")
     Call<List<DistributionCenterResponse>> getDistributionCenters();
 
     @POST("support")

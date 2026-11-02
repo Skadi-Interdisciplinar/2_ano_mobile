@@ -35,10 +35,25 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SessionManager sessionManager = SessionManager.getInstance(this);
+        if (sessionManager.isRememberMe() && sessionManager.hasToken()) {
+            startActivity(new Intent(this, HomeActivity.class));
+            finish();
+            return;
+        }
+
         setContentView(R.layout.activity_login);
 
         initViews();
         setupListeners();
+
+        if (!sessionManager.getUsername().isEmpty() && etUsuario != null) {
+            etUsuario.setText(sessionManager.getUsername());
+            if (cbLembrar != null) {
+                cbLembrar.setChecked(sessionManager.isRememberMe());
+            }
+        }
     }
 
     private void initViews() {
@@ -99,6 +114,7 @@ public class LoginActivity extends AppCompatActivity {
                     SessionManager sessionManager = SessionManager.getInstance(LoginActivity.this);
                     sessionManager.saveToken(tokenResponse.getToken());
                     sessionManager.saveUsername(usuario);
+                    sessionManager.setRememberMe(cbLembrar != null && cbLembrar.isChecked());
 
                     // Buscar perfil do usuário (/me) para sincronizar papel e dados
                     fetchUserProfileAndNavigate(apiService, usuario);
@@ -125,6 +141,9 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     UserResponse user = response.body();
+                    if (user.getNome() != null && !user.getNome().trim().isEmpty()) {
+                        SessionManager.getInstance(LoginActivity.this).saveName(user.getNome());
+                    }
                     SessionManager.getInstance(LoginActivity.this).saveRole(user.getRole());
                     if (user.getRole() != null && (user.getRole().equalsIgnoreCase("ROLE_USER") || user.getRole().equalsIgnoreCase("FUNCIONARIO") || user.getRole().equalsIgnoreCase("OPERADOR"))) {
                         UserRoleManager.setCurrentRole(UserRoleManager.Role.FUNCIONARIO);
