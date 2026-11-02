@@ -52,7 +52,7 @@
                     android:letterSpacing="0.15"
                     android:layout_marginStart="12dp" />
 
-                <!-- NOTIFICACAO COM CIRCULO AO REDOR (FOTO 3) -->
+                <!-- NOTIFICACAO COM CIRCULO AO REDOR -->
                 <FrameLayout
                     android:id="@+id/btnNotification"
                     android:layout_width="40dp"
@@ -70,7 +70,7 @@
                         android:contentDescription="Notificacoes" />
                 </FrameLayout>
 
-                <!-- AVATAR CIRCULAR -->
+                <!-- AVATAR CIRCULAR COM INICIAL DO USUÁRIO -->
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/btnProfileAvatar"
                     android:layout_width="40dp"
@@ -85,51 +85,68 @@
                         android:layout_height="match_parent"
                         android:src="@drawable/logo_skadi"
                         android:background="@color/primary_light"
-                        android:scaleType="centerInside"
-                        android:padding="4dp"
+                        android:scaleType="centerCrop"
                         android:contentDescription="Perfil" />
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
-            <!-- CORPO -->
+            <!-- ======================================================== -->
+            <!-- 1. DASHBOARD DO GESTOR (VISÃO DO CD)                     -->
+            <!-- ======================================================== -->
             <LinearLayout
+                android:id="@+id/layoutHomeManager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-                android:paddingTop="20dp">
+                android:paddingTop="20dp"
+                android:visibility="visible">
 
-                <!-- SAUDACAO -->
+                <!-- SAUDAÇÃO E ESCOPO DO GESTOR -->
                 <TextView
-                    android:id="@+id/tvGreeting"
+                    android:id="@+id/tvManagerGreeting"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Olá, Maria Eduarda!"
+                    android:text="Visão do CD"
                     android:textColor="@color/primary_dark"
                     android:textSize="24sp"
                     android:fontFamily="@font/manrope"
                     android:textStyle="bold"
-                    android:layout_marginBottom="4dp" />
+                    android:layout_marginBottom="2dp" />
 
                 <TextView
+                    android:id="@+id/tvManagerSubtitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Explore seus frigoríficos e acompanhe as temperaturas em tempo real."
-                    android:textColor="@color/secondary_gray"
-                    android:textSize="13sp"
+                    android:text="CD Manaus - Unidade 20"
+                    android:textColor="@color/secondary_dark"
+                    android:textSize="13.5sp"
                     android:fontFamily="@font/manrope"
-                    android:lineSpacingMultiplier="1.2"
-                    android:layout_marginBottom="20dp" />                <!-- GRID 2x2 DE CARDS KPI (SEM BLUR NOS CANTOS, COM BORDA LIMPA E NITIDA) -->
-                <!-- LINHA 1 DE KPIS -->
+                    android:textStyle="bold"
+                    android:layout_marginBottom="2dp" />
+
+                <TextView
+                    android:id="@+id/tvManagerLastUpdated"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Atualizado às --:--"
+                    android:textColor="@color/secondary_gray"
+                    android:textSize="11.5sp"
+                    android:fontFamily="@font/manrope"
+                    android:layout_marginBottom="20dp" />
+
+                <!-- GRADE 2x2: KPIS DE INTERVENÇÃO DO GESTOR -->
+                <!-- LINHA 1 -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_marginBottom="12dp">
 
-                    <!-- Card 1: Alertas do dia -->
+                    <!-- KPI 1: Alertas Críticos -->
                     <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardManagerCriticos"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -138,153 +155,9 @@
                         app:cardElevation="0dp"
                         app:strokeWidth="1dp"
                         app:strokeColor="#E2E8F0"
-                        android:layout_marginEnd="6dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="14dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center_vertical"
-                                android:layout_marginBottom="8dp">
-
-                                <ImageView
-                                    android:layout_width="16dp"
-                                    android:layout_height="16dp"
-                                    android:src="@drawable/ic_alert_triangle_orange"
-                                    android:contentDescription="Alerta dia" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Alertas do dia"
-                                    android:textColor="@color/alert_orange"
-                                    android:textSize="11sp"
-                                    android:fontFamily="@font/manrope"
-                                    android:textStyle="bold"
-                                    android:layout_marginStart="6dp" />
-                            </LinearLayout>
-
-                            <TextView android:id="@+id/tvHomeCountAlertasDia"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="3"
-                                android:textColor="@color/primary_dark"
-                                android:textSize="26sp"
-                                android:fontFamily="@font/manrope"
-                                android:textStyle="bold"
-                                android:layout_marginBottom="4dp" />
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center_vertical">
-
-                                <ImageView
-                                    android:layout_width="14dp"
-                                    android:layout_height="14dp"
-                                    android:src="@drawable/ic_arrow_down_green"
-                                    android:contentDescription="Down" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="1 x Ontem"
-                                    android:textColor="@color/alert_success"
-                                    android:textSize="11sp"
-                                    android:fontFamily="@font/manrope"
-                                    android:layout_marginStart="3dp" />
-                            </LinearLayout>
-                        </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <!-- Card 2: Câmaras estáveis -->
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        app:cardBackgroundColor="@color/white"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="0dp"
-                        app:strokeWidth="1dp"
-                        app:strokeColor="#E2E8F0"
-                        android:layout_marginStart="6dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="14dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center_vertical"
-                                android:layout_marginBottom="8dp">
-
-                                <ImageView
-                                    android:layout_width="16dp"
-                                    android:layout_height="16dp"
-                                    android:src="@drawable/ic_check_circle_green"
-                                    android:contentDescription="Estavel" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Câmaras estáveis"
-                                    android:textColor="@color/alert_success"
-                                    android:textSize="11sp"
-                                    android:fontFamily="@font/manrope"
-                                    android:textStyle="bold"
-                                    android:layout_marginStart="6dp" />
-                            </LinearLayout>
-
-                            <TextView android:id="@+id/tvHomeCountCamarasEstaveis"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="3"
-                                android:textColor="@color/primary_dark"
-                                android:textSize="26sp"
-                                android:fontFamily="@font/manrope"
-                                android:textStyle="bold"
-                                android:layout_marginBottom="4dp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Câmaras"
-                                android:textColor="@color/secondary_gray"
-                                android:textSize="11sp"
-                                android:fontFamily="@font/manrope" />
-                        </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
-                </LinearLayout>
-
-                <!-- LINHA 2 DE KPIS -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="24dp">
-
-                    <!-- Card 3: Alerta (Crítico) -->
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        app:cardBackgroundColor="@color/white"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="0dp"
-                        app:strokeWidth="1dp"
-                        app:strokeColor="#E2E8F0"
-                        android:layout_marginEnd="6dp">
+                        android:layout_marginEnd="6dp"
+                        android:clickable="true"
+                        android:focusable="true">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -303,12 +176,12 @@
                                     android:layout_width="16dp"
                                     android:layout_height="16dp"
                                     android:src="@drawable/ic_alert_triangle_red"
-                                    android:contentDescription="Alerta critico" />
+                                    android:contentDescription="Críticos" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Alerta"
+                                    android:text="Alertas críticos"
                                     android:textColor="@color/alert_danger"
                                     android:textSize="11sp"
                                     android:fontFamily="@font/manrope"
@@ -316,28 +189,30 @@
                                     android:layout_marginStart="6dp" />
                             </LinearLayout>
 
-                            <TextView android:id="@+id/tvHomeCountAlertasCriticos"
+                            <TextView
+                                android:id="@+id/tvManagerCountCriticos"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="3"
+                                android:text="0"
                                 android:textColor="@color/alert_danger"
                                 android:textSize="26sp"
                                 android:fontFamily="@font/manrope"
                                 android:textStyle="bold"
-                                android:layout_marginBottom="4dp" />
+                                android:layout_marginBottom="2dp" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Precisam de atenção"
+                                android:text="Gravidade máxima"
                                 android:textColor="@color/secondary_gray"
                                 android:textSize="11sp"
                                 android:fontFamily="@font/manrope" />
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
-                    <!-- Card 4: Temp. média -->
+                    <!-- KPI 2: SLA Vencido -->
                     <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardManagerSlaVencido"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -346,7 +221,9 @@
                         app:cardElevation="0dp"
                         app:strokeWidth="1dp"
                         app:strokeColor="#E2E8F0"
-                        android:layout_marginStart="6dp">
+                        android:layout_marginStart="6dp"
+                        android:clickable="true"
+                        android:focusable="true">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -364,13 +241,153 @@
                                 <ImageView
                                     android:layout_width="16dp"
                                     android:layout_height="16dp"
-                                    android:src="@drawable/ic_thermometer_blue"
-                                    android:contentDescription="Termometro" />
+                                    android:src="@drawable/ic_alert_triangle_orange"
+                                    android:contentDescription="SLA" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Temp. média"
+                                    android:text="SLA vencido"
+                                    android:textColor="#D97706"
+                                    android:textSize="11sp"
+                                    android:fontFamily="@font/manrope"
+                                    android:textStyle="bold"
+                                    android:layout_marginStart="6dp" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/tvManagerCountSlaVencido"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="@color/primary_dark"
+                                android:textSize="26sp"
+                                android:fontFamily="@font/manrope"
+                                android:textStyle="bold"
+                                android:layout_marginBottom="2dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Prazo estourado (100%)"
+                                android:textColor="@color/secondary_gray"
+                                android:textSize="11sp"
+                                android:fontFamily="@font/manrope" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+
+                <!-- LINHA 2 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="16dp">
+
+                    <!-- KPI 3: Câmaras Fora da Faixa -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardManagerForaFaixa"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="#E2E8F0"
+                        android:layout_marginEnd="6dp"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="14dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical"
+                                android:layout_marginBottom="8dp">
+
+                                <ImageView
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    android:src="@drawable/ic_snowflake"
+                                    android:contentDescription="Câmaras" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Fora da faixa"
+                                    android:textColor="@color/alert_orange"
+                                    android:textSize="11sp"
+                                    android:fontFamily="@font/manrope"
+                                    android:textStyle="bold"
+                                    android:layout_marginStart="6dp" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/tvManagerCountForaFaixa"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="@color/primary_dark"
+                                android:textSize="26sp"
+                                android:fontFamily="@font/manrope"
+                                android:textStyle="bold"
+                                android:layout_marginBottom="2dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Câmaras desreguladas"
+                                android:textColor="@color/secondary_gray"
+                                android:textSize="11sp"
+                                android:fontFamily="@font/manrope" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- KPI 4: Sem Responsável -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardManagerSemResponsavel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="#E2E8F0"
+                        android:layout_marginStart="6dp"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="14dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical"
+                                android:layout_marginBottom="8dp">
+
+                                <ImageView
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    android:src="@drawable/ic_clock_gray"
+                                    android:contentDescription="Sem responsável" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Sem responsável"
                                     android:textColor="@color/primary"
                                     android:textSize="11sp"
                                     android:fontFamily="@font/manrope"
@@ -378,28 +395,80 @@
                                     android:layout_marginStart="6dp" />
                             </LinearLayout>
 
-                            <TextView android:id="@+id/tvHomeTempMedia"
+                            <TextView
+                                android:id="@+id/tvManagerCountSemResponsavel"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="1,0 °C"
+                                android:text="0"
                                 android:textColor="@color/primary_dark"
-                                android:textSize="22sp"
+                                android:textSize="26sp"
                                 android:fontFamily="@font/manrope"
                                 android:textStyle="bold"
-                                android:layout_marginBottom="4dp" />
+                                android:layout_marginBottom="2dp" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="2° acima do recomendado"
-                                android:textColor="@color/alert_danger"
-                                android:textSize="10sp"
+                                android:text="Aguardando atendimento"
+                                android:textColor="@color/secondary_gray"
+                                android:textSize="11sp"
                                 android:fontFamily="@font/manrope" />
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
                 </LinearLayout>
 
-                <!-- SEÇÃO 1: ULTIMA TEMPERATURA DESREGULADA (CARD ALERTA) -->
+                <!-- CARD RESUMO DE CÂMARAS (ESTADO OPERACIONAL) -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardManagerCamarasSummary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="#E2E8F0"
+                    android:layout_marginBottom="24dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="CÂMARAS DO CD"
+                            android:textColor="@color/secondary_dark"
+                            android:textSize="11.5sp"
+                            android:fontFamily="@font/manrope"
+                            android:textStyle="bold"
+                            android:letterSpacing="0.05"
+                            android:layout_marginBottom="8dp" />
+
+                        <TextView
+                            android:id="@+id/tvManagerCamarasStateLine1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Total: 0  •  Na faixa: 0  •  Fora da faixa: 0"
+                            android:textColor="@color/primary_dark"
+                            android:textSize="13sp"
+                            android:fontFamily="@font/manrope"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="4dp" />
+
+                        <TextView
+                            android:id="@+id/tvManagerCamarasStateLine2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Offline: 0  •  Sem dados: 0"
+                            android:textColor="@color/secondary_gray"
+                            android:textSize="12sp"
+                            android:fontFamily="@font/manrope" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- SEÇÃO PRIORIDADES AGORA -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -411,17 +480,17 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Última temperatura desregulada"
+                        android:text="Prioridades agora"
                         android:textColor="@color/primary_dark"
-                        android:textSize="14sp"
+                        android:textSize="16sp"
                         android:fontFamily="@font/manrope"
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/btnVerTodosAlertas"
+                        android:id="@+id/btnManagerVerTodasPrioridades"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Ver todos →"
+                        android:text="Ver todas →"
                         android:textColor="@color/primary"
                         android:textSize="13sp"
                         android:fontFamily="@font/manrope"
@@ -430,150 +499,58 @@
                         android:focusable="true" />
                 </LinearLayout>
 
-                <!-- CARD DE ALERTA CRITICO (CAMARA 291) -->
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardAlertaCritico"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardBackgroundColor="@color/white"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="0dp"
-                    app:strokeWidth="1dp"
-                    app:strokeColor="#E2E8F0"
-                    android:layout_marginBottom="24dp"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:padding="16dp">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="● Crítico" android:id="@+id/tvHomeAlertBadge"
-                                android:textColor="@color/alert_danger"
-                                android:textSize="11sp"
-                                android:fontFamily="@font/manrope"
-                                android:textStyle="bold"
-                                android:background="@drawable/bg_badge_critical"
-                                android:paddingStart="10dp"
-                                android:paddingEnd="10dp"
-                                android:paddingTop="3dp"
-                                android:paddingBottom="3dp"
-                                android:layout_marginBottom="8dp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Câmara 291" android:id="@+id/tvHomeAlertTitle"
-                                android:textColor="@color/primary_dark"
-                                android:textSize="16sp"
-                                android:fontFamily="@font/manrope"
-                                android:textStyle="bold"
-                                android:layout_marginBottom="3dp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Mín. 0°C - Máx. 4°C" android:id="@+id/tvHomeAlertRange"
-                                android:textColor="@color/secondary_gray"
-                                android:textSize="12sp"
-                                android:fontFamily="@font/manrope"
-                                android:layout_marginBottom="6dp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Há 21 min" android:id="@+id/tvHomeAlertTimeElapsed"
-                                android:textColor="@color/secondary_gray"
-                                android:textSize="11sp"
-                                android:fontFamily="@font/manrope" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:gravity="end"
-                            android:layout_marginStart="12dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="8,4°" android:id="@+id/tvHomeAlertTemp"
-                                android:textColor="@color/alert_danger"
-                                android:textSize="30sp"
-                                android:fontFamily="@font/manrope"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="11:11" android:id="@+id/tvHomeAlertTime"
-                                android:textColor="@color/secondary_gray"
-                                android:textSize="12sp"
-                                android:fontFamily="@font/manrope" />
-                        </LinearLayout>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-                <!-- SEÇÃO 2: GRAFICO DE TEMPERATURA -->
+                <!-- CONTAINER DE OCORRÊNCIAS PRIORITÁRIAS DO GESTOR -->
                 <LinearLayout
-                    android:id="@+id/layoutManagerExtraSection"
+                    android:id="@+id/containerManagerPriorities"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical" />
+
+                <!-- ESTADO VAZIO DE PRIORIDADES -->
+                <TextView
+                    android:id="@+id/tvManagerNoPriorities"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nenhum alerta crítico ou pendente no momento. Todas as câmaras operando normalmente."
+                    android:textColor="@color/secondary_gray"
+                    android:textSize="13sp"
+                    android:fontFamily="@font/manrope"
+                    android:gravity="center"
+                    android:padding="24dp"
+                    android:visibility="gone" />
+
+                <!-- SEÇÃO TENDÊNCIA DA TEMPERATURA -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
+                    android:layout_marginTop="16dp"
                     android:layout_marginBottom="12dp">
 
                     <TextView
+                        android:id="@+id/tvManagerChartTitle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Última temperatura desregulada"
+                        android:text="Tendência térmica"
                         android:textColor="@color/primary_dark"
-                        android:textSize="14sp"
+                        android:textSize="16sp"
                         android:fontFamily="@font/manrope"
                         android:textStyle="bold" />
 
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/tvManagerChartPeriod"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical">
-
-                        <ImageView
-                            android:layout_width="14dp"
-                            android:layout_height="14dp"
-                            android:src="@drawable/ic_arrow_up_orange"
-                            android:contentDescription="Pico" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Pico às 22h"
-                            android:textColor="@color/alert_orange"
-                            android:textSize="12sp"
-                            android:fontFamily="@font/manrope"
-                            android:textStyle="bold"
-                            android:layout_marginStart="3dp" />
-                    </LinearLayout>
+                        android:text="Últimas 24h"
+                        android:textColor="@color/secondary_gray"
+                        android:textSize="12sp"
+                        android:fontFamily="@font/manrope"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
-                <!-- CARD DO GRAFICO (SEM BLUR, COM BORDA LIMPA) -->
+                <!-- CARD DO GRÁFICO (COM LEITURAS REAIS E LIMITES) -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -591,7 +568,7 @@
                         android:padding="8dp" />
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- LINHA DE CARDS DE AÇÃO INFERIORES -->
+                <!-- LINHA DE CARDS DE AÇÃO INFERIORES DO GESTOR -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -623,25 +600,173 @@
                                 android:layout_width="22dp"
                                 android:layout_height="22dp"
                                 android:src="@drawable/ic_location_pin"
-                                android:contentDescription="Mapa"
-                                android:layout_marginEnd="8dp" />
+                                android:contentDescription="Mapa" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Mapa das unidades"
+                                android:text="Mapa dos CDs"
                                 android:textColor="@color/primary_dark"
-                                android:textSize="13sp"
+                                android:textSize="12.5sp"
                                 android:fontFamily="@font/manrope"
-                                android:textStyle="bold" />
+                                android:textStyle="bold"
+                                android:layout_marginStart="8dp" />
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
-                    <!-- Card Níveis de alertas > -->
+                    <!-- Botão Níveis de alerta -->
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/btnNiveisAlerta"
                         android:layout_width="0dp"
                         android:layout_height="64dp"
+                        android:layout_weight="1"
+                        app:cardBackgroundColor="#A8D8FF"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="0dp"
+                        android:layout_marginStart="6dp"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:padding="12dp">
+
+                            <ImageView
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
+                                android:src="@drawable/ic_eye_warning"
+                                android:contentDescription="Níveis" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Níveis de Alerta"
+                                android:textColor="@color/primary_dark"
+                                android:textSize="12.5sp"
+                                android:fontFamily="@font/manrope"
+                                android:textStyle="bold"
+                                android:layout_marginStart="8dp" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- ======================================================== -->
+            <!-- 2. DASHBOARD DO FUNCIONÁRIO (MINHA FILA / OPERADOR)     -->
+            <!-- ======================================================== -->
+            <LinearLayout
+                android:id="@+id/layoutHomeEmployee"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:paddingTop="20dp"
+                android:visibility="gone">
+
+                <!-- SAUDAÇÃO PESSOAL -->
+                <TextView
+                    android:id="@+id/tvEmployeeGreeting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Olá, Diego!"
+                    android:textColor="@color/primary_dark"
+                    android:textSize="24sp"
+                    android:fontFamily="@font/manrope"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="2dp" />
+
+                <TextView
+                    android:id="@+id/tvEmployeeSubtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Minha fila · CD Manaus - Unidade 20"
+                    android:textColor="@color/secondary_dark"
+                    android:textSize="13.5sp"
+                    android:fontFamily="@font/manrope"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="2dp" />
+
+                <TextView
+                    android:id="@+id/tvEmployeeLastUpdated"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Atualizado às --:--"
+                    android:textColor="@color/secondary_gray"
+                    android:textSize="11.5sp"
+                    android:fontFamily="@font/manrope"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- GRADE 2x2: RESUMO DA FILA DO FUNCIONÁRIO -->
+                <!-- LINHA 1 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp">
+
+                    <!-- KPI 1: Atribuídos a mim -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardEmployeeAtribuidos"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="#E2E8F0"
+                        android:layout_marginEnd="6dp"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="14dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Atribuídos a mim"
+                                android:textColor="@color/primary"
+                                android:textSize="11.5sp"
+                                android:fontFamily="@font/manrope"
+                                android:textStyle="bold"
+                                android:layout_marginBottom="6dp" />
+
+                            <TextView
+                                android:id="@+id/tvEmployeeCountAtribuidos"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="@color/primary_dark"
+                                android:textSize="26sp"
+                                android:fontFamily="@font/manrope"
+                                android:textStyle="bold"
+                                android:layout_marginBottom="2dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Alertas sob sua ação"
+                                android:textColor="@color/secondary_gray"
+                                android:textSize="11sp"
+                                android:fontFamily="@font/manrope" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- KPI 2: Críticos -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardEmployeeCriticos"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
                         app:cardBackgroundColor="@color/white"
                         app:cardCornerRadius="16dp"
@@ -654,61 +779,442 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:gravity="center_vertical"
-                            android:paddingStart="14dp"
-                            android:paddingEnd="14dp">
-
-                            <!-- 4 bolinhas de status -->
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:layout_marginBottom="4dp">
-
-                                <View
-                                    android:layout_width="9dp"
-                                    android:layout_height="9dp"
-                                    android:background="@drawable/shape_circle_nav_dot_green"
-                                    android:layout_marginEnd="5dp" />
-
-                                <View
-                                    android:layout_width="9dp"
-                                    android:layout_height="9dp"
-                                    android:background="@drawable/shape_circle_nav_dot_yellow"
-                                    android:layout_marginEnd="5dp" />
-
-                                <View
-                                    android:layout_width="9dp"
-                                    android:layout_height="9dp"
-                                    android:background="@drawable/shape_circle_nav_dot_orange"
-                                    android:layout_marginEnd="5dp" />
-
-                                <View
-                                    android:layout_width="9dp"
-                                    android:layout_height="9dp"
-                                    android:background="@drawable/shape_circle_nav_dot_red" />
-                            </LinearLayout>
+                            android:padding="14dp">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Níveis de alertas ›"
-                                android:textColor="@color/primary_dark"
-                                android:textSize="13sp"
+                                android:text="Críticos"
+                                android:textColor="@color/alert_danger"
+                                android:textSize="11.5sp"
                                 android:fontFamily="@font/manrope"
-                                android:textStyle="bold" />
+                                android:textStyle="bold"
+                                android:layout_marginBottom="6dp" />
+
+                            <TextView
+                                android:id="@+id/tvEmployeeCountCriticos"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="@color/alert_danger"
+                                android:textSize="26sp"
+                                android:fontFamily="@font/manrope"
+                                android:textStyle="bold"
+                                android:layout_marginBottom="2dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Ação urgente"
+                                android:textColor="@color/secondary_gray"
+                                android:textSize="11sp"
+                                android:fontFamily="@font/manrope" />
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
                 </LinearLayout>
 
-            </LinearLayout>
-        </LinearLayout>
+                <!-- LINHA 2 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp">
+
+                    <!-- KPI 3: Em atendimento -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardEmployeeEmAtendimento"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="#E2E8F0"
+                        android:layout_marginEnd="6dp"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="14dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Em atendimento"
+                                android:textColor="#D97706"
+                                android:textSize="11.5sp"
+                                android:fontFamily="@font/manrope"
+                                android:textStyle="bold"
+                                android:layout_marginBottom="6dp" />
+
+                            <TextView
+                                android:id="@+id/tvEmployeeCountEmAtendimento"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="@color/primary_dark"
+                                android:textSize="26sp"
+                                android:fontFamily="@font/manrope"
+                                android:textStyle="bold"
+                                android:layout_marginBottom="2dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Em andamento"
+                                android:textColor="@color/secondary_gray"
+                                android:textSize="11sp"
+                                android:fontFamily="@font/manrope" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- KPI 4: SLA Vencido -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardEmployeeSlaVencido"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="#E2E8F0"
+                        android:layout_marginStart="6dp"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="14dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="SLA vencido"
+                                android:textColor="@color/alert_danger"
+                                android:textSize="11.5sp"
+                                android:fontFamily="@font/manrope"
+                                android:textStyle="bold"
+                                android:layout_marginBottom="6dp" />
+
+                            <TextView
+                                android:id="@+id/tvEmployeeCountSlaVencido"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="@color/alert_danger"
+                                android:textSize="26sp"
+                                android:fontFamily="@font/manrope"
+                                android:textStyle="bold"
+                                android:layout_marginBottom="2dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Prazo excedido"
+                                android:textColor="@color/secondary_gray"
+                                android:textSize="11sp"
+                                android:fontFamily="@font/manrope" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
                 </LinearLayout>
+
+                <!-- FAIXA ÂMBAR: PRÓXIMOS DO VENCIMENTO -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/layoutEmployeeSlaAlert"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="#FEF3C7"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="#FDE68A"
+                    android:layout_marginBottom="20dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="14dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp">
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_alert_triangle_orange"
+                            android:contentDescription="Atenção SLA" />
+
+                        <TextView
+                            android:id="@+id/tvEmployeeCountProximosVencimento"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0 alertas próximos do vencimento (70% do prazo consumido)"
+                            android:textColor="#92400E"
+                            android:textSize="11.5sp"
+                            android:fontFamily="@font/manrope"
+                            android:textStyle="bold"
+                            android:layout_marginStart="8dp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- ======================================================== -->
+                <!-- SEÇÃO PRÓXIMA AÇÃO (CARD DE DESTAQUE DA VEZ)             -->
+                <!-- ======================================================== -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PRÓXIMA AÇÃO"
+                    android:textColor="@color/secondary_dark"
+                    android:textSize="11.5sp"
+                    android:fontFamily="@font/manrope"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.08"
+                    android:layout_marginBottom="8dp" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardEmployeeNextAction"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1.5dp"
+                    app:strokeColor="#CBD5E1"
+                    android:layout_marginBottom="24dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <!-- LINHA SUPERIOR -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="6dp">
+
+                            <TextView
+                                android:id="@+id/tvEmployeeNextBadge"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Crítico"
+                                android:textColor="@color/alert_danger"
+                                android:textSize="10.5sp"
+                                android:fontFamily="@font/manrope"
+                                android:textStyle="bold"
+                                android:background="@drawable/bg_badge_critical"
+                                android:paddingStart="8dp"
+                                android:paddingEnd="8dp"
+                                android:paddingTop="2dp"
+                                android:paddingBottom="2dp" />
+
+                            <TextView
+                                android:id="@+id/tvEmployeeNextStatusBadge"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Pendente"
+                                android:textColor="#D97706"
+                                android:textSize="10.5sp"
+                                android:fontFamily="@font/manrope"
+                                android:textStyle="bold"
+                                android:background="@drawable/bg_notif_circle_yellow"
+                                android:paddingStart="8dp"
+                                android:paddingEnd="8dp"
+                                android:paddingTop="2dp"
+                                android:paddingBottom="2dp"
+                                android:layout_marginStart="6dp" />
+
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="1dp"
+                                android:layout_weight="1" />
+
+                            <TextView
+                                android:id="@+id/tvEmployeeNextTimeElapsed"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Há 18 min"
+                                android:textColor="@color/secondary_gray"
+                                android:textSize="11sp"
+                                android:fontFamily="@font/manrope" />
+                        </LinearLayout>
+
+                        <!-- TÍTULO DA CÂMARA E TEMPERATURA -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="4dp">
+
+                            <TextView
+                                android:id="@+id/tvEmployeeNextCamaraTitle"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Câmara 291"
+                                android:textColor="@color/primary_dark"
+                                android:textSize="18sp"
+                                android:fontFamily="@font/manrope"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvEmployeeNextTemp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="8,4°C"
+                                android:textColor="@color/alert_danger"
+                                android:textSize="24sp"
+                                android:fontFamily="@font/manrope"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tvEmployeeNextTempRange"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Faixa recomendada: 0,0°C a 4,0°C"
+                            android:textColor="@color/secondary_gray"
+                            android:textSize="12sp"
+                            android:fontFamily="@font/manrope"
+                            android:layout_marginBottom="4dp" />
+
+                        <TextView
+                            android:id="@+id/tvEmployeeNextSlaInfo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="SLA: 42 min restantes • Etapa Operador"
+                            android:textColor="@color/primary_dark"
+                            android:textSize="12sp"
+                            android:fontFamily="@font/manrope"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="14dp" />
+
+                        <!-- BOTÃO DE AÇÃO -->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnEmployeeNextAction"
+                            android:layout_width="match_parent"
+                            android:layout_height="46dp"
+                            android:text="Iniciar Atendimento"
+                            android:textColor="@color/white"
+                            android:textSize="13sp"
+                            android:fontFamily="@font/manrope"
+                            android:textStyle="bold"
+                            app:cornerRadius="12dp"
+                            app:backgroundTint="@color/primary"
+                            app:elevation="0dp" />
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- SEÇÃO MINHA FILA -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Minha fila de alertas"
+                        android:textColor="@color/primary_dark"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/manrope"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvEmployeeQueueCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0 alertas"
+                        android:textColor="@color/secondary_gray"
+                        android:textSize="12.5sp"
+                        android:fontFamily="@font/manrope"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- CONTAINER DE ITENS DA FILA DO FUNCIONÁRIO -->
+                <LinearLayout
+                    android:id="@+id/containerEmployeeQueue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+
+                <!-- ESTADO VAZIO DA FILA -->
+                <TextView
+                    android:id="@+id/tvEmployeeEmptyQueue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nenhum alerta pendente atribuído à sua fila. Bom trabalho!"
+                    android:textColor="@color/secondary_gray"
+                    android:textSize="13sp"
+                    android:fontFamily="@font/manrope"
+                    android:gravity="center"
+                    android:padding="24dp"
+                    android:visibility="gone" />
+
+                <!-- BOTÃO INFORMATIVO DE NÍVEIS DE ALERTA -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/btnEmployeeNiveisAlerta"
+                    android:layout_width="match_parent"
+                    android:layout_height="54dp"
+                    app:cardBackgroundColor="#A8D8FF"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="0dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="24dp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:padding="12dp">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_eye_warning"
+                            android:contentDescription="Níveis" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Entenda os Níveis de Alerta"
+                            android:textColor="@color/primary_dark"
+                            android:textSize="12.5sp"
+                            android:fontFamily="@font/manrope"
+                            android:textStyle="bold"
+                            android:layout_marginStart="8dp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+
+        </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- TOOLBAR FLUTUANTE EM PÍLULA IDÊNTICA À FOTO 2 -->
+    <!-- TOOLBAR FLUTUANTE EM PÍLULA (COMPARTILHADA) -->
     <LinearLayout
         android:id="@+id/bottomNavContainer"
         android:layout_width="0dp"
@@ -753,7 +1259,7 @@
                 android:layout_marginTop="3dp" />
         </LinearLayout>
 
-        <!-- 2. Alertas (Megafone da Foto 2) -->
+        <!-- 2. Alertas -->
         <LinearLayout
             android:id="@+id/navAlertas"
             android:layout_width="0dp"
@@ -767,7 +1273,7 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_megaphone"
+                android:src="@drawable/ic_bell"
                 android:contentDescription="Alertas" />
 
             <TextView
@@ -780,7 +1286,7 @@
                 android:layout_marginTop="3dp" />
         </LinearLayout>
 
-        <!-- 3. Início (Círculo Azul Marinho Central com Ícone e Texto em Branco - Foto 2) -->
+        <!-- 3. Início (Ativo com fundo circular escuro) -->
         <FrameLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -802,7 +1308,7 @@
                 <ImageView
                     android:layout_width="26dp"
                     android:layout_height="26dp"
-                    android:src="@drawable/ic_home_outline"
+                    android:src="@drawable/ic_home_white"
                     android:contentDescription="Início" />
 
                 <TextView
@@ -816,7 +1322,7 @@
             </LinearLayout>
         </FrameLayout>
 
-        <!-- 4. Relatórios -->
+        <!-- 4. Relatórios (Visível para Gestor) -->
         <LinearLayout
             android:id="@+id/navRelatorios"
             android:layout_width="0dp"
@@ -843,7 +1349,7 @@
                 android:layout_marginTop="3dp" />
         </LinearLayout>
 
-        <!-- 5. Trimmy (IA) -->
+        <!-- 5. Trimmy -->
         <LinearLayout
             android:id="@+id/navTrimmy"
             android:layout_width="0dp"
