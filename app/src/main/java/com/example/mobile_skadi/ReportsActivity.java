@@ -153,10 +153,12 @@ public class ReportsActivity extends AppCompatActivity {
         btnVisualizarAnaliseCompleta.setOnClickListener(v -> {
             Intent intent = new Intent(this, FullAnalysisActivity.class);
             if (selectedColdRoomId != null) {
-                intent.putExtra("EXTRA_COLD_ROOM_ID", selectedColdRoomId);
+                intent.putExtra(FullAnalysisActivity.EXTRA_COLD_ROOM_ID, selectedColdRoomId);
+                intent.putExtra(FullAnalysisActivity.EXTRA_COLD_ROOM_NAME, tvSelectedCamara.getText().toString());
             }
-            intent.putExtra("EXTRA_DATE_START", isoDateFormat.format(calDataInicial.getTime()));
-            intent.putExtra("EXTRA_DATE_END", isoDateFormat.format(calDataFinal.getTime()));
+            intent.putExtra(FullAnalysisActivity.EXTRA_CD_NAME, "CD Manaus - Unidade 20");
+            intent.putExtra(FullAnalysisActivity.EXTRA_DATE_START, isoDateFormat.format(calDataInicial.getTime()));
+            intent.putExtra(FullAnalysisActivity.EXTRA_DATE_END, isoDateFormat.format(calDataFinal.getTime()));
             startActivity(intent);
         });
 

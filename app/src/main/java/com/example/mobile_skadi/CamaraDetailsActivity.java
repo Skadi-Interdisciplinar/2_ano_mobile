@@ -12,6 +12,12 @@ import androidx.core.content.ContextCompat;
 import com.example.mobile_skadi.network.RetrofitClient;
 import com.example.mobile_skadi.network.SkadiApiService;
 import com.example.mobile_skadi.network.dto.ColdRoomResponse;
+import com.example.mobile_skadi.network.dto.TemperatureReadingResponse;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -33,11 +39,28 @@ public class CamaraDetailsActivity extends AppCompatActivity {
     private TextView tvTempRange;
     private TextView tvStatusBoxCurrent;
 
+    private TextView tvIdealMin;
+    private TextView tvIdealAvg;
+    private TextView tvIdealMax;
+
+    private TextView tvGraphMin;
+    private TextView tvGraphAvg;
+    private TextView tvGraphMax;
+
+    private TextView tvStatusMin;
+    private TextView tvStatusAvg;
+    private TextView tvStatusMax;
+
+    private TemperatureChartView chartCamaraDetails;
+
     private LinearLayout navCamaras;
     private LinearLayout navAlertas;
     private LinearLayout navInicio;
     private LinearLayout navRelatorios;
     private LinearLayout navTrimmy;
+
+    private double minLimit = 0.0;
+    private double maxLimit = 4.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +80,20 @@ public class CamaraDetailsActivity extends AppCompatActivity {
         tvCurrentTemp = findViewById(R.id.tvCurrentTemp);
         tvTempRange = findViewById(R.id.tvTempRange);
         tvStatusBoxCurrent = findViewById(R.id.tvStatusBoxCurrent);
+
+        tvIdealMin = findViewById(R.id.tvIdealMin);
+        tvIdealAvg = findViewById(R.id.tvIdealAvg);
+        tvIdealMax = findViewById(R.id.tvIdealMax);
+
+        tvGraphMin = findViewById(R.id.tvGraphMin);
+        tvGraphAvg = findViewById(R.id.tvGraphAvg);
+        tvGraphMax = findViewById(R.id.tvGraphMax);
+
+        tvStatusMin = findViewById(R.id.tvStatusMin);
+        tvStatusAvg = findViewById(R.id.tvStatusAvg);
+        tvStatusMax = findViewById(R.id.tvStatusMax);
+
+        chartCamaraDetails = findViewById(R.id.chartCamaraDetails);
 
         navCamaras = findViewById(R.id.navCamaras);
         navAlertas = findViewById(R.id.navAlertas);
@@ -81,12 +118,20 @@ public class CamaraDetailsActivity extends AppCompatActivity {
         }
         if (currentTemp != null && !currentTemp.isEmpty()) {
             tvCurrentTemp.setText(currentTemp);
-            tvStatusBoxCurrent.setText(currentTemp);
+            if (tvStatusBoxCurrent != null) tvStatusBoxCurrent.setText(currentTemp);
         }
         if (tempRange != null && !tempRange.isEmpty()) {
             tvTempRange.setText(tempRange);
         }
 
+        updateStatusBadge(isCritical);
+
+        if (camaraId > 0) {
+            loadCamaraDetailsFromApi(camaraId);
+        }
+    }
+
+    private void updateStatusBadge(boolean isCritical) {
         if (isCritical) {
             tvCamaraStatusBadge.setText("● Crítico");
             tvCamaraStatusBadge.setTextColor(ContextCompat.getColor(this, R.color.alert_danger));
@@ -98,14 +143,12 @@ public class CamaraDetailsActivity extends AppCompatActivity {
             tvCamaraStatusBadge.setBackgroundResource(R.drawable.bg_badge_stable);
             tvCurrentTemp.setTextColor(ContextCompat.getColor(this, R.color.primary_dark));
         }
-
-        if (camaraId > 0) {
-            loadCamaraDetailsFromApi(camaraId);
-        }
     }
 
     private void loadCamaraDetailsFromApi(long id) {
         SkadiApiService apiService = RetrofitClient.getApiService(this);
+
+        // 1. Dados cadastrais da câmara
         apiService.getColdRoomById(id).enqueue(new Callback<ColdRoomResponse>() {
             @Override
             public void onResponse(Call<ColdRoomResponse> call, Response<ColdRoomResponse> response) {
@@ -123,16 +166,94 @@ public class CamaraDetailsActivity extends AppCompatActivity {
                             tvCamaraSubtitle.setText(camara.getLocation());
                         }
                     }
-                    if (camara.getMinimumTemperature() != null && camara.getMaximumTemperature() != null) {
-                        tvTempRange.setText(String.format("%s°C — %s°C", camara.getMinimumTemperature(), camara.getMaximumTemperature()));
+
+                    if (camara.getMinimumTemperature() != null) {
+                        minLimit = camara.getMinimumTemperature().doubleValue();
+                    }
+                    if (camara.getMaximumTemperature() != null) {
+                        maxLimit = camara.getMaximumTemperature().doubleValue();
+                    }
+
+                    double avgLimit = (minLimit + maxLimit) / 2.0;
+
+                    tvTempRange.setText(String.format(Locale.getDefault(), "%.2f°C – %.2f°C", minLimit, maxLimit));
+
+                    if (tvIdealMin != null) tvIdealMin.setText(String.format(Locale.getDefault(), "%.1f°C", minLimit));
+                    if (tvIdealAvg != null) tvIdealAvg.setText(String.format(Locale.getDefault(), "%.1f°C", avgLimit));
+                    if (tvIdealMax != null) tvIdealMax.setText(String.format(Locale.getDefault(), "%.1f°C", maxLimit));
+
+                    if (tvStatusMin != null) tvStatusMin.setText(String.format(Locale.getDefault(), "%.1f°C", minLimit));
+                    if (tvStatusAvg != null) tvStatusAvg.setText(String.format(Locale.getDefault(), "%.1f°C", avgLimit));
+                    if (tvStatusMax != null) tvStatusMax.setText(String.format(Locale.getDefault(), "%.1f°C", maxLimit));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ColdRoomResponse> call, Throwable t) {}
+        });
+
+        // 2. Temperatura atual em tempo real
+        apiService.getCurrentTemperature(id).enqueue(new Callback<TemperatureReadingResponse>() {
+            @Override
+            public void onResponse(Call<TemperatureReadingResponse> call, Response<TemperatureReadingResponse> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().getTemperature() != null) {
+                    double curr = response.body().getTemperature().doubleValue();
+                    String currStr = String.format(Locale.getDefault(), "%.1f°C", curr);
+                    tvCurrentTemp.setText(currStr);
+                    if (tvStatusBoxCurrent != null) tvStatusBoxCurrent.setText(currStr);
+
+                    boolean isCritical = curr < minLimit || curr > maxLimit;
+                    updateStatusBadge(isCritical);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TemperatureReadingResponse> call, Throwable t) {}
+        });
+
+        // 3. Histórico de leituras das últimas 24 horas
+        apiService.getColdRoomReadings(id).enqueue(new Callback<List<TemperatureReadingResponse>>() {
+            @Override
+            public void onResponse(Call<List<TemperatureReadingResponse>> call, Response<List<TemperatureReadingResponse>> response) {
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                    List<TemperatureReadingResponse> readings = response.body();
+                    double min = Double.MAX_VALUE;
+                    double max = -Double.MAX_VALUE;
+                    double sum = 0.0;
+                    int count = 0;
+
+                    List<Float> points = new ArrayList<>();
+
+                    for (TemperatureReadingResponse r : readings) {
+                        if (r.getTemperature() != null) {
+                            double val = r.getTemperature().doubleValue();
+                            if (val < min) min = val;
+                            if (val > max) max = val;
+                            sum += val;
+                            count++;
+                            points.add((float) val);
+                        }
+                    }
+
+                    if (count > 0) {
+                        double avg = sum / count;
+                        if (tvGraphMin != null) tvGraphMin.setText(String.format(Locale.getDefault(), "%.1f °C", min));
+                        if (tvGraphAvg != null) tvGraphAvg.setText(String.format(Locale.getDefault(), "%.1f °C", avg));
+                        if (tvGraphMax != null) tvGraphMax.setText(String.format(Locale.getDefault(), "%.1f °C", max));
+
+                        if (tvStatusMin != null) tvStatusMin.setText(String.format(Locale.getDefault(), "%.1f°C", min));
+                        if (tvStatusAvg != null) tvStatusAvg.setText(String.format(Locale.getDefault(), "%.1f°C", avg));
+                        if (tvStatusMax != null) tvStatusMax.setText(String.format(Locale.getDefault(), "%.1f°C", max));
+
+                        if (chartCamaraDetails != null && !points.isEmpty()) {
+                            chartCamaraDetails.setDataPoints(points);
+                        }
                     }
                 }
             }
 
             @Override
-            public void onFailure(Call<ColdRoomResponse> call, Throwable t) {
-                // Modo offline/resiliente: preserva os dados recebidos via Intent
-            }
+            public void onFailure(Call<List<TemperatureReadingResponse>> call, Throwable t) {}
         });
     }
 

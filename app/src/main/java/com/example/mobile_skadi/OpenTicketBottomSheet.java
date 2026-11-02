@@ -55,15 +55,7 @@ public class OpenTicketBottomSheet extends BottomSheetDialog {
         TextView tvTicketTypeSelected = view.findViewById(R.id.tvTicketTypeSelected);
         EditText etTicketDescription = view.findViewById(R.id.etTicketDescription);
         AppCompatButton btnSubmit = view.findViewById(R.id.btnSubmitTicket);
-        View btnCallSupport = view.findViewById(R.id.btnCallSupport);
 
-        if (btnCallSupport != null) {
-            btnCallSupport.setOnClickListener(v -> {
-                android.content.Intent callIntent = new android.content.Intent(android.content.Intent.ACTION_DIAL);
-                callIntent.setData(android.net.Uri.parse("tel:1130000000"));
-                getContext().startActivity(callIntent);
-            });
-        }
 
         btnClose.setOnClickListener(v -> dismiss());
 

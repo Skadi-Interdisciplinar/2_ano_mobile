@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:padding="24dp">
 
-    <!-- CABEÇALHO COM BOTÃO FECHAR E TÍTULO -->
+    <!-- CABEÃ‡ALHO COM BOTÃƒO FECHAR E TÃTULO -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -66,7 +66,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|start"
             android:layout_marginStart="14dp"
-            android:text="Escolha opção"
+            android:text="Escolha opÃ§Ã£o"
             android:textColor="#64748B"
             android:textSize="14sp"
             android:fontFamily="@font/manrope" />
@@ -77,15 +77,15 @@
             android:layout_gravity="center_vertical|end"
             android:layout_marginEnd="14dp"
             android:src="@drawable/ic_chevron_down"
-            android:contentDescription="Selecionar opção" />
+            android:contentDescription="Selecionar opÃ§Ã£o" />
     </FrameLayout>
 
-    <!-- DESCRIÇÃO -->
+    <!-- DESCRIÃ‡ÃƒO -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Descrição"
+        android:text="DescriÃ§Ã£o"
         android:textColor="#0F2851"
         android:textSize="13sp"
         android:fontFamily="@font/manrope"
@@ -106,7 +106,7 @@
         android:textColorHint="#94A3B8"
         android:textSize="13.5sp" />
 
-    <!-- BOTÃO ENVIAR -->
+    <!-- BOTÃƒO ENVIAR -->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnSubmitTicket"
         android:layout_width="match_parent"
@@ -121,34 +121,6 @@
         android:textSize="15sp"
         android:textStyle="bold" />
 
-    <!-- BOTÃO LIGAR PARA O SUPORTE (RECURSO DE HARDWARE: TELEFONE) -->
-    <LinearLayout
-        android:id="@+id/btnCallSupport"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginBottom="12dp"
-        android:background="@drawable/bg_btn_secondary_outline"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:clickable="true"
-        android:focusable="true">
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@android:drawable/ic_menu_call"
-            android:tint="@color/primary_dark"
-            android:contentDescription="Ligar" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="Ligar para suporte: (11) 3000-0000"
-            android:textColor="@color/primary_dark"
-            android:textSize="14sp"
-            android:fontFamily="@font/manrope"
-            android:textStyle="bold" />
-    </LinearLayout>
+    <!-- BOTÃƒO LIGAR PARA O SUPORTE (RECURSO DE HARDWARE: TELEFONE) -->
 
 </LinearLayout>

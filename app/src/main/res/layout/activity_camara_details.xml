@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -275,7 +275,7 @@
                                 android:paddingBottom="12dp"
                                 android:layout_marginEnd="5dp">
 
-                                <TextView
+                                <TextView android:id="@+id/tvIdealMin"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="-2°C"
@@ -307,7 +307,7 @@
                                 android:layout_marginStart="5dp"
                                 android:layout_marginEnd="5dp">
 
-                                <TextView
+                                <TextView android:id="@+id/tvIdealAvg"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="2,0°C"
@@ -338,8 +338,7 @@
                                 android:paddingBottom="12dp"
                                 android:layout_marginStart="5dp">
 
-                                <TextView
-                                    android:layout_width="wrap_content"
+                                <TextView android:id="@+id/tvIdealMax"
                                     android:layout_height="wrap_content"
                                     android:text="3,2°C"
                                     android:textColor="@color/primary_dark"
@@ -392,7 +391,7 @@
                                 android:orientation="vertical"
                                 android:gravity="center">
 
-                                <TextView
+                                <TextView android:id="@+id/tvGraphMin"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="-2,0 °C"
@@ -420,7 +419,7 @@
                                 android:orientation="vertical"
                                 android:gravity="center">
 
-                                <TextView
+                                <TextView android:id="@+id/tvGraphAvg"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="2,0 °C"
@@ -448,7 +447,7 @@
                                 android:orientation="vertical"
                                 android:gravity="center">
 
-                                <TextView
+                                <TextView android:id="@+id/tvGraphMax"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="3,2 °C"
@@ -553,7 +552,7 @@
                                 android:textSize="10sp"
                                 android:fontFamily="@font/manrope" />
 
-                            <TextView
+                            <TextView android:id="@+id/tvStatusMin"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="0,0°C"
@@ -618,7 +617,7 @@
                                 android:textSize="10sp"
                                 android:fontFamily="@font/manrope" />
 
-                            <TextView
+                            <TextView android:id="@+id/tvStatusAvg"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="1,9°C"
@@ -649,7 +648,7 @@
                                 android:textSize="10sp"
                                 android:fontFamily="@font/manrope" />
 
-                            <TextView
+                            <TextView android:id="@+id/tvStatusMax"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="4,0°C"

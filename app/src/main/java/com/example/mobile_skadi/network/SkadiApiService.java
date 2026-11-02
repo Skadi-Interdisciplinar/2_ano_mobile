@@ -53,6 +53,9 @@ public interface SkadiApiService {
     @GET("alerts/history")
     Call<List<AlertResponse>> getAlertsHistory(@Query("coldRoomId") Integer coldRoomId);
 
+        @GET("readings/cold-rooms/{coldRoomId}")
+    Call<List<TemperatureReadingResponse>> getColdRoomReadings(@Path("coldRoomId") Long coldRoomId);
+
     @GET("readings/cold-rooms/{coldRoomId}/current-temperature")
     Call<TemperatureReadingResponse> getCurrentTemperature(@Path("coldRoomId") Long coldRoomId);
 

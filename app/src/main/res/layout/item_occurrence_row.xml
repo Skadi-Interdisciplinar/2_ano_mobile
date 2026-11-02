@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:clickable="true"
+    android:focusable="true">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@id/tvOccurBadge"
+        android:layout_marginEnd="12dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvOccurTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Câmara atingiu variação"
+            android:textColor="@color/primary_dark"
+            android:textSize="13sp"
+            android:fontFamily="@font/manrope"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvOccurTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hoje às 14:30"
+            android:textColor="@color/secondary_gray"
+            android:textSize="11.5sp"
+            android:fontFamily="@font/manrope"
+            android:layout_marginTop="2dp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvOccurBadge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:text="● Crítico"
+        android:textColor="@color/alert_danger"
+        android:textSize="11sp"
+        android:fontFamily="@font/manrope"
+        android:textStyle="bold"
+        android:background="@drawable/bg_badge_critical"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp" />
+
+</RelativeLayout>

@@ -23,7 +23,18 @@ public class TemperatureChartView extends View {
     private final Path fillPath = new Path();
 
     // Dados mockados de temperatura (das 00h às 21h)
-    private final float[] temperatures = {0.1f, 0.25f, 0.4f, 0.6f, 0.8f, 1.0f, 1.3f, 1.9f};
+        private float[] temperatures = {0.1f, 0.25f, 0.4f, 0.6f, 0.8f, 1.0f, 1.3f, 1.9f};
+
+    public void setDataPoints(java.util.List<Float> points) {
+        if (points != null && points.size() >= 2) {
+            float[] arr = new float[points.size()];
+            for (int i = 0; i < points.size(); i++) {
+                arr[i] = points.get(i);
+            }
+            this.temperatures = arr;
+            invalidate();
+        }
+    }
     private final String[] xLabels = {"00h", "03h", "06h", "09h", "12h", "15h", "18h", "21h"};
     private final String[] yLabels = {"2 deg", "1 deg", "0 deg"};
     private final float[] yValues = {2.0f, 1.0f, 0.0f};

@@ -1,38 +1,63 @@
 package com.example.mobile_skadi;
 
 import android.content.Intent;
+import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
-import com.example.mobile_skadi.network.TrimmyApiClient;
-import com.example.mobile_skadi.network.dto.RelatorioPdfRequest;
+import com.example.mobile_skadi.network.RetrofitClient;
+import com.example.mobile_skadi.network.SessionManager;
+import com.example.mobile_skadi.network.SkadiApiService;
+import com.example.mobile_skadi.network.dto.ColdRoomResponse;
+import com.example.mobile_skadi.network.dto.DistributionCenterResponse;
+import com.example.mobile_skadi.network.dto.TemperatureReadingResponse;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class GeneratedReportActivity extends AppCompatActivity {
 
+    public static final String EXTRA_COLD_ROOM_ID = "EXTRA_COLD_ROOM_ID";
+    public static final String EXTRA_COLD_ROOM_NAME = "EXTRA_COLD_ROOM_NAME";
+    public static final String EXTRA_CD_NAME = "EXTRA_CD_NAME";
+    public static final String EXTRA_DATE_START = "EXTRA_DATE_START";
+    public static final String EXTRA_DATE_END = "EXTRA_DATE_END";
+
     private FrameLayout btnBackReport;
     private ImageView btnShareReport;
+    private View documentContent;
+
+    private TextView tvDocCdNome;
+    private TextView tvDocCdEndereco;
+    private TextView tvDocCdCnpj;
+    private TextView tvDocResponsavelTecnico;
+
+    private TextView tvDocCamara;
+    private TextView tvDocPeriodo;
+    private TextView tvDocFaixaTemperatura;
+    private TextView tvDocTotalRegistros;
+    private TextView tvDocRegistrosConformes;
 
     private Long coldRoomId;
+    private String coldRoomName;
+    private String cdName;
     private String startDate;
     private String endDate;
 
@@ -41,17 +66,45 @@ public class GeneratedReportActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generated_report);
 
+        initViews();
+        parseIntentExtras();
+        setupListeners();
+        loadDocumentData();
+    }
+
+    private void initViews() {
         btnBackReport = findViewById(R.id.btnBackReport);
         btnShareReport = findViewById(R.id.btnShareReport);
+        documentContent = findViewById(R.id.documentContent);
 
-        if (getIntent().hasExtra("EXTRA_COLD_ROOM_ID")) {
-            long rId = getIntent().getLongExtra("EXTRA_COLD_ROOM_ID", 0L);
-            if (rId > 0) coldRoomId = rId;
+        tvDocCdNome = findViewById(R.id.tvDocCdNome);
+        tvDocCdEndereco = findViewById(R.id.tvDocCdEndereco);
+        tvDocCdCnpj = findViewById(R.id.tvDocCdCnpj);
+        tvDocResponsavelTecnico = findViewById(R.id.tvDocResponsavelTecnico);
+
+        tvDocCamara = findViewById(R.id.tvDocCamara);
+        tvDocPeriodo = findViewById(R.id.tvDocPeriodo);
+        tvDocFaixaTemperatura = findViewById(R.id.tvDocFaixaTemperatura);
+        tvDocTotalRegistros = findViewById(R.id.tvDocTotalRegistros);
+        tvDocRegistrosConformes = findViewById(R.id.tvDocRegistrosConformes);
+    }
+
+    private void parseIntentExtras() {
+        Intent intent = getIntent();
+        if (intent != null) {
+            if (intent.hasExtra(EXTRA_COLD_ROOM_ID)) {
+                long rId = intent.getLongExtra(EXTRA_COLD_ROOM_ID, 0L);
+                if (rId > 0) coldRoomId = rId;
+            }
+            coldRoomName = intent.getStringExtra(EXTRA_COLD_ROOM_NAME);
+            cdName = intent.getStringExtra(EXTRA_CD_NAME);
+            startDate = intent.getStringExtra(EXTRA_DATE_START);
+            endDate = intent.getStringExtra(EXTRA_DATE_END);
         }
-        startDate = getIntent().getStringExtra("EXTRA_DATE_START");
-        endDate = getIntent().getStringExtra("EXTRA_DATE_END");
 
         SimpleDateFormat iso = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat br = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+
         if (startDate == null || startDate.isEmpty()) {
             startDate = iso.format(new Date(System.currentTimeMillis() - 7L * 24 * 3600 * 1000));
         }
@@ -59,58 +112,152 @@ public class GeneratedReportActivity extends AppCompatActivity {
             endDate = iso.format(new Date());
         }
 
-        btnBackReport.setOnClickListener(v -> finish());
-        btnShareReport.setOnClickListener(v -> downloadAndOpenPdf());
+        if (cdName == null || cdName.isEmpty()) {
+            cdName = "CD Manaus - Unidade 20";
+        }
+
+        // Responsável Técnico atual logado
+        String userName = SessionManager.getInstance(this).getName();
+        if (userName != null && !userName.isEmpty()) {
+            if (tvDocResponsavelTecnico != null) tvDocResponsavelTecnico.setText(userName);
+        }
+
+        // Centro de Distribuição
+        if (tvDocCdNome != null) tvDocCdNome.setText(cdName);
+
+        // Câmara selecionada
+        String cLabel = (coldRoomName != null && !coldRoomName.isEmpty()) ? coldRoomName : (coldRoomId != null ? "Câmara " + coldRoomId : "Todas as câmaras");
+        if (tvDocCamara != null) tvDocCamara.setText(cLabel);
+
+        // Período formatado
+        try {
+            Date dS = iso.parse(startDate);
+            Date dE = iso.parse(endDate);
+            if (dS != null && dE != null && tvDocPeriodo != null) {
+                tvDocPeriodo.setText(br.format(dS) + " - " + br.format(dE));
+            }
+        } catch (Exception e) {
+            if (tvDocPeriodo != null) tvDocPeriodo.setText(startDate + " - " + endDate);
+        }
     }
 
-    private void downloadAndOpenPdf() {
-        Toast.makeText(this, "Baixando PDF do relatório...", Toast.LENGTH_SHORT).show();
+    private void loadDocumentData() {
+        SkadiApiService apiService = RetrofitClient.getApiService(this);
 
-        RelatorioPdfRequest request = new RelatorioPdfRequest(null, coldRoomId, startDate, endDate);
-        TrimmyApiClient.getApiService(this).downloadPdfReport(request).enqueue(new Callback<ResponseBody>() {
+        // 1. Carrega dados do CD
+        apiService.getDistributionCenters().enqueue(new Callback<List<DistributionCenterResponse>>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    saveAndOpenPdfFile(response.body());
-                } else {
-                    int code = response.code();
-                    String msg = "Erro ao gerar PDF (" + code + ").";
-                    if (code == 401) msg = "Sessão expirada. Faça login novamente.";
-                    else if (code == 403) msg = "Acesso não permitido para este relatório.";
-                    else if (code == 422) msg = "Filtros de data ou câmara inválidos.";
-                    else if (code == 502 || code == 503) msg = "Serviço de geração de relatório indisponível.";
-                    Toast.makeText(GeneratedReportActivity.this, msg, Toast.LENGTH_LONG).show();
+            public void onResponse(Call<List<DistributionCenterResponse>> call, Response<List<DistributionCenterResponse>> response) {
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                    DistributionCenterResponse dc = response.body().get(0);
+                    if (dc.getName() != null && tvDocCdNome != null) {
+                        tvDocCdNome.setText(dc.getName());
+                    }
+                    if (dc.getCnpj() != null && tvDocCdCnpj != null) {
+                        tvDocCdCnpj.setText(dc.getCnpj());
+                    }
                 }
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast.makeText(GeneratedReportActivity.this,
-                        "Não foi possível conectar ao servidor de relatórios (porta 8000).",
-                        Toast.LENGTH_LONG).show();
+            public void onFailure(Call<List<DistributionCenterResponse>> call, Throwable t) {}
+        });
+
+        // 2. Carrega limites de temperatura da câmara
+        if (coldRoomId != null && coldRoomId > 0) {
+            apiService.getColdRoomById(coldRoomId).enqueue(new Callback<ColdRoomResponse>() {
+                @Override
+                public void onResponse(Call<ColdRoomResponse> call, Response<ColdRoomResponse> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        ColdRoomResponse cr = response.body();
+                        if (cr.getMinimumTemperature() != null && cr.getMaximumTemperature() != null && tvDocFaixaTemperatura != null) {
+                            tvDocFaixaTemperatura.setText(String.format(Locale.getDefault(), "%.2f°C – %.2f°C",
+                                    cr.getMinimumTemperature().doubleValue(), cr.getMaximumTemperature().doubleValue()));
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ColdRoomResponse> call, Throwable t) {}
+            });
+        }
+
+        // 3. Carrega estatísticas de leituras
+        Call<List<TemperatureReadingResponse>> readingsCall = (coldRoomId != null && coldRoomId > 0)
+                ? apiService.getColdRoomReadings(coldRoomId)
+                : apiService.getAllReadings();
+
+        readingsCall.enqueue(new Callback<List<TemperatureReadingResponse>>() {
+            @Override
+            public void onResponse(Call<List<TemperatureReadingResponse>> call, Response<List<TemperatureReadingResponse>> response) {
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                    List<TemperatureReadingResponse> list = response.body();
+                    int total = list.size();
+                    int compliant = 0;
+
+                    for (TemperatureReadingResponse r : list) {
+                        if (r.getTemperature() != null) {
+                            double val = r.getTemperature().doubleValue();
+                            if (val >= 0.0 && val <= 4.0) {
+                                compliant++;
+                            }
+                        }
+                    }
+
+                    int pct = (int) Math.round((compliant * 100.0) / total);
+
+                    if (tvDocTotalRegistros != null) tvDocTotalRegistros.setText(String.valueOf(total));
+                    if (tvDocRegistrosConformes != null) tvDocRegistrosConformes.setText(compliant + " (" + pct + "%)");
+                }
             }
+
+            @Override
+            public void onFailure(Call<List<TemperatureReadingResponse>> call, Throwable t) {}
         });
     }
 
-    private void saveAndOpenPdfFile(ResponseBody body) {
+    private void setupListeners() {
+        btnBackReport.setOnClickListener(v -> finish());
+        btnShareReport.setOnClickListener(v -> saveAndOpenPdfFile());
+    }
+
+    /**
+     * Salva o documento visual completo como arquivo PDF na memória do celular
+     * e o abre com o visualizador/compartilhador do sistema.
+     */
+    private void saveAndOpenPdfFile() {
+        Toast.makeText(this, "Gerando PDF do relatório...", Toast.LENGTH_SHORT).show();
+
         try {
-            File pdfDir = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
-            if (pdfDir == null) pdfDir = getCacheDir();
-            File pdfFile = new File(pdfDir, "skadi-relatorio-" + startDate + "-" + endDate + ".pdf");
+            View docView = documentContent != null ? documentContent : findViewById(android.R.id.content);
+            if (docView == null) return;
 
-            InputStream inputStream = body.byteStream();
-            OutputStream outputStream = new FileOutputStream(pdfFile);
-            byte[] buffer = new byte[4096];
-            int read;
-            while ((read = inputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, read);
-            }
-            outputStream.flush();
-            outputStream.close();
-            inputStream.close();
+            int width = docView.getWidth() > 0 ? docView.getWidth() : 1080;
+            int height = docView.getHeight() > 0 ? docView.getHeight() : 1920;
 
-            Toast.makeText(this, "PDF salvo: " + pdfFile.getName(), Toast.LENGTH_SHORT).show();
+            PdfDocument document = new PdfDocument();
+            PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(width, height, 1).create();
+            PdfDocument.Page page = document.startPage(pageInfo);
 
+            docView.draw(page.getCanvas());
+            document.finishPage(page);
+
+            // Salva na pasta de Downloads pública do celular
+            File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            if (!downloadsDir.exists()) downloadsDir.mkdirs();
+
+            String fileName = "skadi-relatorio-" + System.currentTimeMillis() + ".pdf";
+            File pdfFile = new File(downloadsDir, fileName);
+
+            FileOutputStream fos = new FileOutputStream(pdfFile);
+            document.writeTo(fos);
+            document.close();
+            fos.flush();
+            fos.close();
+
+            Toast.makeText(this, "PDF salvo em Downloads: " + fileName, Toast.LENGTH_LONG).show();
+
+            // Abre o PDF com o aplicativo padrão do usuário
             Uri fileUri = FileProvider.getUriForFile(
                     this,
                     getApplicationContext().getPackageName() + ".provider",
@@ -119,10 +266,13 @@ public class GeneratedReportActivity extends AppCompatActivity {
 
             Intent openIntent = new Intent(Intent.ACTION_VIEW);
             openIntent.setDataAndType(fileUri, "application/pdf");
-            openIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            startActivity(Intent.createChooser(openIntent, "Abrir Relatório PDF"));
+            openIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            Intent chooser = Intent.createChooser(openIntent, "Abrir Relatório PDF");
+            startActivity(chooser);
+
         } catch (Exception e) {
-            Toast.makeText(this, "PDF baixado em " + getPackageName() + ", erro ao abrir leitor externo: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Erro ao exportar PDF: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 }

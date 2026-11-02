@@ -32,6 +32,11 @@ public class RetrofitClient {
                     .build();
 
             String baseUrl = BuildConfig.BASE_URL;
+            if (baseUrl == null || baseUrl.trim().isEmpty()) {
+                baseUrl = "http://127.0.0.1:8080/";
+            } else if (baseUrl.contains("localhost")) {
+                baseUrl = baseUrl.replace("localhost", "127.0.0.1");
+            }
             if (!baseUrl.endsWith("/")) {
                 baseUrl += "/";
             }

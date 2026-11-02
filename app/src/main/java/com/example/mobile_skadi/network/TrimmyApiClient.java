@@ -34,6 +34,8 @@ public class TrimmyApiClient {
             String baseUrl = BuildConfig.AI_BASE_URL;
             if (baseUrl == null || baseUrl.trim().isEmpty()) {
                 baseUrl = "http://127.0.0.1:8000/";
+            } else if (baseUrl.contains("localhost")) {
+                baseUrl = baseUrl.replace("localhost", "127.0.0.1");
             }
             if (!baseUrl.endsWith("/")) {
                 baseUrl += "/";

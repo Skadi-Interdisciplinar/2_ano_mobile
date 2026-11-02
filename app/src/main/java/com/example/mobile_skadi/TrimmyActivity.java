@@ -40,7 +40,7 @@ public class TrimmyActivity extends AppCompatActivity {
     private TextView tvInitialUserPrompt;
 
     private TextView chipSuggest1;
-    private TextView chipSuggest2;
+    
     private EditText etTrimmyMessage;
     private FrameLayout btnSendTrimmy;
 
@@ -77,7 +77,7 @@ public class TrimmyActivity extends AppCompatActivity {
         tvInitialUserPrompt = findViewById(R.id.tvInitialUserPrompt);
 
         chipSuggest1 = findViewById(R.id.chipSuggest1);
-        chipSuggest2 = findViewById(R.id.chipSuggest2);
+        
         etTrimmyMessage = findViewById(R.id.etTrimmyMessage);
         btnSendTrimmy = findViewById(R.id.btnSendTrimmy);
 
@@ -112,7 +112,7 @@ public class TrimmyActivity extends AppCompatActivity {
 
         // Sugestões rápidas na tela inicial do Trimmy
         chipSuggest1.setOnClickListener(v -> startChatWithPrompt("Quais câmaras estão críticas hoje?"));
-        chipSuggest2.setOnClickListener(v -> startChatWithPrompt("Diagnóstico da Câmara 291"));
+        
 
         // Envio de mensagem pelo botão ou teclado
         btnSendTrimmy.setOnClickListener(v -> handleSendMessage());
