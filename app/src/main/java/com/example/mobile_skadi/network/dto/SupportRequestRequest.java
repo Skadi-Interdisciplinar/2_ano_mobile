@@ -1,30 +1,35 @@
 package com.example.mobile_skadi.network.dto;
 
+import com.google.gson.annotations.SerializedName;
+
 public class SupportRequestRequest {
-    private String subject;
-    private String description;
+    @SerializedName("categoria")
+    private String categoria;
+
+    @SerializedName("descricao")
+    private String descricao;
 
     public SupportRequestRequest() {
     }
 
-    public SupportRequestRequest(String subject, String description) {
-        this.subject = subject;
-        this.description = description;
+    public SupportRequestRequest(String categoria, String descricao) {
+        this.categoria = categoria;
+        this.descricao = descricao;
     }
 
-    public String getSubject() {
-        return subject;
+    public String getCategoria() {
+        return categoria;
     }
 
-    public void setSubject(String subject) {
-        this.subject = subject;
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDescricao() {
+        return descricao;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 }

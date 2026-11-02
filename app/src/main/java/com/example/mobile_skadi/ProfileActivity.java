@@ -100,7 +100,7 @@ public class ProfileActivity extends AppCompatActivity {
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
-                            Toast.makeText(this, "Não foi possível carregar a imagem.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "NÃ£o foi possÃ­vel carregar a imagem.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
@@ -112,7 +112,7 @@ public class ProfileActivity extends AppCompatActivity {
                     if (isGranted) {
                         openCamera();
                     } else {
-                        Toast.makeText(this, "Permissão da câmera é necessária para tirar foto.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "PermissÃ£o da cÃ¢mera Ã© necessÃ¡ria para tirar foto.", Toast.LENGTH_SHORT).show();
                     }
                 }
         );
@@ -123,7 +123,7 @@ public class ProfileActivity extends AppCompatActivity {
         try {
             cameraLauncher.launch(takePictureIntent);
         } catch (Exception e) {
-            Toast.makeText(this, "Erro ao abrir câmera: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Erro ao abrir cÃ¢mera: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -136,9 +136,9 @@ public class ProfileActivity extends AppCompatActivity {
     private void showPhotoPickerDialog() {
         String[] options;
         if (AvatarManager.hasCustomAvatar(this)) {
-            options = new String[]{"Tirar foto (Câmera)", "Escolher da Galeria", "Restaurar foto padrão"};
+            options = new String[]{"Tirar foto (CÃ¢mera)", "Escolher da Galeria", "Restaurar foto padrÃ£o"};
         } else {
-            options = new String[]{"Tirar foto (Câmera)", "Escolher da Galeria"};
+            options = new String[]{"Tirar foto (CÃ¢mera)", "Escolher da Galeria"};
         }
 
         new AlertDialog.Builder(this)
@@ -156,7 +156,7 @@ public class ProfileActivity extends AppCompatActivity {
                     } else if (which == 2) {
                         AvatarManager.clearAvatar(this);
                         recreate();
-                        Toast.makeText(this, "Foto de perfil restaurada para o padrão.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Foto de perfil restaurada para o padrÃ£o.", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .show();
@@ -243,7 +243,7 @@ public class ProfileActivity extends AppCompatActivity {
             cardProfileAvatarMain.setOnClickListener(v -> showPhotoPickerDialog());
         }
 
-        // 1. Preferências do sistema
+        // 1. PreferÃªncias do sistema
         cardPreferences.setOnClickListener(v -> {
             startActivity(new Intent(this, PreferencesActivity.class));
         });
@@ -253,23 +253,11 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(new Intent(this, ResetPasswordActivity.class));
         });
 
-        // 3. Fale conosco (Suporte - Opções de chamado ou ligação via Hardware)
+        // 3. Fale conosco (Suporte - OpÃ§Ãµes de chamado ou ligaÃ§Ã£o via Hardware)
         cardContactSupport.setOnClickListener(v -> {
-            new AlertDialog.Builder(this)
-                    .setTitle("Fale Conosco")
-                    .setItems(new String[]{"Abrir chamado online", "Ligar para suporte: (11) 3000-0000"}, (dialog, which) -> {
-                        if (which == 0) {
-                            OpenTicketBottomSheet.show(this);
-                        } else {
-                            Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                            callIntent.setData(Uri.parse("tel:1130000000"));
-                            startActivity(callIntent);
-                        }
-                    })
-                    .show();
+            OpenTicketBottomSheet.show(this);
         });
 
-        // 4. Minha equipe
         cardMyTeam.setOnClickListener(v -> {
             startActivity(new Intent(this, SquadsActivity.class));
         });
