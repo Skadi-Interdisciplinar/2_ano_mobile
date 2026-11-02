@@ -91,6 +91,15 @@
         <activity
             android:name=".ErrorStateActivity"
             android:exported="false" />
+        <activity
+            android:name=".ForgotPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".VerifyCodeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".NewPasswordActivity"
+            android:exported="false" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

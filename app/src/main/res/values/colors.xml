@@ -12,6 +12,8 @@
     <color name="secondary_dark">#2D3748</color>
     <color name="secondary">#55D8FF</color>
     <color name="secondary_gray">#718096</color>
+    <color name="hint_gray">#A0AEC0</color>
+    <color name="accent_blue">#2E8FEA</color>
     <color name="background">#F7FAFC</color>
 
     <!-- Cores de Alerta -->

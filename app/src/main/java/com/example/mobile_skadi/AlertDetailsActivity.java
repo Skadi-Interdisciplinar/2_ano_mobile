@@ -108,9 +108,6 @@ public class AlertDetailsActivity extends AppCompatActivity {
         navRelatorios = findViewById(R.id.navRelatorios);
         navTrimmy = findViewById(R.id.navTrimmy);
 
-        if (btnJustificar != null) {
-            btnJustificar.setVisibility(UserRoleManager.isEmployee() ? View.GONE : View.VISIBLE);
-        }
         UserRoleManager.applyBottomNavForRole(this);
     }
 
@@ -120,26 +117,39 @@ public class AlertDetailsActivity extends AppCompatActivity {
         btnProfileAvatar.setOnClickListener(v -> startActivity(new Intent(this, ProfileActivity.class)));
 
         btnJustificar.setOnClickListener(v -> {
-            AlertJustificationDialog.show(this, (reason, description) -> {
-                if (alertId != null && alertId > 0) {
-                    RetrofitClient.getApiService(this).recognizeAlert(alertId).enqueue(new Callback<Void>() {
-                        @Override
-                        public void onResponse(Call<Void> call, Response<Void> response) {
-                            setAlertResolved(true);
-                            Toast.makeText(AlertDetailsActivity.this, "Justificativa registrada com sucesso!", Toast.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void onFailure(Call<Void> call, Throwable t) {
-                            setAlertResolved(true);
-                            Toast.makeText(AlertDetailsActivity.this, "Justificativa registrada (modo offline)!", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                } else {
-                    setAlertResolved(true);
-                    Toast.makeText(this, "Justificativa registrada com sucesso!", Toast.LENGTH_SHORT).show();
+            if (!isResolved) {
+                // Estado 1: Assumir alerta -> muda para Resolvido
+                setAlertResolved(true);
+                if (tvEndTime != null && (tvEndTime.getText() == null || tvEndTime.getText().toString().isEmpty() || "--:--".equals(tvEndTime.getText().toString()))) {
+                    tvEndTime.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm")));
                 }
-            });
+                Toast.makeText(this, "Alerta assumido e marcado como resolvido!", Toast.LENGTH_SHORT).show();
+            } else {
+                // Estado 2: Justificar -> abre o popup existente
+                AlertJustificationDialog.show(this, (reason, description) -> {
+                    if (alertId != null && alertId > 0) {
+                        RetrofitClient.getApiService(this).recognizeAlert(alertId).enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                btnJustificar.setText("Justificado");
+                                btnJustificar.setEnabled(false);
+                                Toast.makeText(AlertDetailsActivity.this, "Justificativa registrada com sucesso!", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onFailure(Call<Void> call, Throwable t) {
+                                btnJustificar.setText("Justificado");
+                                btnJustificar.setEnabled(false);
+                                Toast.makeText(AlertDetailsActivity.this, "Justificativa registrada (modo offline)!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else {
+                        btnJustificar.setText("Justificado");
+                        btnJustificar.setEnabled(false);
+                        Toast.makeText(this, "Justificativa registrada com sucesso!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
         });
 
         navCamaras.setOnClickListener(v -> {
@@ -271,13 +281,15 @@ public class AlertDetailsActivity extends AppCompatActivity {
             tvEndTime.setTextColor(ContextCompat.getColor(this, R.color.primary_dark));
             tvAlertStatus.setText("Resolvido");
             tvAlertStatus.setTextColor(ContextCompat.getColor(this, R.color.alert_success));
-            layoutActionButtons.setVisibility(View.GONE);
+            layoutActionButtons.setVisibility(View.VISIBLE);
+            btnJustificar.setText("Justificar");
         } else {
             colEndTime.setVisibility(View.GONE);
             tvStartTime.setTextColor(ContextCompat.getColor(this, R.color.primary_dark));
             tvAlertStatus.setText("Em andamento");
             tvAlertStatus.setTextColor(ContextCompat.getColor(this, R.color.alert_danger));
             layoutActionButtons.setVisibility(View.VISIBLE);
+            btnJustificar.setText("Assumir alerta");
         }
     }
 }

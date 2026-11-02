@@ -5,6 +5,8 @@ import com.example.mobile_skadi.network.dto.ColdRoomResponse;
 import com.example.mobile_skadi.network.dto.DistributionCenterResponse;
 import com.example.mobile_skadi.network.dto.LoginRequest;
 import com.example.mobile_skadi.network.dto.NotificationResponse;
+import com.example.mobile_skadi.network.dto.PasswordCodeVerificationRequest;
+import com.example.mobile_skadi.network.dto.PasswordRecoveryRequest;
 import com.example.mobile_skadi.network.dto.SupportRequestRequest;
 import com.example.mobile_skadi.network.dto.TemperatureReadingResponse;
 import com.example.mobile_skadi.network.dto.TokenResponse;
@@ -24,6 +26,12 @@ public interface SkadiApiService {
 
     @POST("auth/login")
     Call<TokenResponse> login(@Body LoginRequest request);
+
+    @POST("auth/recover-password")
+    Call<Void> recoverPassword(@Body PasswordRecoveryRequest request);
+
+    @POST("auth/verify-recovery-code")
+    Call<Void> verifyRecoveryCode(@Body PasswordCodeVerificationRequest request);
 
     @GET("me")
     Call<UserResponse> me();
