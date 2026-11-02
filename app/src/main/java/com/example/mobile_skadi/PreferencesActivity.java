@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
 import com.google.android.material.card.MaterialCardView;
+import com.example.mobile_skadi.notification.AppNotificationManager;
+import com.example.mobile_skadi.utils.AvatarManager;
 
 public class PreferencesActivity extends AppCompatActivity {
 
@@ -29,6 +31,12 @@ public class PreferencesActivity extends AppCompatActivity {
     private LinearLayout navInicio;
     private LinearLayout navRelatorios;
     private LinearLayout navTrimmy;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AvatarManager.applyAvatar(this, btnProfileAvatar);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,8 +82,15 @@ public class PreferencesActivity extends AppCompatActivity {
             Toast.makeText(this, "Seleção de idioma em desenvolvimento.", Toast.LENGTH_SHORT).show();
         });
 
+        switchNotifications.setChecked(AppNotificationManager.hasNotificationPermission(this));
         switchNotifications.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            Toast.makeText(this, isChecked ? "Notificações ativadas" : "Notificações silenciadas", Toast.LENGTH_SHORT).show();
+            if (isChecked) {
+                AppNotificationManager.initChannels(this);
+                AppNotificationManager.sendTestNotification(this);
+                Toast.makeText(this, "Notificações ativadas! Alerta enviado para teste.", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Notificações silenciadas no app.", Toast.LENGTH_SHORT).show();
+            }
         });
 
         // Bottom Navigation

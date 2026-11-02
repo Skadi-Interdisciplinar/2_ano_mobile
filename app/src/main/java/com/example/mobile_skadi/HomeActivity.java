@@ -18,6 +18,13 @@ import com.example.mobile_skadi.network.SkadiApiService;
 import com.example.mobile_skadi.network.dto.AlertResponse;
 import com.example.mobile_skadi.network.dto.ColdRoomResponse;
 import com.example.mobile_skadi.network.dto.TemperatureReadingResponse;
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.content.ContextCompat;
+import com.example.mobile_skadi.notification.AppNotificationManager;
 import com.google.android.material.card.MaterialCardView;
 
 import java.math.BigDecimal;
@@ -71,6 +78,7 @@ public class HomeActivity extends AppCompatActivity {
     private LinearLayout navInicio;
     private LinearLayout navRelatorios;
     private LinearLayout navTrimmy;
+    private ActivityResultLauncher<String> notifPermissionLauncher;
 
     private final Map<Long, ColdRoomResponse> coldRoomsMap = new HashMap<>();
     private final Map<Long, TemperatureReadingResponse> readingsMap = new HashMap<>();
@@ -80,13 +88,31 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        notifPermissionLauncher = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(),
+                isGranted -> {
+                    if (isGranted) {
+                        AppNotificationManager.initChannels(this);
+                    }
+                }
+        );
+
+        AppNotificationManager.initChannels(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                notifPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+            }
+        }
+
         initViews();
         setupListeners();
     }
 
     @Override
     protected void onResume() {
-        super.onResume();
+        super.onResume();
+
         com.example.mobile_skadi.utils.AvatarManager.applyAvatar(this, btnProfileAvatar);
         updateGreeting();
         loadHomeData();
@@ -331,6 +357,20 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(intent);
             });
             cardAlertaCritico.setVisibility(View.VISIBLE);
+
+            String sev = topAlert.getSeverityLevel() != null ? topAlert.getSeverityLevel().toUpperCase() : "";
+            if (sev.contains("CRITIC") || sev.contains("URGENT")) {
+                String camaraName = (cr != null && cr.getLocation() != null && !cr.getLocation().isEmpty())
+                        ? cr.getLocation()
+                        : "Câmara " + (roomId != null ? roomId : "");
+                double currentTemp = (reading != null && reading.getTemperature() != null)
+                        ? reading.getTemperature().doubleValue()
+                        : 8.4;
+                double limitTemp = (cr != null && cr.getMaximumTemperature() != null)
+                        ? cr.getMaximumTemperature().doubleValue()
+                        : 4.0;
+                AppNotificationManager.sendCriticalAlertNotification(this, camaraName, currentTemp, limitTemp, topAlert.getId());
+            }
         } else {
             // Se não há alertas ativos
             if (cardAlertaCritico != null) cardAlertaCritico.setVisibility(View.GONE);

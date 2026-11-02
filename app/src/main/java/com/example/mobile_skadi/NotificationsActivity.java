@@ -13,6 +13,7 @@ import com.example.mobile_skadi.network.RetrofitClient;
 import com.example.mobile_skadi.network.SkadiApiService;
 import com.example.mobile_skadi.network.dto.NotificationResponse;
 import com.google.android.material.card.MaterialCardView;
+import com.example.mobile_skadi.utils.AvatarManager;
 
 import java.util.List;
 
@@ -35,6 +36,12 @@ public class NotificationsActivity extends AppCompatActivity {
     private LinearLayout navInicio;
     private LinearLayout navRelatorios;
     private LinearLayout navTrimmy;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AvatarManager.applyAvatar(this, btnProfileAvatar);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
