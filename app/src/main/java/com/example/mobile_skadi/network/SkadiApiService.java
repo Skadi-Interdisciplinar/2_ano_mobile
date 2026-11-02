@@ -10,7 +10,6 @@ import com.example.mobile_skadi.network.dto.TemperatureReadingResponse;
 import com.example.mobile_skadi.network.dto.TokenResponse;
 import com.example.mobile_skadi.network.dto.UserResponse;
 import com.example.mobile_skadi.network.dto.AddressResponse;
-import com.example.mobile_skadi.network.dto.TemperatureReadingViewResponse;
 
 import java.util.List;
 
@@ -62,9 +61,6 @@ public interface SkadiApiService {
 
     @GET("distribution-centers/{id}/addresses")
     Call<List<AddressResponse>> getDistributionCenterAddresses(@Path("id") Long id);
-
-    @GET("readings/cold-rooms/{id}/current-temperature")
-    Call<TemperatureReadingViewResponse> getCurrentTemperature(@Path("id") Long id);
 
     @POST("support")
     Call<Void> createSupportRequest(@Body SupportRequestRequest request);

@@ -4,7 +4,7 @@ import com.example.mobile_skadi.network.dto.AddressResponse;
 import com.example.mobile_skadi.network.dto.AlertResponse;
 import com.example.mobile_skadi.network.dto.ColdRoomResponse;
 import com.example.mobile_skadi.network.dto.DistributionCenterResponse;
-import com.example.mobile_skadi.network.dto.TemperatureReadingViewResponse;
+import com.example.mobile_skadi.network.dto.TemperatureReadingResponse;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -56,7 +56,7 @@ public final class CdMapSummary {
     }
 
     public static CdMapSummary calculate(DistributionCenterResponse cd, AddressResponse address,
-            List<ColdRoomResponse> rooms, Map<Long, TemperatureReadingViewResponse> readings,
+            List<ColdRoomResponse> rooms, Map<Long, TemperatureReadingResponse> readings,
             List<AlertResponse> alerts, boolean roomsAvailable, boolean alertsAvailable) {
         Map<Long, ColdRoomResponse> ownRooms = new LinkedHashMap<>();
         for (ColdRoomResponse room : rooms) {
@@ -68,7 +68,7 @@ public final class CdMapSummary {
         int count = 0, outside = 0, checkedRanges = 0, pending = 0;
         Instant oldest = null;
         for (ColdRoomResponse room : ownRooms.values()) {
-            TemperatureReadingViewResponse reading = readings.get(room.getId());
+            TemperatureReadingResponse reading = readings.get(room.getId());
             if (reading == null || !room.getId().equals(reading.getColdRoomId()) || reading.getTemperature() == null) {
                 valid = false;
                 continue;

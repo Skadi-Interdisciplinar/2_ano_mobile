@@ -5,7 +5,7 @@ import com.example.mobile_skadi.network.dto.AddressResponse;
 import com.example.mobile_skadi.network.dto.AlertResponse;
 import com.example.mobile_skadi.network.dto.ColdRoomResponse;
 import com.example.mobile_skadi.network.dto.DistributionCenterResponse;
-import com.example.mobile_skadi.network.dto.TemperatureReadingViewResponse;
+import com.example.mobile_skadi.network.dto.TemperatureReadingResponse;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -90,7 +90,7 @@ public final class CdMapDataLoader {
                 if (room.getId() != null && cds.containsKey(room.getDistributionCenterId())) rooms.add(room);
 
             Map<Long, AddressResponse> addresses = new ConcurrentHashMap<>();
-            Map<Long, TemperatureReadingViewResponse> readings = new ConcurrentHashMap<>();
+            Map<Long, TemperatureReadingResponse> readings = new ConcurrentHashMap<>();
             List<Callable<Void>> tasks = new ArrayList<>();
             for (Long cdId : cds.keySet()) tasks.add(() -> {
                 List<AddressResponse> items = optional(api.getDistributionCenterAddresses(cdId));
@@ -102,7 +102,7 @@ public final class CdMapDataLoader {
             });
             Set<Long> scheduledRooms = ConcurrentHashMap.newKeySet();
             for (ColdRoomResponse room : rooms) if (scheduledRooms.add(room.getId())) tasks.add(() -> {
-                TemperatureReadingViewResponse reading = optional(api.getCurrentTemperature(room.getId()));
+                TemperatureReadingResponse reading = optional(api.getCurrentTemperature(room.getId()));
                 if (reading != null) readings.put(room.getId(), reading);
                 return null;
             });
