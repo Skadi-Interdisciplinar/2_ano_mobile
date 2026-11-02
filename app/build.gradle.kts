@@ -17,6 +17,9 @@ val apiBaseUrl: String = System.getenv("SKADI_API_BASE_URL")
 
 val mapsApiKey = System.getenv("MAPS_API_KEY")?.trim()?.takeIf { it.isNotBlank() }
     ?: localProperties.getProperty("MAPS_API_KEY", "").trim()
+val aiApiBaseUrl: String = System.getenv("SKADI_AI_API_BASE_URL")
+    ?: localProperties.getProperty("SKADI_AI_API_BASE_URL")
+    ?: "http://localhost:8000/"
 
 android {
     namespace = "com.example.mobile_skadi"
@@ -36,6 +39,7 @@ android {
         buildConfigField("String", "BASE_URL", "\"$apiBaseUrl\"")
         buildConfigField("boolean", "MAPS_CONFIGURED", mapsApiKey.isNotBlank().toString())
         manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
+        buildConfigField("String", "AI_BASE_URL", "\"$aiApiBaseUrl\"")
     }
 
     buildFeatures {

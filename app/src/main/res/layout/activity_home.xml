@@ -170,7 +170,7 @@
                                     android:layout_marginStart="6dp" />
                             </LinearLayout>
 
-                            <TextView
+                            <TextView android:id="@+id/tvHomeCountAlertasDia"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="3"
@@ -246,7 +246,7 @@
                                     android:layout_marginStart="6dp" />
                             </LinearLayout>
 
-                            <TextView
+                            <TextView android:id="@+id/tvHomeCountCamarasEstaveis"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="3"
@@ -316,7 +316,7 @@
                                     android:layout_marginStart="6dp" />
                             </LinearLayout>
 
-                            <TextView
+                            <TextView android:id="@+id/tvHomeCountAlertasCriticos"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="3"
@@ -378,7 +378,7 @@
                                     android:layout_marginStart="6dp" />
                             </LinearLayout>
 
-                            <TextView
+                            <TextView android:id="@+id/tvHomeTempMedia"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="1,0 °C"
@@ -460,7 +460,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="● Crítico"
+                                android:text="● Crítico" android:id="@+id/tvHomeAlertBadge"
                                 android:textColor="@color/alert_danger"
                                 android:textSize="11sp"
                                 android:fontFamily="@font/manrope"
@@ -475,7 +475,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Câmara 291"
+                                android:text="Câmara 291" android:id="@+id/tvHomeAlertTitle"
                                 android:textColor="@color/primary_dark"
                                 android:textSize="16sp"
                                 android:fontFamily="@font/manrope"
@@ -485,7 +485,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Mín. 0°C - Máx. 4°C"
+                                android:text="Mín. 0°C - Máx. 4°C" android:id="@+id/tvHomeAlertRange"
                                 android:textColor="@color/secondary_gray"
                                 android:textSize="12sp"
                                 android:fontFamily="@font/manrope"
@@ -494,7 +494,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Há 21 min"
+                                android:text="Há 21 min" android:id="@+id/tvHomeAlertTimeElapsed"
                                 android:textColor="@color/secondary_gray"
                                 android:textSize="11sp"
                                 android:fontFamily="@font/manrope" />
@@ -510,7 +510,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="8,4°"
+                                android:text="8,4°" android:id="@+id/tvHomeAlertTemp"
                                 android:textColor="@color/alert_danger"
                                 android:textSize="30sp"
                                 android:fontFamily="@font/manrope"
@@ -519,7 +519,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="11:11"
+                                android:text="11:11" android:id="@+id/tvHomeAlertTime"
                                 android:textColor="@color/secondary_gray"
                                 android:textSize="12sp"
                                 android:fontFamily="@font/manrope" />

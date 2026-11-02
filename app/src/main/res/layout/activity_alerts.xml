@@ -10,7 +10,8 @@
         android:id="@+id/scrollAlerts"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:fillViewport="true"
+        android:fillViewport="false"
+        android:clipToPadding="false"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -134,7 +135,7 @@
                             android:paddingTop="14dp"
                             android:paddingBottom="14dp">
 
-                            <TextView
+                            <TextView android:id="@+id/tvCountAtivos"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="3"
@@ -175,7 +176,7 @@
                             android:paddingTop="14dp"
                             android:paddingBottom="14dp">
 
-                            <TextView
+                            <TextView android:id="@+id/tvCountCriticos"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="1"
@@ -215,7 +216,7 @@
                             android:paddingTop="14dp"
                             android:paddingBottom="14dp">
 
-                            <TextView
+                            <TextView android:id="@+id/tvCountResolvidos"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="1"
@@ -251,24 +252,31 @@
                     android:clickable="true"
                     android:focusable="true">
 
-                    <FrameLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
                         <!-- FAIXA LATERAL VERMELHA -->
                         <View
                             android:layout_width="6dp"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/bg_strip_critical" />
+                            android:layout_height="0dp"
+                            android:background="@drawable/bg_strip_critical"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent" />
 
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:paddingStart="20dp"
                             android:paddingEnd="16dp"
                             android:paddingTop="16dp"
-                            android:paddingBottom="16dp">
+                            android:paddingBottom="16dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent">
 
                             <!-- LINHA SUPERIOR: BADGE + HORA + TEMPERATURA -->
                             <LinearLayout
@@ -281,7 +289,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="● Crítico"
+                                    android:id="@+id/tvAlertBadgeCritical" android:text="● Crítico"
                                     android:textColor="@color/alert_danger"
                                     android:textSize="11sp"
                                     android:fontFamily="@font/manrope"
@@ -296,7 +304,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="11h11"
+                                    android:id="@+id/tvAlertTimeCritical" android:text="11h11"
                                     android:textColor="@color/secondary_gray"
                                     android:textSize="12sp"
                                     android:fontFamily="@font/manrope"
@@ -305,7 +313,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="8,4°C"
+                                    android:id="@+id/tvAlertTempCritical" android:text="8,4°C"
                                     android:textColor="@color/alert_danger"
                                     android:textSize="22sp"
                                     android:fontFamily="@font/manrope"
@@ -315,7 +323,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Câmara 291"
+                                android:id="@+id/tvAlertTitleCritical" android:text="Câmara 291"
                                 android:textColor="@color/primary_dark"
                                 android:textSize="17sp"
                                 android:fontFamily="@font/manrope"
@@ -333,7 +341,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="Mín. 0°C | Máx. 4°C"
+                                    android:id="@+id/tvAlertRangeCritical" android:text="Mín. 0°C | Máx. 4°C"
                                     android:textColor="@color/secondary_gray"
                                     android:textSize="12sp"
                                     android:fontFamily="@font/manrope" />
@@ -345,7 +353,7 @@
                                     android:contentDescription="Ver detalhes" />
                             </LinearLayout>
                         </LinearLayout>
-                    </FrameLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
                 </com.google.android.material.card.MaterialCardView>
 
                 <!-- 2. CARD ATENÇÃO (CÂMARA 61) -->
@@ -362,24 +370,31 @@
                     android:clickable="true"
                     android:focusable="true">
 
-                    <FrameLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
                         <!-- FAIXA LATERAL AMARELA -->
                         <View
                             android:layout_width="6dp"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/bg_strip_warning" />
+                            android:layout_height="0dp"
+                            android:background="@drawable/bg_strip_warning"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent" />
 
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:paddingStart="20dp"
                             android:paddingEnd="16dp"
                             android:paddingTop="16dp"
-                            android:paddingBottom="16dp">
+                            android:paddingBottom="16dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent">
 
                             <!-- LINHA SUPERIOR -->
                             <LinearLayout
@@ -392,7 +407,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="● Atenção"
+                                    android:id="@+id/tvAlertBadgeWarning" android:text="● Atenção"
                                     android:textColor="#E5A100"
                                     android:textSize="11sp"
                                     android:fontFamily="@font/manrope"
@@ -407,7 +422,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="9h56"
+                                    android:id="@+id/tvAlertTimeWarning" android:text="9h56"
                                     android:textColor="@color/secondary_gray"
                                     android:textSize="12sp"
                                     android:fontFamily="@font/manrope"
@@ -416,7 +431,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="2,3°C"
+                                    android:id="@+id/tvAlertTempWarning" android:text="2,3°C"
                                     android:textColor="#E5A100"
                                     android:textSize="22sp"
                                     android:fontFamily="@font/manrope"
@@ -426,7 +441,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Câmara 61"
+                                android:id="@+id/tvAlertTitleWarning" android:text="Câmara 61"
                                 android:textColor="@color/primary_dark"
                                 android:textSize="17sp"
                                 android:fontFamily="@font/manrope"
@@ -444,7 +459,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="Mín. 0°C | Máx. 2°C"
+                                    android:id="@+id/tvAlertRangeWarning" android:text="Mín. 0°C | Máx. 2°C"
                                     android:textColor="@color/secondary_gray"
                                     android:textSize="12sp"
                                     android:fontFamily="@font/manrope" />
@@ -456,7 +471,7 @@
                                     android:contentDescription="Ver detalhes" />
                             </LinearLayout>
                         </LinearLayout>
-                    </FrameLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
                 </com.google.android.material.card.MaterialCardView>
 
                 <!-- 3. CARD ESTÁVEL (CÂMARA 1) -->
@@ -473,24 +488,31 @@
                     android:clickable="true"
                     android:focusable="true">
 
-                    <FrameLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
                         <!-- FAIXA LATERAL VERDE -->
                         <View
                             android:layout_width="6dp"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/bg_strip_stable" />
+                            android:layout_height="0dp"
+                            android:background="@drawable/bg_strip_stable"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent" />
 
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:paddingStart="20dp"
                             android:paddingEnd="16dp"
                             android:paddingTop="16dp"
-                            android:paddingBottom="16dp">
+                            android:paddingBottom="16dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent">
 
                             <!-- LINHA SUPERIOR -->
                             <LinearLayout
@@ -503,7 +525,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="● Estável"
+                                    android:id="@+id/tvAlertBadgeStable" android:text="● Estável"
                                     android:textColor="@color/alert_success"
                                     android:textSize="11sp"
                                     android:fontFamily="@font/manrope"
@@ -518,7 +540,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="5h12"
+                                    android:id="@+id/tvAlertTimeStable" android:text="5h12"
                                     android:textColor="@color/secondary_gray"
                                     android:textSize="12sp"
                                     android:fontFamily="@font/manrope"
@@ -527,7 +549,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="1,4°C"
+                                    android:id="@+id/tvAlertTempStable" android:text="1,4°C"
                                     android:textColor="@color/alert_success"
                                     android:textSize="22sp"
                                     android:fontFamily="@font/manrope"
@@ -537,7 +559,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Câmara 1"
+                                android:id="@+id/tvAlertTitleStable" android:text="Câmara 1"
                                 android:textColor="@color/primary_dark"
                                 android:textSize="17sp"
                                 android:fontFamily="@font/manrope"
@@ -555,7 +577,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="Mín. 0°C | Máx. 4°C"
+                                    android:id="@+id/tvAlertRangeStable" android:text="Mín. 0°C | Máx. 4°C"
                                     android:textColor="@color/secondary_gray"
                                     android:textSize="12sp"
                                     android:fontFamily="@font/manrope" />
@@ -567,12 +589,27 @@
                                     android:contentDescription="Ver detalhes" />
                             </LinearLayout>
                         </LinearLayout>
-                    </FrameLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
                 </com.google.android.material.card.MaterialCardView>
+
+                <!-- ESTADO VAZIO -->
+                <TextView
+                    android:id="@+id/tvEmptyAlerts"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nenhum alerta pendente no momento."
+                    android:textColor="@color/secondary_gray"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/manrope"
+                    android:gravity="center"
+                    android:paddingTop="24dp"
+                    android:paddingBottom="24dp"
+                    android:visibility="gone" />
 
                 <!-- LINK DO RODAPÉ -->
                 <TextView
                     android:id="@+id/btnEntendaNiveis"
+                    android:layout_marginTop="16dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"

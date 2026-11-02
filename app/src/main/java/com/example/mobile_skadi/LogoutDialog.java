@@ -7,9 +7,12 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+
+import com.example.mobile_skadi.network.SessionManager;
 
 public class LogoutDialog extends Dialog {
 
@@ -23,21 +26,31 @@ public class LogoutDialog extends Dialog {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dialog_logout);
 
-        if (getWindow() != null) {
-            getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Window window = getWindow();
+        if (window != null) {
+            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         }
 
         TextView btnCancel = findViewById(R.id.btnCancelLogout);
         TextView btnConfirm = findViewById(R.id.btnConfirmLogout);
 
-        btnCancel.setOnClickListener(v -> dismiss());
+        if (btnCancel != null) {
+            btnCancel.setOnClickListener(v -> dismiss());
+        }
 
-        btnConfirm.setOnClickListener(v -> {
-            dismiss();
-            Intent intent = new Intent(getContext(), LoginActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            getContext().startActivity(intent);
-        });
+        if (btnConfirm != null) {
+            btnConfirm.setOnClickListener(v -> {
+                dismiss();
+                // Limpa completamente a sessão salva
+                SessionManager.getInstance(getContext()).clear();
+                UserRoleManager.setCurrentRole(UserRoleManager.Role.GESTOR);
+
+                Intent intent = new Intent(getContext(), LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                getContext().startActivity(intent);
+            });
+        }
     }
 
     public static void show(Context context) {
