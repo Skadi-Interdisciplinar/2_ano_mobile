@@ -13,6 +13,14 @@
 
     <style name="Theme.Mobile_skadi" parent="Base.Theme.Mobile_skadi" />
 
+    <!-- Tema exclusivo da Splash Screen (fundo escuro e status bar combinando) -->
+    <style name="Theme.Mobile_skadi.Splash" parent="Theme.Material3.Light.NoActionBar">
+        <item name="android:windowBackground">@color/primary_dark</item>
+        <item name="android:statusBarColor">@color/primary_dark</item>
+        <item name="android:navigationBarColor">@color/primary_dark</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
     <!-- Shape: card com topo arredondado -->
     <style name="ShapeAppearance.Skadi.CardTopRounded" parent="">
         <item name="cornerFamily">rounded</item>
@@ -21,4 +29,4 @@
         <item name="cornerSizeBottomLeft">0dp</item>
         <item name="cornerSizeBottomRight">0dp</item>
     </style>
-</resources>
+</resources>

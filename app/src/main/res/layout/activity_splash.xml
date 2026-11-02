@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/primary_dark">
 
-    <!-- CONTAINER CENTRAL (LOGO + SKADI + SUBTÍTULO) -->
+    <!-- CONTAINER CENTRALIZADO FIGMA (LOGO + SKADI + SUBTÍTULO) -->
     <LinearLayout
         android:id="@+id/layoutCenterBrand"
         android:layout_width="wrap_content"
@@ -14,17 +14,15 @@
         android:orientation="vertical"
         android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/layoutSplashFooter"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_chainStyle="spread_inside"
-        android:layout_marginTop="80dp">
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- LOGO SKADI (LOBO) -->
+        <!-- LOGO SKADI EM ALTA QUALIDADE -->
         <ImageView
             android:id="@+id/ivSplashLogo"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
             android:src="@drawable/logo_skadi"
             android:contentDescription="Logo Skadi"
             android:scaleType="fitCenter" />
@@ -36,10 +34,10 @@
             android:layout_height="wrap_content"
             android:text="SKADI"
             android:textColor="@color/white"
-            android:textSize="36sp"
+            android:textSize="40sp"
             android:fontFamily="@font/cinzel_decorative"
             android:letterSpacing="0.18"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="20dp" />
 
         <!-- SLOGAN / SUBTÍTULO -->
         <TextView
@@ -48,41 +46,19 @@
             android:layout_height="wrap_content"
             android:text="Monitoramento Térmico Inteligente"
             android:textColor="#A8C4DC"
-            android:textSize="13.5sp"
+            android:textSize="14sp"
             android:fontFamily="@font/manrope"
             android:letterSpacing="0.04"
-            android:layout_marginTop="6dp" />
+            android:layout_marginTop="8dp" />
 
-    </LinearLayout>
-
-    <!-- FOOTER DA SPLASH (PROGRESS + VERSÃO/INSTITUIÇÃO) -->
-    <LinearLayout
-        android:id="@+id/layoutSplashFooter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:layout_marginBottom="44dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
+        <!-- SPINNER DE CARREGAMENTO SUTIL -->
         <ProgressBar
             android:id="@+id/pbSplashLoading"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
             android:indeterminate="true"
             android:indeterminateTint="#A8C4DC"
-            android:layout_marginBottom="16dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Germinare TECH"
-            android:textColor="#648BAF"
-            android:textSize="12sp"
-            android:fontFamily="@font/manrope"
-            android:letterSpacing="0.06" />
+            android:layout_marginTop="40dp" />
 
     </LinearLayout>
 
