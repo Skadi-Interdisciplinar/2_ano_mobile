@@ -1,0 +1,29 @@
+package com.example.mobile_skadi;
+
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.text.Normalizer;
+import java.util.Locale;
+
+public final class CdMapGeometry {
+    private CdMapGeometry() { }
+
+    public static double distanceMeters(double lat1, double lng1, double lat2, double lng2) {
+        double dLat = Math.toRadians(lat2 - lat1), dLng = Math.toRadians(lng2 - lng1);
+        double a = Math.pow(Math.sin(dLat / 2), 2) + Math.cos(Math.toRadians(lat1))
+                * Math.cos(Math.toRadians(lat2)) * Math.pow(Math.sin(dLng / 2), 2);
+        return 6371000 * 2 * Math.asin(Math.sqrt(Math.max(0, Math.min(1, a))));
+    }
+
+    public static String addressKey(String address) {
+        String normalized = Normalizer.normalize(address, Normalizer.Form.NFKC)
+                .trim().replaceAll("\\s+", " ").toLowerCase(Locale.ROOT);
+        try {
+            byte[] hash = MessageDigest.getInstance("SHA-256").digest(normalized.getBytes(StandardCharsets.UTF_8));
+            StringBuilder result = new StringBuilder();
+            for (byte b : hash) result.append(String.format(Locale.ROOT, "%02x", b & 0xff));
+            return result.toString();
+        } catch (NoSuchAlgorithmException impossible) { throw new IllegalStateException(impossible); }
+    }
+}
