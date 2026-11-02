@@ -30,6 +30,16 @@ import retrofit2.Response;
 
 public class NotificationsActivity extends AppCompatActivity {
 
+    private static final long REFRESH_INTERVAL_MS = 5 * 60 * 1000L;
+    private final android.os.Handler refreshHandler = new android.os.Handler(android.os.Looper.getMainLooper());
+    private final Runnable refreshRunnable = new Runnable() {
+        @Override
+        public void run() {
+            loadAlertsAndNotifications();
+            refreshHandler.postDelayed(this, REFRESH_INTERVAL_MS);
+        }
+    };
+
     private FrameLayout btnBack;
     private MaterialCardView btnProfileAvatar;
 
@@ -48,6 +58,14 @@ public class NotificationsActivity extends AppCompatActivity {
         super.onResume();
         AvatarManager.applyAvatar(this, btnProfileAvatar);
         loadAlertsAndNotifications();
+        refreshHandler.removeCallbacks(refreshRunnable);
+        refreshHandler.postDelayed(refreshRunnable, REFRESH_INTERVAL_MS);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        refreshHandler.removeCallbacks(refreshRunnable);
     }
 
     @Override

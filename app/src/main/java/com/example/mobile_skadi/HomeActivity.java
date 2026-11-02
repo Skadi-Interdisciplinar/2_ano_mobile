@@ -350,7 +350,9 @@ public class HomeActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<EmployeeDashboardResponse> call, Throwable t) {}
+                public void onFailure(Call<EmployeeDashboardResponse> call, Throwable t) {
+                    android.util.Log.e("HomeActivity", "Falha ao carregar dashboard do funcionário: " + t.getMessage());
+                }
             });
         } else {
             // Chamada direta e única ao endpoint de gestor
@@ -363,7 +365,9 @@ public class HomeActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<ManagerDashboardResponse> call, Throwable t) {}
+                public void onFailure(Call<ManagerDashboardResponse> call, Throwable t) {
+                    android.util.Log.e("HomeActivity", "Falha ao carregar dashboard do gestor: " + t.getMessage());
+                }
             });
         }
     }
@@ -401,6 +405,14 @@ public class HomeActivity extends AppCompatActivity {
                 for (PriorityAlertDto p : priorities) {
                     View itemView = createPriorityAlertItem(inflater, containerManagerPriorities, p);
                     containerManagerPriorities.addView(itemView);
+
+                    // Dispara notificação local se houver alerta crítico pendente
+                    if (p.getSeverityLevel() != null && p.getSeverityLevel().contains("CRITIC")
+                            && !"RECONHECIDO".equalsIgnoreCase(p.getStatus())) {
+                        double curr = p.getCurrentTemperature() != null ? p.getCurrentTemperature().doubleValue() : 8.0;
+                        double max = p.getMaximumTemperature() != null ? p.getMaximumTemperature().doubleValue() : 4.0;
+                        AppNotificationManager.sendCriticalAlertNotification(this, p.getColdRoomName(), curr, max, p.getId());
+                    }
                 }
             }
         }
@@ -504,6 +516,13 @@ public class HomeActivity extends AppCompatActivity {
                         intent.putExtra(AlertDetailsActivity.EXTRA_IS_RESOLVED, false);
                         startActivity(intent);
                     });
+                }
+
+                // Notificação de alerta crítico operacional
+                if (isCritical && !isRecognized) {
+                    double curr = next.getCurrentTemperature() != null ? next.getCurrentTemperature().doubleValue() : 8.0;
+                    double max = next.getMaximumTemperature() != null ? next.getMaximumTemperature().doubleValue() : 4.0;
+                    AppNotificationManager.sendCriticalAlertNotification(this, next.getColdRoomName(), curr, max, next.getId());
                 }
             }
         }
