@@ -90,7 +90,8 @@ public class ReportsActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        super.onResume();
+        super.onResume();
+        com.example.mobile_skadi.utils.AvatarManager.applyAvatar(this, btnProfileAvatar);
         loadData();
     }
 

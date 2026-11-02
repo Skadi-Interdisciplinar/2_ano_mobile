@@ -89,7 +89,8 @@ public class CamarasActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        super.onResume();
+        super.onResume();
+        com.example.mobile_skadi.utils.AvatarManager.applyAvatar(this, btnProfileAvatar);
         loadCamarasFromApi();
         refreshHandler.removeCallbacks(refreshRunnable);
         refreshHandler.postDelayed(refreshRunnable, REFRESH_INTERVAL_MS);

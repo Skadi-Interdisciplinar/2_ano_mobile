@@ -62,6 +62,12 @@ public class AlertDetailsActivity extends AppCompatActivity {
     private Integer alertId = null;
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        com.example.mobile_skadi.utils.AvatarManager.applyAvatar(this, btnProfileAvatar);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alert_details);

@@ -112,13 +112,43 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginTop="24dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/bg_btn_navy_rounded"
         android:fontFamily="@font/manrope"
-        android:text="Enviar"
+        android:text="Enviar chamado"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="15sp"
         android:textStyle="bold" />
+
+    <!-- BOTÃO LIGAR PARA O SUPORTE (RECURSO DE HARDWARE: TELEFONE) -->
+    <LinearLayout
+        android:id="@+id/btnCallSupport"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/bg_btn_secondary_outline"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:clickable="true"
+        android:focusable="true">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@android:drawable/ic_menu_call"
+            android:tint="@color/primary_dark"
+            android:contentDescription="Ligar" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Ligar para suporte: (11) 3000-0000"
+            android:textColor="@color/primary_dark"
+            android:textSize="14sp"
+            android:fontFamily="@font/manrope"
+            android:textStyle="bold" />
+    </LinearLayout>
 
 </LinearLayout>
