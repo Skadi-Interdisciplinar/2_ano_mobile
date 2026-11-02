@@ -19,29 +19,21 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import com.example.mobile_skadi.data.SkadiDatabaseHelper;
 import com.example.mobile_skadi.network.RetrofitClient;
 import com.example.mobile_skadi.network.SessionManager;
 import com.example.mobile_skadi.network.SkadiApiService;
-import com.example.mobile_skadi.network.dto.AlertResponse;
-import com.example.mobile_skadi.network.dto.ColdRoomResponse;
-import com.example.mobile_skadi.network.dto.TemperatureReadingResponse;
+import com.example.mobile_skadi.network.dto.EmployeeDashboardResponse;
+import com.example.mobile_skadi.network.dto.ManagerDashboardResponse;
+import com.example.mobile_skadi.network.dto.PriorityAlertDto;
 import com.example.mobile_skadi.notification.AppNotificationManager;
 import com.example.mobile_skadi.utils.AvatarManager;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 
-import java.math.BigDecimal;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -132,10 +124,6 @@ public class HomeActivity extends AppCompatActivity {
     private LinearLayout navTrimmy;
 
     private ActivityResultLauncher<String> notifPermissionLauncher;
-
-    private final Map<Long, ColdRoomResponse> coldRoomsMap = new HashMap<>();
-    private final Map<Long, TemperatureReadingResponse> latestReadingsMap = new HashMap<>();
-    private final List<TemperatureReadingResponse> allReadingsHistory = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -291,7 +279,7 @@ public class HomeActivity extends AppCompatActivity {
         btnNotification.setOnClickListener(v -> startActivity(new Intent(this, NotificationsActivity.class)));
         btnProfileAvatar.setOnClickListener(v -> startActivity(new Intent(this, ProfileActivity.class)));
 
-        // Manager listeners
+        // Manager
         if (btnManagerVerTodasPrioridades != null) {
             btnManagerVerTodasPrioridades.setOnClickListener(v -> startActivity(new Intent(this, AlertsActivity.class)));
         }
@@ -314,7 +302,7 @@ public class HomeActivity extends AppCompatActivity {
             btnNiveisAlerta.setOnClickListener(v -> AlertLevelsDialog.show(this));
         }
 
-        // Employee listeners
+        // Employee
         if (cardEmployeeAtribuidos != null) {
             cardEmployeeAtribuidos.setOnClickListener(v -> startActivity(new Intent(this, AlertsActivity.class)));
         }
@@ -340,326 +328,120 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void openFilteredAlerts() {
-        Intent intent = new Intent(this, AlertsActivity.class);
-        startActivity(intent);
+        startActivity(new Intent(this, AlertsActivity.class));
     }
 
     private void loadHomeData() {
         SkadiApiService apiService = RetrofitClient.getApiService(this);
-        SkadiDatabaseHelper dbHelper = SkadiDatabaseHelper.getInstance(this);
+        boolean isEmployee = UserRoleManager.isEmployee(this);
 
         String currentTimeStr = "Atualizado às " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"));
         if (tvManagerLastUpdated != null) tvManagerLastUpdated.setText(currentTimeStr);
         if (tvEmployeeLastUpdated != null) tvEmployeeLastUpdated.setText(currentTimeStr);
 
-        // 1. Carrega Câmaras
-        apiService.getColdRooms().enqueue(new Callback<List<ColdRoomResponse>>() {
-            @Override
-            public void onResponse(Call<List<ColdRoomResponse>> call, Response<List<ColdRoomResponse>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    coldRoomsMap.clear();
-                    for (ColdRoomResponse cr : response.body()) {
-                        coldRoomsMap.put(cr.getId(), cr);
-                    }
-                    dbHelper.saveColdRooms(response.body());
-                } else {
-                    coldRoomsMap.clear();
-                    coldRoomsMap.putAll(dbHelper.getCachedColdRoomsMap());
-                }
-                loadReadings(apiService, dbHelper);
-            }
-
-            @Override
-            public void onFailure(Call<List<ColdRoomResponse>> call, Throwable t) {
-                coldRoomsMap.clear();
-                coldRoomsMap.putAll(dbHelper.getCachedColdRoomsMap());
-                loadReadings(apiService, dbHelper);
-            }
-        });
-    }
-
-    private void loadReadings(SkadiApiService apiService, SkadiDatabaseHelper dbHelper) {
-        // 2. Carrega Leituras
-        apiService.getAllReadings().enqueue(new Callback<List<TemperatureReadingResponse>>() {
-            @Override
-            public void onResponse(Call<List<TemperatureReadingResponse>> call, Response<List<TemperatureReadingResponse>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    dbHelper.saveReadings(response.body());
-                    processReadings(response.body());
-                } else {
-                    processReadings(dbHelper.getCachedReadings());
-                }
-                loadAlerts(apiService, dbHelper);
-            }
-
-            @Override
-            public void onFailure(Call<List<TemperatureReadingResponse>> call, Throwable t) {
-                processReadings(dbHelper.getCachedReadings());
-                loadAlerts(apiService, dbHelper);
-            }
-        });
-    }
-
-    private void processReadings(List<TemperatureReadingResponse> readings) {
-        latestReadingsMap.clear();
-        allReadingsHistory.clear();
-        if (readings != null) {
-            allReadingsHistory.addAll(readings);
-            for (TemperatureReadingResponse tr : readings) {
-                if (tr.getColdRoomId() != null) {
-                    // Mantém a leitura mais recente de cada câmara
-                    TemperatureReadingResponse current = latestReadingsMap.get(tr.getColdRoomId());
-                    if (current == null) {
-                        latestReadingsMap.put(tr.getColdRoomId(), tr);
-                    } else if (tr.getMeasuredAt() != null && current.getMeasuredAt() != null) {
-                        try {
-                            LocalDateTime tNew = LocalDateTime.parse(tr.getMeasuredAt());
-                            LocalDateTime tOld = LocalDateTime.parse(current.getMeasuredAt());
-                            if (tNew.isAfter(tOld)) {
-                                latestReadingsMap.put(tr.getColdRoomId(), tr);
-                            }
-                        } catch (Exception ignored) {
-                            latestReadingsMap.put(tr.getColdRoomId(), tr);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private void loadAlerts(SkadiApiService apiService, SkadiDatabaseHelper dbHelper) {
-        // 3. Carrega Alertas
-        apiService.getAlerts(null).enqueue(new Callback<List<AlertResponse>>() {
-            @Override
-            public void onResponse(Call<List<AlertResponse>> call, Response<List<AlertResponse>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    dbHelper.saveAlerts(response.body());
-                    bindDashboard(response.body());
-                } else {
-                    List<AlertResponse> cached = dbHelper.getCachedAlerts();
-                    bindDashboard(cached);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<AlertResponse>> call, Throwable t) {
-                List<AlertResponse> cached = dbHelper.getCachedAlerts();
-                bindDashboard(cached);
-            }
-        });
-    }
-
-    private void bindDashboard(List<AlertResponse> alerts) {
-        boolean isEmployee = UserRoleManager.isEmployee(this);
-
-        // 1. Processar métricas de câmaras
-        int totalCamaras = coldRoomsMap.size();
-        int naFaixaCount = 0;
-        int foraFaixaCount = 0;
-        int offlineCount = 0;
-        int semDadosCount = 0;
-
-        LocalDateTime now = LocalDateTime.now();
-
-        for (Map.Entry<Long, ColdRoomResponse> entry : coldRoomsMap.entrySet()) {
-            Long roomId = entry.getKey();
-            ColdRoomResponse cr = entry.getValue();
-            TemperatureReadingResponse tr = latestReadingsMap.get(roomId);
-
-            if (tr == null || tr.getTemperature() == null) {
-                semDadosCount++;
-            } else {
-                boolean isOffline = false;
-                if (tr.getMeasuredAt() != null) {
-                    try {
-                        LocalDateTime readTime = LocalDateTime.parse(tr.getMeasuredAt());
-                        long minutesDiff = Math.abs(Duration.between(readTime, now).toMinutes());
-                        if (minutesDiff > 10) {
-                            isOffline = true;
-                        }
-                    } catch (Exception ignored) {}
-                }
-
-                if (isOffline) {
-                    offlineCount++;
-                } else {
-                    double temp = tr.getTemperature().doubleValue();
-                    double min = cr.getMinimumTemperature() != null ? cr.getMinimumTemperature().doubleValue() : -2.0;
-                    double max = cr.getMaximumTemperature() != null ? cr.getMaximumTemperature().doubleValue() : 4.0;
-
-                    if (temp >= min && temp <= max) {
-                        naFaixaCount++;
-                    } else {
-                        foraFaixaCount++;
-                    }
-                }
-            }
-        }
-
-        // 2. Processar métricas de alertas abertos
-        List<AlertResponse> openAlerts = new ArrayList<>();
-        int criticosCount = 0;
-        int slaVencidoCount = 0;
-        int proximosVencimentoCount = 0;
-        int semResponsavelCount = 0;
-
-        if (alerts != null) {
-            for (AlertResponse alert : alerts) {
-                boolean isResolved = alert.getStatus() != null && "RESOLVIDO".equalsIgnoreCase(alert.getStatus());
-                if (!isResolved) {
-                    openAlerts.add(alert);
-
-                    boolean isCritical = alert.getSeverityLevel() != null &&
-                            ("CRITICO".equalsIgnoreCase(alert.getSeverityLevel()) || "CRITICA".equalsIgnoreCase(alert.getSeverityLevel()));
-                    if (isCritical) {
-                        criticosCount++;
-                    }
-
-                    // SLA calculation
-                    SlaStatus sla = calculateSla(alert, now);
-                    if (sla.isVencido) {
-                        slaVencidoCount++;
-                    } else if (sla.isProximo) {
-                        proximosVencimentoCount++;
-                    }
-
-                    // Responsável
-                    if (alert.getCurrentLevel() == null || "OPERADOR".equalsIgnoreCase(alert.getCurrentLevel())) {
-                        semResponsavelCount++;
-                    }
-                }
-            }
-        }
-
-        // Ordenar alertas por prioridade: Críticos -> SLA vencido -> SLA próximo -> mais antigos
-        Collections.sort(openAlerts, new Comparator<AlertResponse>() {
-            @Override
-            public int compare(AlertResponse a1, AlertResponse a2) {
-                boolean c1 = isAlertCritical(a1);
-                boolean c2 = isAlertCritical(a2);
-                if (c1 != c2) return c1 ? -1 : 1;
-
-                SlaStatus s1 = calculateSla(a1, now);
-                SlaStatus s2 = calculateSla(a2, now);
-                if (s1.isVencido != s2.isVencido) return s1.isVencido ? -1 : 1;
-                if (s1.isProximo != s2.isProximo) return s1.isProximo ? -1 : 1;
-
-                return 0;
-            }
-        });
-
         if (isEmployee) {
-            bindEmployeeDashboard(openAlerts, criticosCount, slaVencidoCount, proximosVencimentoCount, now);
+            // Chamada direta e única ao endpoint de funcionário
+            apiService.getEmployeeDashboard().enqueue(new Callback<EmployeeDashboardResponse>() {
+                @Override
+                public void onResponse(Call<EmployeeDashboardResponse> call, Response<EmployeeDashboardResponse> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        bindEmployeeData(response.body());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<EmployeeDashboardResponse> call, Throwable t) {}
+            });
         } else {
-            bindManagerDashboard(totalCamaras, naFaixaCount, foraFaixaCount, offlineCount, semDadosCount,
-                    criticosCount, slaVencidoCount, semResponsavelCount, openAlerts, now);
+            // Chamada direta e única ao endpoint de gestor
+            apiService.getManagerDashboard().enqueue(new Callback<ManagerDashboardResponse>() {
+                @Override
+                public void onResponse(Call<ManagerDashboardResponse> call, Response<ManagerDashboardResponse> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        bindManagerData(response.body());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ManagerDashboardResponse> call, Throwable t) {}
+            });
         }
     }
 
-    private void bindManagerDashboard(int totalCamaras, int naFaixa, int foraFaixa, int offline, int semDados,
-                                      int criticos, int slaVencido, int semResponsavel,
-                                      List<AlertResponse> openAlerts, LocalDateTime now) {
-        // KPIs de intervenção do Gestor
-        if (tvManagerCountCriticos != null) tvManagerCountCriticos.setText(String.valueOf(criticos));
-        if (tvManagerCountSlaVencido != null) tvManagerCountSlaVencido.setText(String.valueOf(slaVencido));
-        if (tvManagerCountForaFaixa != null) tvManagerCountForaFaixa.setText(String.valueOf(foraFaixa));
-        if (tvManagerCountSemResponsavel != null) tvManagerCountSemResponsavel.setText(String.valueOf(semResponsavel));
+    private void bindManagerData(ManagerDashboardResponse data) {
+        if (data.getCdName() != null && !data.getCdName().isEmpty() && tvManagerSubtitle != null) {
+            tvManagerSubtitle.setText(data.getCdName());
+        }
 
-        // Resumo de câmaras
+        if (tvManagerCountCriticos != null) tvManagerCountCriticos.setText(String.valueOf(data.getCriticosCount()));
+        if (tvManagerCountSlaVencido != null) tvManagerCountSlaVencido.setText(String.valueOf(data.getSlaVencidoCount()));
+        if (tvManagerCountForaFaixa != null) tvManagerCountForaFaixa.setText(String.valueOf(data.getForaFaixaCount()));
+        if (tvManagerCountSemResponsavel != null) tvManagerCountSemResponsavel.setText(String.valueOf(data.getSemResponsavelCount()));
+
         if (tvManagerCamarasStateLine1 != null) {
             tvManagerCamarasStateLine1.setText(String.format(Locale.getDefault(),
-                    "Total: %d  •  Na faixa: %d  •  Fora da faixa: %d", totalCamaras, naFaixa, foraFaixa));
+                    "Total: %d  •  Na faixa: %d  •  Fora da faixa: %d",
+                    data.getTotalCamaras(), data.getNaFaixaCamaras(), data.getForaFaixaCamaras()));
         }
         if (tvManagerCamarasStateLine2 != null) {
             tvManagerCamarasStateLine2.setText(String.format(Locale.getDefault(),
-                    "Offline: %d  •  Sem dados: %d", offline, semDados));
+                    "Offline: %d  •  Sem dados: %d",
+                    data.getOfflineCamaras(), data.getSemDadosCamaras()));
         }
 
-        // Prioridades Agora (Top 3)
+        // Prioridades Agora
         if (containerManagerPriorities != null) {
             containerManagerPriorities.removeAllViews();
-            int topCount = Math.min(openAlerts.size(), 3);
-            if (topCount == 0) {
+            List<PriorityAlertDto> priorities = data.getPriorities();
+            if (priorities == null || priorities.isEmpty()) {
                 if (tvManagerNoPriorities != null) tvManagerNoPriorities.setVisibility(View.VISIBLE);
             } else {
                 if (tvManagerNoPriorities != null) tvManagerNoPriorities.setVisibility(View.GONE);
                 LayoutInflater inflater = LayoutInflater.from(this);
-                for (int i = 0; i < topCount; i++) {
-                    AlertResponse alert = openAlerts.get(i);
-                    View itemView = createPriorityAlertItem(inflater, containerManagerPriorities, alert, now);
+                for (PriorityAlertDto p : priorities) {
+                    View itemView = createPriorityAlertItem(inflater, containerManagerPriorities, p);
                     containerManagerPriorities.addView(itemView);
                 }
             }
         }
 
-        // Gráfico de Tendência da câmara prioritária ou câmara #1
-        if (temperatureChart != null) {
-            List<Float> chartPoints = new ArrayList<>();
-            Long targetRoomId = !openAlerts.isEmpty() && openAlerts.get(0).getColdRoomId() != null
-                    ? openAlerts.get(0).getColdRoomId().longValue() : 1L;
-
-            ColdRoomResponse cr = coldRoomsMap.get(targetRoomId);
-            if (cr != null && cr.getLocation() != null && tvManagerChartTitle != null) {
-                tvManagerChartTitle.setText("Tendência · " + cr.getLocation());
-            }
-
-            for (TemperatureReadingResponse tr : allReadingsHistory) {
-                if (tr.getColdRoomId() != null && tr.getColdRoomId().equals(targetRoomId) && tr.getTemperature() != null) {
-                    chartPoints.add(tr.getTemperature().floatValue());
-                }
-            }
-            if (chartPoints.isEmpty()) {
-                TemperatureReadingResponse latest = latestReadingsMap.get(targetRoomId);
-                if (latest != null && latest.getTemperature() != null) {
-                    chartPoints.add(latest.getTemperature().floatValue());
-                }
-            }
-            if (!chartPoints.isEmpty()) {
-                temperatureChart.setDataPoints(chartPoints);
-            }
+        // Tendência de Temperatura
+        if (temperatureChart != null && data.getTrendReadings() != null && !data.getTrendReadings().isEmpty()) {
+            temperatureChart.setDataPoints(data.getTrendReadings());
         }
     }
 
-    private void bindEmployeeDashboard(List<AlertResponse> openAlerts, int criticos, int slaVencido, int proximosVencimento, LocalDateTime now) {
-        int totalAtribuidos = openAlerts.size();
-        int emAtendimentoCount = 0;
-        for (AlertResponse a : openAlerts) {
-            if (a.getStatus() != null && "RECONHECIDO".equalsIgnoreCase(a.getStatus())) {
-                emAtendimentoCount++;
-            }
+    private void bindEmployeeData(EmployeeDashboardResponse data) {
+        if (data.getCdName() != null && !data.getCdName().isEmpty() && tvEmployeeSubtitle != null) {
+            tvEmployeeSubtitle.setText("Minha fila · " + data.getCdName());
         }
 
-        // KPIs da fila do funcionário
-        if (tvEmployeeCountAtribuidos != null) tvEmployeeCountAtribuidos.setText(String.valueOf(totalAtribuidos));
-        if (tvEmployeeCountCriticos != null) tvEmployeeCountCriticos.setText(String.valueOf(criticos));
-        if (tvEmployeeCountEmAtendimento != null) tvEmployeeCountEmAtendimento.setText(String.valueOf(emAtendimentoCount));
-        if (tvEmployeeCountSlaVencido != null) tvEmployeeCountSlaVencido.setText(String.valueOf(slaVencido));
+        if (tvEmployeeCountAtribuidos != null) tvEmployeeCountAtribuidos.setText(String.valueOf(data.getAtribuidosCount()));
+        if (tvEmployeeCountCriticos != null) tvEmployeeCountCriticos.setText(String.valueOf(data.getCriticosCount()));
+        if (tvEmployeeCountEmAtendimento != null) tvEmployeeCountEmAtendimento.setText(String.valueOf(data.getEmAtendimentoCount()));
+        if (tvEmployeeCountSlaVencido != null) tvEmployeeCountSlaVencido.setText(String.valueOf(data.getSlaVencidoCount()));
 
         // Faixa Âmbar de Próximos do Vencimento
         if (layoutEmployeeSlaAlert != null) {
-            if (proximosVencimento > 0) {
+            if (data.getProximosVencimentoCount() > 0) {
                 layoutEmployeeSlaAlert.setVisibility(View.VISIBLE);
                 if (tvEmployeeCountProximosVencimento != null) {
-                    tvEmployeeCountProximosVencimento.setText(proximosVencimento + " alertas próximos do vencimento (70% do prazo consumido)");
+                    tvEmployeeCountProximosVencimento.setText(data.getProximosVencimentoCount() + " alertas próximos do vencimento (70% do prazo consumido)");
                 }
             } else {
                 layoutEmployeeSlaAlert.setVisibility(View.GONE);
             }
         }
 
-        // PRÓXIMA AÇÃO (Card de Destaque #1)
+        // PRÓXIMA AÇÃO (Card #1)
+        PriorityAlertDto next = data.getNextAction();
         if (cardEmployeeNextAction != null) {
-            if (openAlerts.isEmpty()) {
+            if (next == null) {
                 cardEmployeeNextAction.setVisibility(View.GONE);
             } else {
                 cardEmployeeNextAction.setVisibility(View.VISIBLE);
-                AlertResponse nextAlert = openAlerts.get(0);
-                Long roomId = nextAlert.getColdRoomId() != null ? nextAlert.getColdRoomId().longValue() : 1L;
-                ColdRoomResponse cr = coldRoomsMap.get(roomId);
-                TemperatureReadingResponse reading = latestReadingsMap.get(roomId);
-
-                boolean isCritical = isAlertCritical(nextAlert);
-                boolean isRecognized = nextAlert.getStatus() != null && "RECONHECIDO".equalsIgnoreCase(nextAlert.getStatus());
+                boolean isCritical = next.getSeverityLevel() != null && next.getSeverityLevel().contains("CRITIC");
+                boolean isRecognized = next.getStatus() != null && "RECONHECIDO".equalsIgnoreCase(next.getStatus());
 
                 if (tvEmployeeNextBadge != null) {
                     tvEmployeeNextBadge.setText(isCritical ? "Crítico" : "Atenção");
@@ -672,17 +454,13 @@ public class HomeActivity extends AppCompatActivity {
                     tvEmployeeNextStatusBadge.setTextColor(Color.parseColor(isRecognized ? "#0284C7" : "#D97706"));
                 }
 
-                if (tvEmployeeNextTimeElapsed != null && nextAlert.getCreatedAt() != null) {
-                    tvEmployeeNextTimeElapsed.setText(formatElapsedTime(nextAlert.getCreatedAt(), now));
-                }
-
                 if (tvEmployeeNextCamaraTitle != null) {
-                    tvEmployeeNextCamaraTitle.setText(cr != null && cr.getLocation() != null ? cr.getLocation() : "Câmara " + roomId);
+                    tvEmployeeNextCamaraTitle.setText(next.getColdRoomName() != null ? next.getColdRoomName() : "Câmara " + next.getColdRoomId());
                 }
 
                 if (tvEmployeeNextTemp != null) {
-                    if (reading != null && reading.getTemperature() != null) {
-                        tvEmployeeNextTemp.setText(String.format(Locale.getDefault(), "%.1f°C", reading.getTemperature()));
+                    if (next.getCurrentTemperature() != null) {
+                        tvEmployeeNextTemp.setText(String.format(Locale.getDefault(), "%.1f°C", next.getCurrentTemperature()));
                         tvEmployeeNextTemp.setTextColor(ContextCompat.getColor(this, isCritical ? R.color.alert_danger : R.color.alert_orange));
                     } else {
                         tvEmployeeNextTemp.setText("Sem leitura");
@@ -691,24 +469,24 @@ public class HomeActivity extends AppCompatActivity {
                 }
 
                 if (tvEmployeeNextTempRange != null) {
-                    if (cr != null && cr.getMinimumTemperature() != null && cr.getMaximumTemperature() != null) {
+                    if (next.getMinimumTemperature() != null && next.getMaximumTemperature() != null) {
                         tvEmployeeNextTempRange.setText(String.format(Locale.getDefault(),
-                                "Faixa recomendada: %.1f°C a %.1f°C", cr.getMinimumTemperature(), cr.getMaximumTemperature()));
+                                "Faixa recomendada: %.1f°C a %.1f°C", next.getMinimumTemperature(), next.getMaximumTemperature()));
                     } else {
                         tvEmployeeNextTempRange.setText("Faixa recomendada: -2,0°C a 4,0°C");
                     }
                 }
 
-                SlaStatus sla = calculateSla(nextAlert, now);
                 if (tvEmployeeNextSlaInfo != null) {
-                    tvEmployeeNextSlaInfo.setText("SLA: " + sla.description + " • " + (nextAlert.getCurrentLevel() != null ? "Nível " + nextAlert.getCurrentLevel() : "Etapa Operador"));
+                    String slaText = formatSlaText(next);
+                    tvEmployeeNextSlaInfo.setText("SLA: " + slaText + " • " + (next.getCurrentLevel() != null ? "Nível " + next.getCurrentLevel() : "Operador"));
                 }
 
                 if (btnEmployeeNextAction != null) {
                     btnEmployeeNextAction.setText(isRecognized ? "Ver Detalhes do Alerta" : "Iniciar Atendimento");
                     btnEmployeeNextAction.setOnClickListener(v -> {
-                        if (!isRecognized && nextAlert.getId() != null) {
-                            RetrofitClient.getApiService(this).recognizeAlert(nextAlert.getId()).enqueue(new Callback<Void>() {
+                        if (!isRecognized && next.getId() != null) {
+                            RetrofitClient.getApiService(this).recognizeAlert(next.getId()).enqueue(new Callback<Void>() {
                                 @Override
                                 public void onResponse(Call<Void> call, Response<Void> response) {}
                                 @Override
@@ -716,7 +494,7 @@ public class HomeActivity extends AppCompatActivity {
                             });
                         }
                         Intent intent = new Intent(this, AlertDetailsActivity.class);
-                        intent.putExtra(AlertDetailsActivity.EXTRA_ALERT_ID, nextAlert.getId());
+                        intent.putExtra(AlertDetailsActivity.EXTRA_ALERT_ID, next.getId());
                         intent.putExtra(AlertDetailsActivity.EXTRA_IS_RESOLVED, false);
                         startActivity(intent);
                     });
@@ -724,27 +502,26 @@ public class HomeActivity extends AppCompatActivity {
             }
         }
 
-        // MINHA FILA (Itens seguintes da fila)
+        // MINHA FILA
         if (containerEmployeeQueue != null) {
             containerEmployeeQueue.removeAllViews();
-            if (openAlerts.isEmpty()) {
+            List<PriorityAlertDto> queue = data.getQueue();
+            if (queue == null || queue.isEmpty()) {
                 if (tvEmployeeEmptyQueue != null) tvEmployeeEmptyQueue.setVisibility(View.VISIBLE);
                 if (tvEmployeeQueueCount != null) tvEmployeeQueueCount.setText("0 alertas");
             } else {
                 if (tvEmployeeEmptyQueue != null) tvEmployeeEmptyQueue.setVisibility(View.GONE);
-                if (tvEmployeeQueueCount != null) tvEmployeeQueueCount.setText(openAlerts.size() + " alertas");
+                if (tvEmployeeQueueCount != null) tvEmployeeQueueCount.setText(queue.size() + " alertas");
                 LayoutInflater inflater = LayoutInflater.from(this);
-                // Exibe os alertas a partir do segundo se o primeiro estiver no destaque, ou todos
-                for (int i = 0; i < openAlerts.size(); i++) {
-                    AlertResponse alert = openAlerts.get(i);
-                    View itemView = createPriorityAlertItem(inflater, containerEmployeeQueue, alert, now);
+                for (PriorityAlertDto p : queue) {
+                    View itemView = createPriorityAlertItem(inflater, containerEmployeeQueue, p);
                     containerEmployeeQueue.addView(itemView);
                 }
             }
         }
     }
 
-    private View createPriorityAlertItem(LayoutInflater inflater, LinearLayout parent, AlertResponse alert, LocalDateTime now) {
+    private View createPriorityAlertItem(LayoutInflater inflater, LinearLayout parent, PriorityAlertDto p) {
         View view = inflater.inflate(R.layout.item_home_priority_alert, parent, false);
 
         TextView tvBadge = view.findViewById(R.id.tvPriorityBadge);
@@ -755,11 +532,8 @@ public class HomeActivity extends AppCompatActivity {
         TextView tvRangeAndSla = view.findViewById(R.id.tvPriorityRangeAndSla);
         TextView tvAssignee = view.findViewById(R.id.tvPriorityAssignee);
 
-        boolean isCritical = isAlertCritical(alert);
-        boolean isRecognized = alert.getStatus() != null && "RECONHECIDO".equalsIgnoreCase(alert.getStatus());
-        Long roomId = alert.getColdRoomId() != null ? alert.getColdRoomId().longValue() : 1L;
-        ColdRoomResponse cr = coldRoomsMap.get(roomId);
-        TemperatureReadingResponse reading = latestReadingsMap.get(roomId);
+        boolean isCritical = p.getSeverityLevel() != null && p.getSeverityLevel().contains("CRITIC");
+        boolean isRecognized = p.getStatus() != null && "RECONHECIDO".equalsIgnoreCase(p.getStatus());
 
         if (tvBadge != null) {
             tvBadge.setText(isCritical ? "Crítico" : "Atenção");
@@ -772,17 +546,13 @@ public class HomeActivity extends AppCompatActivity {
             tvStatusBadge.setTextColor(Color.parseColor(isRecognized ? "#0284C7" : "#D97706"));
         }
 
-        if (tvTimeElapsed != null && alert.getCreatedAt() != null) {
-            tvTimeElapsed.setText(formatElapsedTime(alert.getCreatedAt(), now));
-        }
-
         if (tvCamaraTitle != null) {
-            tvCamaraTitle.setText(cr != null && cr.getLocation() != null ? cr.getLocation() : "Câmara " + roomId);
+            tvCamaraTitle.setText(p.getColdRoomName() != null ? p.getColdRoomName() : "Câmara " + p.getColdRoomId());
         }
 
         if (tvTemp != null) {
-            if (reading != null && reading.getTemperature() != null) {
-                tvTemp.setText(String.format(Locale.getDefault(), "%.1f°C", reading.getTemperature()));
+            if (p.getCurrentTemperature() != null) {
+                tvTemp.setText(String.format(Locale.getDefault(), "%.1f°C", p.getCurrentTemperature()));
                 tvTemp.setTextColor(ContextCompat.getColor(this, isCritical ? R.color.alert_danger : R.color.alert_orange));
             } else {
                 tvTemp.setText("Sem leitura");
@@ -790,23 +560,21 @@ public class HomeActivity extends AppCompatActivity {
             }
         }
 
-        SlaStatus sla = calculateSla(alert, now);
         if (tvRangeAndSla != null) {
-            String rangeStr = (cr != null && cr.getMinimumTemperature() != null && cr.getMaximumTemperature() != null)
-                    ? String.format(Locale.getDefault(), "Faixa: %.1f°C a %.1f°C", cr.getMinimumTemperature(), cr.getMaximumTemperature())
+            String rangeStr = (p.getMinimumTemperature() != null && p.getMaximumTemperature() != null)
+                    ? String.format(Locale.getDefault(), "Faixa: %.1f°C a %.1f°C", p.getMinimumTemperature(), p.getMaximumTemperature())
                     : "Faixa padrão: -2°C a 4°C";
-            tvRangeAndSla.setText(rangeStr + " • SLA: " + sla.description);
+            tvRangeAndSla.setText(rangeStr + " • SLA: " + formatSlaText(p));
         }
 
         if (tvAssignee != null) {
-            String roleStr = alert.getCurrentLevel() != null ? "Nível " + alert.getCurrentLevel() : "Operador";
-            tvAssignee.setText("Atendimento: " + roleStr);
+            tvAssignee.setText("Atendimento: " + (p.getAssigneeName() != null ? p.getAssigneeName() : "Operador"));
         }
 
         view.setOnClickListener(v -> {
             Intent intent = new Intent(this, AlertDetailsActivity.class);
-            if (alert.getId() != null) {
-                intent.putExtra(AlertDetailsActivity.EXTRA_ALERT_ID, alert.getId());
+            if (p.getId() != null) {
+                intent.putExtra(AlertDetailsActivity.EXTRA_ALERT_ID, p.getId());
             }
             intent.putExtra(AlertDetailsActivity.EXTRA_IS_RESOLVED, false);
             startActivity(intent);
@@ -815,64 +583,14 @@ public class HomeActivity extends AppCompatActivity {
         return view;
     }
 
-    private boolean isAlertCritical(AlertResponse alert) {
-        if (alert == null || alert.getSeverityLevel() == null) return false;
-        String s = alert.getSeverityLevel().toUpperCase();
-        return s.contains("CRITIC") || s.contains("URGENT");
-    }
-
-    private SlaStatus calculateSla(AlertResponse alert, LocalDateTime now) {
-        SlaStatus status = new SlaStatus();
-        if (alert == null || alert.getCreatedAt() == null || alert.getReferenceShelfLifeHours() == null) {
-            status.description = "Sem prazo de referência";
-            return status;
+    private String formatSlaText(PriorityAlertDto p) {
+        if ("SLA_VENCIDO".equals(p.getSlaStatus())) {
+            return "Vencido (" + (p.getRemainingMinutes() != null ? Math.abs(p.getRemainingMinutes()) : 0) + " min acima)";
+        } else if ("PROXIMO_VENCIMENTO".equals(p.getSlaStatus())) {
+            return (p.getRemainingMinutes() != null ? p.getRemainingMinutes() : 0) + " min restantes (70% consumido)";
+        } else if ("SEM_REFERENCIA".equals(p.getSlaStatus())) {
+            return "Sem prazo de referência";
         }
-
-        try {
-            LocalDateTime created = LocalDateTime.parse(alert.getCreatedAt());
-            long elapsedMinutes = Math.abs(Duration.between(created, now).toMinutes());
-            long totalAllowedMinutes = (long) (alert.getReferenceShelfLifeHours().doubleValue() * 60);
-
-            if (totalAllowedMinutes <= 0) {
-                status.description = "Sem referência";
-                return status;
-            }
-
-            long remainingMinutes = totalAllowedMinutes - elapsedMinutes;
-            double percentConsumed = (elapsedMinutes * 100.0) / totalAllowedMinutes;
-
-            if (percentConsumed >= 100) {
-                status.isVencido = true;
-                status.description = "SLA Vencido (" + Math.abs(remainingMinutes) + " min acima)";
-            } else if (percentConsumed >= 70) {
-                status.isProximo = true;
-                status.description = remainingMinutes + " min restantes (70% consumido)";
-            } else {
-                status.description = remainingMinutes + " min restantes (No prazo)";
-            }
-        } catch (Exception e) {
-            status.description = "No prazo";
-        }
-
-        return status;
-    }
-
-    private String formatElapsedTime(String rawDate, LocalDateTime now) {
-        try {
-            LocalDateTime ldt = LocalDateTime.parse(rawDate);
-            long minutes = Math.abs(Duration.between(ldt, now).toMinutes());
-            if (minutes < 1) return "Agora";
-            if (minutes < 60) return "Há " + minutes + " min";
-            long hours = minutes / 60;
-            return "Há " + hours + " h";
-        } catch (Exception e) {
-            return "Recente";
-        }
-    }
-
-    private static class SlaStatus {
-        boolean isVencido = false;
-        boolean isProximo = false;
-        String description = "No prazo";
+        return (p.getRemainingMinutes() != null ? p.getRemainingMinutes() : 0) + " min restantes (No prazo)";
     }
 }

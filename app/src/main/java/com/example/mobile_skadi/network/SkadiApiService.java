@@ -5,7 +5,9 @@ import com.example.mobile_skadi.network.dto.AlertResponse;
 import com.example.mobile_skadi.network.dto.ChangePasswordRequest;
 import com.example.mobile_skadi.network.dto.ColdRoomResponse;
 import com.example.mobile_skadi.network.dto.DistributionCenterResponse;
+import com.example.mobile_skadi.network.dto.EmployeeDashboardResponse;
 import com.example.mobile_skadi.network.dto.LoginRequest;
+import com.example.mobile_skadi.network.dto.ManagerDashboardResponse;
 import com.example.mobile_skadi.network.dto.NotificationResponse;
 import com.example.mobile_skadi.network.dto.PasswordCodeVerificationRequest;
 import com.example.mobile_skadi.network.dto.PasswordRecoveryRequest;
@@ -79,4 +81,10 @@ public interface SkadiApiService {
 
     @POST("support")
     Call<Void> createSupportRequest(@Body SupportRequestRequest request);
+
+    @GET("dashboard/manager")
+    Call<ManagerDashboardResponse> getManagerDashboard();
+
+    @GET("dashboard/employee")
+    Call<EmployeeDashboardResponse> getEmployeeDashboard();
 }
