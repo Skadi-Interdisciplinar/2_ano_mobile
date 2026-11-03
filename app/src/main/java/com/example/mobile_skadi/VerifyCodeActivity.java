@@ -39,6 +39,9 @@ public class VerifyCodeActivity extends AppCompatActivity {
 
         email = getIntent() != null && getIntent().hasExtra(EXTRA_EMAIL)
                 ? getIntent().getStringExtra(EXTRA_EMAIL) : "";
+        if (email != null) {
+            email = email.trim().toLowerCase();
+        }
 
         initViews();
         setupListeners();
@@ -102,11 +105,7 @@ public class VerifyCodeActivity extends AppCompatActivity {
             public void onFailure(Call<Void> call, Throwable t) {
                 btnVerificarCodigo.setEnabled(true);
                 btnVerificarCodigo.setText("Verificar código");
-                // Fallback amigável
-                Intent intent = new Intent(VerifyCodeActivity.this, NewPasswordActivity.class);
-                intent.putExtra(NewPasswordActivity.EXTRA_EMAIL, email);
-                startActivity(intent);
-                finish();
+                Toast.makeText(VerifyCodeActivity.this, "Falha de conexão: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -122,12 +121,16 @@ public class VerifyCodeActivity extends AppCompatActivity {
         RetrofitClient.getApiService(this).recoverPassword(request).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                Toast.makeText(VerifyCodeActivity.this, "Novo código enviado com sucesso!", Toast.LENGTH_SHORT).show();
+                if (response.isSuccessful()) {
+                    Toast.makeText(VerifyCodeActivity.this, "Novo código enviado com sucesso!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(VerifyCodeActivity.this, "Erro ao reenviar código (HTTP " + response.code() + ").", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(VerifyCodeActivity.this, "Código reenviado com sucesso!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(VerifyCodeActivity.this, "Falha de conexão: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

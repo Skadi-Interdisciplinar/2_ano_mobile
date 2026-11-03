@@ -40,6 +40,9 @@ public class NewPasswordActivity extends AppCompatActivity {
 
         email = getIntent() != null && getIntent().hasExtra(EXTRA_EMAIL)
                 ? getIntent().getStringExtra(EXTRA_EMAIL) : "";
+        if (email != null) {
+            email = email.trim().toLowerCase();
+        }
 
         initViews();
         setupListeners();

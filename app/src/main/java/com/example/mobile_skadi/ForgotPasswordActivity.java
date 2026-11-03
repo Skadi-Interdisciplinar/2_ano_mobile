@@ -3,7 +3,6 @@ package com.example.mobile_skadi;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,7 +56,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     }
 
     private void onEnviarCodigoClicked() {
-        String email = etEmail.getText() != null ? etEmail.getText().toString().trim() : "";
+        String rawEmail = etEmail.getText() != null ? etEmail.getText().toString().trim() : "";
+        final String email = rawEmail.toLowerCase();
 
         if (email.isEmpty()) {
             tilEmail.setError("Informe seu e-mail cadastrado");
@@ -81,21 +81,24 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 btnEnviarCodigo.setEnabled(true);
                 btnEnviarCodigo.setText("Enviar código");
 
-                // Avança para o passo 2 (código de verificação)
-                Intent intent = new Intent(ForgotPasswordActivity.this, VerifyCodeActivity.class);
-                intent.putExtra(EXTRA_EMAIL, email);
-                startActivity(intent);
+                if (response.isSuccessful()) {
+                    Toast.makeText(ForgotPasswordActivity.this, "Código enviado para " + email, Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(ForgotPasswordActivity.this, VerifyCodeActivity.class);
+                    intent.putExtra(EXTRA_EMAIL, email);
+                    startActivity(intent);
+                } else if (response.code() == 404) {
+                    tilEmail.setError("E-mail não encontrado no sistema");
+                    etEmail.requestFocus();
+                } else {
+                    Toast.makeText(ForgotPasswordActivity.this, "Erro ao enviar código (código " + response.code() + ").", Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 btnEnviarCodigo.setEnabled(true);
                 btnEnviarCodigo.setText("Enviar código");
-                // Modo resiliente/fallback: avança para permitir fluxo no app
-                Toast.makeText(ForgotPasswordActivity.this, "Código gerado para " + email, Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(ForgotPasswordActivity.this, VerifyCodeActivity.class);
-                intent.putExtra(EXTRA_EMAIL, email);
-                startActivity(intent);
+                Toast.makeText(ForgotPasswordActivity.this, "Falha de rede ao conectar à API: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
