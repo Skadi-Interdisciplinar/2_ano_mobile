@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:padding="24dp">
 
-    <!-- CABEÃ‡ALHO COM BOTÃƒO FECHAR E TÃTULO -->
+    <!-- CABEÇALHO COM BOTÃO FECHAR E TÍTULO -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -66,7 +66,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|start"
             android:layout_marginStart="14dp"
-            android:text="Escolha opÃ§Ã£o"
+            android:text="Escolha opção"
             android:textColor="#64748B"
             android:textSize="14sp"
             android:fontFamily="@font/manrope" />
@@ -77,15 +77,15 @@
             android:layout_gravity="center_vertical|end"
             android:layout_marginEnd="14dp"
             android:src="@drawable/ic_chevron_down"
-            android:contentDescription="Selecionar opÃ§Ã£o" />
+            android:contentDescription="Selecionar opção" />
     </FrameLayout>
 
-    <!-- DESCRIÃ‡ÃƒO -->
+    <!-- DESCRIÇÃO -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="DescriÃ§Ã£o"
+        android:text="Descrição"
         android:textColor="#0F2851"
         android:textSize="13sp"
         android:fontFamily="@font/manrope"
@@ -106,7 +106,7 @@
         android:textColorHint="#94A3B8"
         android:textSize="13.5sp" />
 
-    <!-- BOTÃƒO ENVIAR -->
+    <!-- BOTÃO ENVIAR -->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnSubmitTicket"
         android:layout_width="match_parent"
@@ -121,6 +121,6 @@
         android:textSize="15sp"
         android:textStyle="bold" />
 
-    <!-- BOTÃƒO LIGAR PARA O SUPORTE (RECURSO DE HARDWARE: TELEFONE) -->
+    <!-- BOTÃO LIGAR PARA O SUPORTE (RECURSO DE HARDWARE: TELEFONE) -->
 
 </LinearLayout>

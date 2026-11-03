@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -554,9 +554,10 @@
                                 android:orientation="vertical">
 
                                 <TextView
+                                    android:id="@+id/tvDocRegistrosAlerta"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="8 (33,3%)"
+                                    android:text="0 (0%)"
                                     android:textColor="@color/primary_dark"
                                     android:textSize="14sp"
                                     android:fontFamily="@font/manrope"
@@ -601,9 +602,10 @@
                                 android:orientation="vertical">
 
                                 <TextView
+                                    android:id="@+id/tvDocTempMedia"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="-2,2ºC"
+                                    android:text="--°C"
                                     android:textColor="@color/primary_dark"
                                     android:textSize="14sp"
                                     android:fontFamily="@font/manrope"
@@ -647,9 +649,10 @@
                                 android:orientation="vertical">
 
                                 <TextView
+                                    android:id="@+id/tvDocTempMax"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="3,5 ºC"
+                                    android:text="--°C"
                                     android:textColor="@color/primary_dark"
                                     android:textSize="14sp"
                                     android:fontFamily="@font/manrope"
@@ -692,9 +695,10 @@
                                 android:orientation="vertical">
 
                                 <TextView
+                                    android:id="@+id/tvDocTempMin"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="-10ºC"
+                                    android:text="--°C"
                                     android:textColor="@color/primary_dark"
                                     android:textSize="14sp"
                                     android:fontFamily="@font/manrope"
@@ -723,7 +727,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="24dp">
+                    android:paddingBottom="64dp">
 
                     <TextView
                         android:layout_width="wrap_content"

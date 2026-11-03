@@ -17,6 +17,7 @@ import androidx.core.content.FileProvider;
 import com.example.mobile_skadi.network.RetrofitClient;
 import com.example.mobile_skadi.network.SessionManager;
 import com.example.mobile_skadi.network.SkadiApiService;
+import com.example.mobile_skadi.network.dto.AddressResponse;
 import com.example.mobile_skadi.network.dto.ColdRoomResponse;
 import com.example.mobile_skadi.network.dto.DistributionCenterResponse;
 import com.example.mobile_skadi.network.dto.TemperatureReadingResponse;
@@ -54,6 +55,10 @@ public class GeneratedReportActivity extends AppCompatActivity {
     private TextView tvDocFaixaTemperatura;
     private TextView tvDocTotalRegistros;
     private TextView tvDocRegistrosConformes;
+    private TextView tvDocRegistrosAlerta;
+    private TextView tvDocTempMedia;
+    private TextView tvDocTempMax;
+    private TextView tvDocTempMin;
 
     private Long coldRoomId;
     private String coldRoomName;
@@ -87,6 +92,10 @@ public class GeneratedReportActivity extends AppCompatActivity {
         tvDocFaixaTemperatura = findViewById(R.id.tvDocFaixaTemperatura);
         tvDocTotalRegistros = findViewById(R.id.tvDocTotalRegistros);
         tvDocRegistrosConformes = findViewById(R.id.tvDocRegistrosConformes);
+        tvDocRegistrosAlerta = findViewById(R.id.tvDocRegistrosAlerta);
+        tvDocTempMedia = findViewById(R.id.tvDocTempMedia);
+        tvDocTempMax = findViewById(R.id.tvDocTempMax);
+        tvDocTempMin = findViewById(R.id.tvDocTempMin);
     }
 
     private void parseIntentExtras() {
@@ -126,17 +135,17 @@ public class GeneratedReportActivity extends AppCompatActivity {
         if (tvDocCdNome != null) tvDocCdNome.setText(cdName);
 
         // Câmara selecionada
-        String cLabel = (coldRoomName != null && !coldRoomName.isEmpty()) ? coldRoomName : (coldRoomId != null ? "Câmara " + coldRoomId : "Todas as câmaras");
+        String cLabel = (coldRoomName != null && !coldRoomName.isEmpty()) ? coldRoomName : "Todas as câmaras";
         if (tvDocCamara != null) tvDocCamara.setText(cLabel);
 
         // Período formatado
         try {
-            Date dS = iso.parse(startDate);
-            Date dE = iso.parse(endDate);
-            if (dS != null && dE != null && tvDocPeriodo != null) {
-                tvDocPeriodo.setText(br.format(dS) + " - " + br.format(dE));
+            Date dStart = iso.parse(startDate);
+            Date dEnd = iso.parse(endDate);
+            if (dStart != null && dEnd != null && tvDocPeriodo != null) {
+                tvDocPeriodo.setText(br.format(dStart) + " - " + br.format(dEnd));
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
             if (tvDocPeriodo != null) tvDocPeriodo.setText(startDate + " - " + endDate);
         }
     }
@@ -144,17 +153,43 @@ public class GeneratedReportActivity extends AppCompatActivity {
     private void loadDocumentData() {
         SkadiApiService apiService = RetrofitClient.getApiService(this);
 
-        // 1. Carrega dados do CD
+        // 1. Carrega dados do CD e Endereço Real
         apiService.getDistributionCenters().enqueue(new Callback<List<DistributionCenterResponse>>() {
             @Override
             public void onResponse(Call<List<DistributionCenterResponse>> call, Response<List<DistributionCenterResponse>> response) {
                 if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
-                    DistributionCenterResponse dc = response.body().get(0);
-                    if (dc.getName() != null && tvDocCdNome != null) {
-                        tvDocCdNome.setText(dc.getName());
+                    DistributionCenterResponse matchedCd = null;
+                    for (DistributionCenterResponse cd : response.body()) {
+                        if (cd.getName() != null && cd.getName().equalsIgnoreCase(cdName)) {
+                            matchedCd = cd;
+                            break;
+                        }
                     }
-                    if (dc.getCnpj() != null && tvDocCdCnpj != null) {
-                        tvDocCdCnpj.setText(dc.getCnpj());
+                    if (matchedCd == null) {
+                        matchedCd = response.body().get(0);
+                    }
+
+                    if (matchedCd != null) {
+                        if (tvDocCdCnpj != null && matchedCd.getCnpj() != null) {
+                            tvDocCdCnpj.setText(matchedCd.getCnpj());
+                        }
+
+                        if (matchedCd.getId() != null) {
+                            apiService.getDistributionCenterAddresses(matchedCd.getId()).enqueue(new Callback<List<AddressResponse>>() {
+                                @Override
+                                public void onResponse(Call<List<AddressResponse>> call, Response<List<AddressResponse>> addrResp) {
+                                    if (addrResp.isSuccessful() && addrResp.body() != null && !addrResp.body().isEmpty()) {
+                                        AddressResponse addr = addrResp.body().get(0);
+                                        if (tvDocCdEndereco != null) {
+                                            tvDocCdEndereco.setText(addr.displayAddress());
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<List<AddressResponse>> call, Throwable t) {}
+                            });
+                        }
                     }
                 }
             }
@@ -163,7 +198,7 @@ public class GeneratedReportActivity extends AppCompatActivity {
             public void onFailure(Call<List<DistributionCenterResponse>> call, Throwable t) {}
         });
 
-        // 2. Carrega limites de temperatura da câmara
+        // 2. Carrega faixa de temperatura da câmara (se selecionada)
         if (coldRoomId != null && coldRoomId > 0) {
             apiService.getColdRoomById(coldRoomId).enqueue(new Callback<ColdRoomResponse>() {
                 @Override
@@ -171,7 +206,7 @@ public class GeneratedReportActivity extends AppCompatActivity {
                     if (response.isSuccessful() && response.body() != null) {
                         ColdRoomResponse cr = response.body();
                         if (cr.getMinimumTemperature() != null && cr.getMaximumTemperature() != null && tvDocFaixaTemperatura != null) {
-                            tvDocFaixaTemperatura.setText(String.format(Locale.getDefault(), "%.2f°C – %.2f°C",
+                            tvDocFaixaTemperatura.setText(String.format(Locale.getDefault(), "%.1f°C a %.1f°C",
                                     cr.getMinimumTemperature().doubleValue(), cr.getMaximumTemperature().doubleValue()));
                         }
                     }
@@ -182,7 +217,7 @@ public class GeneratedReportActivity extends AppCompatActivity {
             });
         }
 
-        // 3. Carrega estatísticas de leituras
+        // 3. Carrega estatísticas de leituras reais
         Call<List<TemperatureReadingResponse>> readingsCall = (coldRoomId != null && coldRoomId > 0)
                 ? apiService.getColdRoomReadings(coldRoomId)
                 : apiService.getAllReadings();
@@ -194,20 +229,39 @@ public class GeneratedReportActivity extends AppCompatActivity {
                     List<TemperatureReadingResponse> list = response.body();
                     int total = list.size();
                     int compliant = 0;
+                    double sumTemp = 0.0;
+                    double minT = Double.MAX_VALUE;
+                    double maxT = -Double.MAX_VALUE;
+                    int validReadings = 0;
 
                     for (TemperatureReadingResponse r : list) {
                         if (r.getTemperature() != null) {
                             double val = r.getTemperature().doubleValue();
+                            sumTemp += val;
+                            if (val < minT) minT = val;
+                            if (val > maxT) maxT = val;
+                            validReadings++;
+
                             if (val >= 0.0 && val <= 4.0) {
                                 compliant++;
                             }
                         }
                     }
 
-                    int pct = (int) Math.round((compliant * 100.0) / total);
+                    int compliantPct = total > 0 ? (int) Math.round((compliant * 100.0) / total) : 0;
+                    int alertCount = total - compliant;
+                    int alertPct = total > 0 ? (int) Math.round((alertCount * 100.0) / total) : 0;
 
                     if (tvDocTotalRegistros != null) tvDocTotalRegistros.setText(String.valueOf(total));
-                    if (tvDocRegistrosConformes != null) tvDocRegistrosConformes.setText(compliant + " (" + pct + "%)");
+                    if (tvDocRegistrosConformes != null) tvDocRegistrosConformes.setText(compliant + " (" + compliantPct + "%)");
+                    if (tvDocRegistrosAlerta != null) tvDocRegistrosAlerta.setText(alertCount + " (" + alertPct + "%)");
+
+                    if (validReadings > 0) {
+                        double avg = sumTemp / validReadings;
+                        if (tvDocTempMedia != null) tvDocTempMedia.setText(String.format(Locale.getDefault(), "%.1f°C", avg));
+                        if (tvDocTempMax != null) tvDocTempMax.setText(String.format(Locale.getDefault(), "%.1f°C", maxT));
+                        if (tvDocTempMin != null) tvDocTempMin.setText(String.format(Locale.getDefault(), "%.1f°C", minT));
+                    }
                 }
             }
 

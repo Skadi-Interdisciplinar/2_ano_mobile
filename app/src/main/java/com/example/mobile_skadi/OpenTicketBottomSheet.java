@@ -24,13 +24,10 @@ import retrofit2.Response;
 public class OpenTicketBottomSheet extends BottomSheetDialog {
 
     private final String[] ticketTypes = {
-            "Falha de temperatura",
-            "Problema com sensor",
-            "Erro de conexão",
-            "Manutenção da câmara",
-            "Dúvida operacional",
-            "Sugestão de melhoria",
-            "Outro assunto"
+            "DUVIDA",
+            "SUGESTAO",
+            "RECLAMACAO",
+            "OUTRO"
     };
 
     public OpenTicketBottomSheet(@NonNull Context context) {
@@ -56,7 +53,6 @@ public class OpenTicketBottomSheet extends BottomSheetDialog {
         EditText etTicketDescription = view.findViewById(R.id.etTicketDescription);
         AppCompatButton btnSubmit = view.findViewById(R.id.btnSubmitTicket);
 
-
         btnClose.setOnClickListener(v -> dismiss());
 
         btnSelectTicketType.setOnClickListener(v -> {
@@ -79,7 +75,7 @@ public class OpenTicketBottomSheet extends BottomSheetDialog {
             btnSubmit.setEnabled(false);
             btnSubmit.setText("Enviando...");
 
-            String tipoEscolhido = tvTicketTypeSelected.getText() != null ? tvTicketTypeSelected.getText().toString() : "Outro assunto";
+            String tipoEscolhido = tvTicketTypeSelected.getText() != null ? tvTicketTypeSelected.getText().toString().trim() : "OUTRO";
             String categoria = mapToSupportCategory(tipoEscolhido);
             String fullDescricao = "[" + tipoEscolhido + "] " + desc;
 
@@ -111,11 +107,10 @@ public class OpenTicketBottomSheet extends BottomSheetDialog {
 
     private String mapToSupportCategory(String tipo) {
         if (tipo == null) return "OUTRO";
-        if (tipo.contains("Dúvida")) return "DUVIDA";
-        if (tipo.contains("Sugestão")) return "SUGESTAO";
-        if (tipo.contains("Falha") || tipo.contains("Problema") || tipo.contains("Erro") || tipo.contains("Reclamação")) {
-            return "RECLAMACAO";
-        }
+        String upper = tipo.toUpperCase().trim();
+        if (upper.contains("DUVIDA")) return "DUVIDA";
+        if (upper.contains("SUGESTAO")) return "SUGESTAO";
+        if (upper.contains("RECLAMACAO")) return "RECLAMACAO";
         return "OUTRO";
     }
 

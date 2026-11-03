@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/background">
 
-    <!-- CONTEÃšDO COM ROLAGEM -->
+    <!-- CONTEÚDO COM ROLAGEM -->
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollNotifications"
         android:layout_width="0dp"
@@ -23,7 +23,7 @@
             android:orientation="vertical"
             android:paddingBottom="120dp">
 
-            <!-- CABEÃ‡ALHO AZUL ESCURO ARREDONDADO -->
+            <!-- CABEÇALHO AZUL ESCURO ARREDONDADO -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
                 android:paddingTop="50dp"
                 android:paddingBottom="24dp">
 
-                <!-- BOTÃƒO VOLTAR -->
+                <!-- BOTÃO VOLTAR -->
                 <FrameLayout
                     android:id="@+id/btnBack"
                     android:layout_width="40dp"
@@ -53,7 +53,7 @@
                         android:contentDescription="Voltar" />
                 </FrameLayout>
 
-                <!-- TÃTULO E SUBTÃTULO -->
+                <!-- TÍTULO E SUBTÍTULO -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="NotificaÃ§Ãµes"
+                        android:text="Notificações"
                         android:textColor="@color/white"
                         android:textSize="22sp"
                         android:fontFamily="@font/manrope"
@@ -79,7 +79,7 @@
                         android:layout_marginTop="2dp" />
                 </LinearLayout>
 
-                <!-- BOTÃƒO NOTIFICAÃ‡ÃƒO -->
+                <!-- BOTÃO NOTIFICAÇÃO -->
                 <FrameLayout
                     android:id="@+id/btnNotification"
                     android:layout_width="40dp"
@@ -94,7 +94,7 @@
                         android:layout_height="22dp"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_bell_rounded"
-                        android:contentDescription="NotificaÃ§Ãµes" />
+                        android:contentDescription="Notificações" />
                 </FrameLayout>
 
                 <!-- AVATAR -->
@@ -118,14 +118,14 @@
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
-            <!-- LISTA DE NOTIFICAÃ‡Ã•ES (FIEL AO FIGMA) -->
+            <!-- LISTA DE NOTIFICAÇÃ•ES (FIEL AO FIGMA) -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginTop="8dp">
 
-                <!-- NOTIFICAÃ‡ÃƒO 1 (NÃƒO LIDA - CRÃTICA) -->
+                <!-- NOTIFICAÇÃO 1 (NÃO LIDA - CRÍTICA) -->
             <!-- CONTAINER DINÂMICO DE NOTIFICAÇÕES (ALIMENTADO VIA API/REDIS) -->
             <ProgressBar
                 android:id="@+id/progressLoadingNotifs"
@@ -184,7 +184,7 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- TOOLBAR FLUTUANTE EM PÃLULA -->
+    <!-- TOOLBAR FLUTUANTE EM PÍLULA -->
     <LinearLayout
         android:id="@+id/bottomNavContainer"
         android:layout_width="0dp"
@@ -202,7 +202,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- 1. CÃ¢maras -->
+        <!-- 1. Câmaras -->
         <LinearLayout
             android:id="@+id/navCamaras"
             android:layout_width="0dp"
@@ -217,12 +217,12 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_snowflake"
-                android:contentDescription="CÃ¢maras" />
+                android:contentDescription="Câmaras" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="CÃ¢maras"
+                android:text="Câmaras"
                 android:textColor="@color/primary_dark"
                 android:textSize="11sp"
                 android:fontFamily="@font/manrope"
@@ -256,7 +256,7 @@
                 android:layout_marginTop="3dp" />
         </LinearLayout>
 
-        <!-- 3. InÃ­cio -->
+        <!-- 3. Início -->
         <LinearLayout
             android:id="@+id/navInicio"
             android:layout_width="0dp"
@@ -271,19 +271,19 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_home_navy"
-                android:contentDescription="InÃ­cio" />
+                android:contentDescription="Início" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="InÃ­cio"
+                android:text="Início"
                 android:textColor="@color/primary_dark"
                 android:textSize="11sp"
                 android:fontFamily="@font/manrope"
                 android:layout_marginTop="3dp" />
         </LinearLayout>
 
-        <!-- 4. RelatÃ³rios -->
+        <!-- 4. Relatórios -->
         <LinearLayout
             android:id="@+id/navRelatorios"
             android:layout_width="0dp"
@@ -298,12 +298,12 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_doc_report"
-                android:contentDescription="RelatÃ³rios" />
+                android:contentDescription="Relatórios" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="RelatÃ³rios"
+                android:text="Relatórios"
                 android:textColor="@color/primary_dark"
                 android:textSize="11sp"
                 android:fontFamily="@font/manrope"
