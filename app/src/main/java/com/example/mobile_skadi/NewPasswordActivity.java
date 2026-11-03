@@ -100,14 +100,18 @@ public class NewPasswordActivity extends AppCompatActivity {
             public void onResponse(Call<Void> call, Response<Void> response) {
                 btnSalvarNovaSenha.setEnabled(true);
                 btnSalvarNovaSenha.setText("Salvar nova senha");
-                showSuccessDialog();
+                if (response.isSuccessful()) {
+                    showSuccessDialog();
+                } else {
+                    Toast.makeText(NewPasswordActivity.this, "Código de recuperação inválido ou expirado.", Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 btnSalvarNovaSenha.setEnabled(true);
                 btnSalvarNovaSenha.setText("Salvar nova senha");
-                showSuccessDialog();
+                Toast.makeText(NewPasswordActivity.this, "Falha de rede: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
