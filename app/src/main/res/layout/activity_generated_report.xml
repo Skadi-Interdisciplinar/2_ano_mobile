@@ -63,7 +63,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <LinearLayout
+        <LinearLayout android:id="@+id/documentContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -184,7 +184,7 @@
                                 android:fontFamily="@font/manrope"
                                 android:textStyle="bold" />
 
-                            <TextView
+                            <TextView android:id="@+id/tvDocCdNome"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentEnd="true"
@@ -213,6 +213,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentEnd="true"
+                                android:id="@+id/tvDocCdEndereco"
                                 android:text="Rua Onze, 43 - São Paulo/SP"
                                 android:textColor="#2563EB"
                                 android:textSize="12sp"
@@ -238,6 +239,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentEnd="true"
+                                android:id="@+id/tvDocCdCnpj"
                                 android:text="12.345.678/0001-90"
                                 android:textColor="#2563EB"
                                 android:textSize="12sp"
@@ -262,6 +264,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentEnd="true"
+                                android:id="@+id/tvDocResponsavelTecnico"
                                 android:text="Beatriz Hinsching"
                                 android:textColor="#2563EB"
                                 android:textSize="12sp"
@@ -329,7 +332,7 @@
                                 android:fontFamily="@font/manrope"
                                 android:textStyle="bold" />
 
-                            <TextView
+                            <TextView android:id="@+id/tvDocCamara"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentEnd="true"
@@ -358,6 +361,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentEnd="true"
+                                android:id="@+id/tvDocPeriodo"
                                 android:text="11/08/2026 - 15/08/2026"
                                 android:textColor="#2563EB"
                                 android:textSize="12sp"
@@ -378,7 +382,7 @@
                                 android:fontFamily="@font/manrope"
                                 android:textStyle="bold" />
 
-                            <TextView
+                            <TextView android:id="@+id/tvDocFaixaTemperatura"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentEnd="true"
@@ -456,7 +460,7 @@
                                 android:layout_weight="1"
                                 android:orientation="vertical">
 
-                                <TextView
+                                <TextView android:id="@+id/tvDocTotalRegistros"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="18"
@@ -502,9 +506,10 @@
                                 android:layout_weight="1"
                                 android:orientation="vertical">
 
-                                <TextView
+                            <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:id="@+id/tvDocRegistrosConformes"
                                     android:text="12 (66,6%)"
                                     android:textColor="@color/primary_dark"
                                     android:textSize="14sp"
@@ -549,9 +554,10 @@
                                 android:orientation="vertical">
 
                                 <TextView
+                                    android:id="@+id/tvDocRegistrosAlerta"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="8 (33,3%)"
+                                    android:text="0 (0%)"
                                     android:textColor="@color/primary_dark"
                                     android:textSize="14sp"
                                     android:fontFamily="@font/manrope"
@@ -596,9 +602,10 @@
                                 android:orientation="vertical">
 
                                 <TextView
+                                    android:id="@+id/tvDocTempMedia"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="-2,2ºC"
+                                    android:text="--°C"
                                     android:textColor="@color/primary_dark"
                                     android:textSize="14sp"
                                     android:fontFamily="@font/manrope"
@@ -642,9 +649,10 @@
                                 android:orientation="vertical">
 
                                 <TextView
+                                    android:id="@+id/tvDocTempMax"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="3,5 ºC"
+                                    android:text="--°C"
                                     android:textColor="@color/primary_dark"
                                     android:textSize="14sp"
                                     android:fontFamily="@font/manrope"
@@ -687,9 +695,10 @@
                                 android:orientation="vertical">
 
                                 <TextView
+                                    android:id="@+id/tvDocTempMin"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="-10ºC"
+                                    android:text="--°C"
                                     android:textColor="@color/primary_dark"
                                     android:textSize="14sp"
                                     android:fontFamily="@font/manrope"
@@ -718,7 +727,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="24dp">
+                    android:paddingBottom="64dp">
 
                     <TextView
                         android:layout_width="wrap_content"

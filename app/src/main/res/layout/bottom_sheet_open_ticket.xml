@@ -112,13 +112,15 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginTop="24dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/bg_btn_navy_rounded"
         android:fontFamily="@font/manrope"
-        android:text="Enviar"
+        android:text="Enviar chamado"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="15sp"
         android:textStyle="bold" />
+
+    <!-- BOTÃO LIGAR PARA O SUPORTE (RECURSO DE HARDWARE: TELEFONE) -->
 
 </LinearLayout>

@@ -27,6 +27,7 @@ public class AuthInterceptor implements Interceptor {
         String path = original.url().encodedPath();
         boolean isAuthEndpoint = path.contains("auth/login")
                 || path.contains("auth/recover-password")
+                || path.contains("auth/verify-recovery-code")
                 || path.contains("auth/reset-password");
 
         if (!isAuthEndpoint) {

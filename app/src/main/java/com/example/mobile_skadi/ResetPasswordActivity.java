@@ -10,9 +10,16 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
+import com.example.mobile_skadi.network.RetrofitClient;
+import com.example.mobile_skadi.network.dto.ChangePasswordRequest;
+import com.example.mobile_skadi.utils.AvatarManager;
 import com.google.android.material.card.MaterialCardView;
 
-public class    ResetPasswordActivity extends AppCompatActivity {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class ResetPasswordActivity extends AppCompatActivity {
 
     private FrameLayout btnBack;
     private FrameLayout btnNotification;
@@ -28,6 +35,12 @@ public class    ResetPasswordActivity extends AppCompatActivity {
     private LinearLayout navInicio;
     private LinearLayout navRelatorios;
     private LinearLayout navTrimmy;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AvatarManager.applyAvatar(this, btnProfileAvatar);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,20 +83,49 @@ public class    ResetPasswordActivity extends AppCompatActivity {
             String newPass = etNewPassword.getText() != null ? etNewPassword.getText().toString().trim() : "";
             String confirmPass = etConfirmNewPassword.getText() != null ? etConfirmNewPassword.getText().toString().trim() : "";
 
-            if (current.isEmpty() || newPass.isEmpty() || confirmPass.isEmpty()) {
+            if (!arePasswordFieldsFilled(current, newPass, confirmPass)) {
                 Toast.makeText(this, "Preencha todos os campos para continuar.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            if (!newPass.equals(confirmPass)) {
+            if (newPass.length() < 6) {
+                Toast.makeText(this, "A nova senha deve possuir pelo menos 6 caracteres.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (!doPasswordsMatch(newPass, confirmPass)) {
                 Toast.makeText(this, "A nova senha e a confirmação não coincidem.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Exibe o modal de confirmação de redefinição de senha
-            ResetPasswordConfirmDialog.show(this, () -> {
-                Toast.makeText(this, "Senha redefinida com sucesso!", Toast.LENGTH_SHORT).show();
-                finish();
+            btnSubmitNewPassword.setEnabled(false);
+            btnSubmitNewPassword.setText("Redefinindo...");
+
+            ChangePasswordRequest request = new ChangePasswordRequest(current, newPass, confirmPass);
+            RetrofitClient.getApiService(this).changePassword(request).enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    btnSubmitNewPassword.setEnabled(true);
+                    btnSubmitNewPassword.setText("Confirmar nova senha");
+
+                    if (response.isSuccessful()) {
+                        ResetPasswordConfirmDialog.show(ResetPasswordActivity.this, () -> {
+                            Toast.makeText(ResetPasswordActivity.this, "Senha redefinida com sucesso!", Toast.LENGTH_SHORT).show();
+                            finish();
+                        });
+                    } else if (response.code() == 400 || response.code() == 401) {
+                        Toast.makeText(ResetPasswordActivity.this, "Senha atual incorreta ou inválida.", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(ResetPasswordActivity.this, "Erro ao alterar senha (código " + response.code() + ").", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    btnSubmitNewPassword.setEnabled(true);
+                    btnSubmitNewPassword.setText("Confirmar nova senha");
+                    Toast.makeText(ResetPasswordActivity.this, "Erro de rede ao conectar com a API: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
             });
         });
 

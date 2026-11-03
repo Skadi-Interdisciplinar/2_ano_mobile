@@ -60,6 +60,13 @@ public class AlertDetailsActivity extends AppCompatActivity {
 
     private boolean isResolved = false;
     private Integer alertId = null;
+    private Long currentRoomId = null;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        com.example.mobile_skadi.utils.AvatarManager.applyAvatar(this, btnProfileAvatar);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +83,6 @@ public class AlertDetailsActivity extends AppCompatActivity {
             }
         }
 
-        // Verifica estado inicial via intent (padrão: em andamento)
         isResolved = getIntent().getBooleanExtra(EXTRA_IS_RESOLVED, false);
         setAlertResolved(isResolved);
 
@@ -108,9 +114,6 @@ public class AlertDetailsActivity extends AppCompatActivity {
         navRelatorios = findViewById(R.id.navRelatorios);
         navTrimmy = findViewById(R.id.navTrimmy);
 
-        if (btnJustificar != null) {
-            btnJustificar.setVisibility(UserRoleManager.isEmployee() ? View.GONE : View.VISIBLE);
-        }
         UserRoleManager.applyBottomNavForRole(this);
     }
 
@@ -120,24 +123,27 @@ public class AlertDetailsActivity extends AppCompatActivity {
         btnProfileAvatar.setOnClickListener(v -> startActivity(new Intent(this, ProfileActivity.class)));
 
         btnJustificar.setOnClickListener(v -> {
+            if (isResolved) {
+                Toast.makeText(this, "Este alerta já foi resolvido e seu atendimento está concluído.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Alerta pendente -> abre o diálogo de justificativa
             AlertJustificationDialog.show(this, (reason, description) -> {
                 if (alertId != null && alertId > 0) {
                     RetrofitClient.getApiService(this).recognizeAlert(alertId).enqueue(new Callback<Void>() {
                         @Override
                         public void onResponse(Call<Void> call, Response<Void> response) {
-                            setAlertResolved(true);
-                            Toast.makeText(AlertDetailsActivity.this, "Justificativa registrada com sucesso!", Toast.LENGTH_SHORT).show();
+                            handleJustificationSuccess();
                         }
 
                         @Override
                         public void onFailure(Call<Void> call, Throwable t) {
-                            setAlertResolved(true);
-                            Toast.makeText(AlertDetailsActivity.this, "Justificativa registrada (modo offline)!", Toast.LENGTH_SHORT).show();
+                            handleJustificationSuccess();
                         }
                     });
                 } else {
-                    setAlertResolved(true);
-                    Toast.makeText(this, "Justificativa registrada com sucesso!", Toast.LENGTH_SHORT).show();
+                    handleJustificationSuccess();
                 }
             });
         });
@@ -167,22 +173,86 @@ public class AlertDetailsActivity extends AppCompatActivity {
         });
     }
 
+    private void handleJustificationSuccess() {
+        setAlertResolved(true);
+        if (tvEndTime != null) {
+            tvEndTime.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm")));
+        }
+        if (btnJustificar != null) {
+            btnJustificar.setText("Atendimento finalizado");
+            btnJustificar.setEnabled(false);
+            btnJustificar.setAlpha(0.6f);
+        }
+        Toast.makeText(AlertDetailsActivity.this, "Alerta justificado e atendimento registrado!", Toast.LENGTH_SHORT).show();
+
+        // Atualiza a temperatura atual imediatamente
+        if (currentRoomId != null) {
+            RetrofitClient.getApiService(this).getCurrentTemperature(currentRoomId).enqueue(new Callback<TemperatureReadingResponse>() {
+                @Override
+                public void onResponse(Call<TemperatureReadingResponse> call, Response<TemperatureReadingResponse> response) {
+                    if (response.isSuccessful() && response.body() != null && response.body().getTemperature() != null) {
+                        if (tvAlertDetailTemp != null) {
+                            tvAlertDetailTemp.setText(String.format(Locale.getDefault(), "%.1f°C", response.body().getTemperature()));
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<TemperatureReadingResponse> call, Throwable t) {}
+            });
+        }
+    }
+
     private void loadAlertDetails() {
         SkadiApiService apiService = RetrofitClient.getApiService(this);
 
+        // Limpa campos para não exibir dados mockados do layout
+        if (tvStartTime != null) tvStartTime.setText("--:--");
+        if (tvEndTime != null) tvEndTime.setText("--:--");
+
+        // 1. Busca primeiro em alertas ativos
         apiService.getAlerts(null).enqueue(new Callback<List<AlertResponse>>() {
             @Override
             public void onResponse(Call<List<AlertResponse>> call, Response<List<AlertResponse>> response) {
+                AlertResponse current = null;
                 if (response.isSuccessful() && response.body() != null) {
-                    AlertResponse current = null;
                     for (AlertResponse a : response.body()) {
                         if (alertId != null && alertId.equals(a.getId())) {
                             current = a;
                             break;
                         }
                     }
-                    if (current == null && !response.body().isEmpty()) {
-                        current = response.body().get(0);
+                }
+
+                if (current != null) {
+                    bindAlert(current, apiService);
+                } else {
+                    // 2. Não achou nos ativos: busca no histórico (resolvidos)
+                    loadFromHistory(apiService);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<AlertResponse>> call, Throwable t) {
+                loadFromHistory(apiService);
+            }
+        });
+    }
+
+    private void loadFromHistory(SkadiApiService apiService) {
+        apiService.getAlertsHistory(null).enqueue(new Callback<List<AlertResponse>>() {
+            @Override
+            public void onResponse(Call<List<AlertResponse>> callH, Response<List<AlertResponse>> responseH) {
+                if (responseH.isSuccessful() && responseH.body() != null) {
+                    AlertResponse current = null;
+                    for (AlertResponse a : responseH.body()) {
+                        if (alertId != null && alertId.equals(a.getId())) {
+                            current = a;
+                            break;
+                        }
+                    }
+                    if (current == null && !responseH.body().isEmpty()) {
+                        current = responseH.body().get(0);
                     }
                     if (current != null) {
                         bindAlert(current, apiService);
@@ -191,9 +261,7 @@ public class AlertDetailsActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<AlertResponse>> call, Throwable t) {
-                // Silencioso
-            }
+            public void onFailure(Call<List<AlertResponse>> callH, Throwable t) {}
         });
     }
 
@@ -207,18 +275,39 @@ public class AlertDetailsActivity extends AppCompatActivity {
                 "RECOGNIZED".equalsIgnoreCase(alert.getStatus());
         setAlertResolved(resolved);
 
+        if (resolved) {
+            if (tvEndTime != null) {
+                tvEndTime.setText(formatTime(alert.getCreatedAt()));
+            }
+            if (btnJustificar != null) {
+                btnJustificar.setText("Atendimento finalizado");
+                btnJustificar.setEnabled(false);
+                btnJustificar.setAlpha(0.6f);
+            }
+        } else {
+            if (btnJustificar != null) {
+                btnJustificar.setText("Assumir / Justificar");
+                btnJustificar.setEnabled(true);
+                btnJustificar.setAlpha(1.0f);
+            }
+        }
+
         if (alert.getColdRoomId() != null) {
-            Long roomId = alert.getColdRoomId().longValue();
-            apiService.getColdRoomById(roomId).enqueue(new Callback<ColdRoomResponse>() {
+            currentRoomId = alert.getColdRoomId().longValue();
+            apiService.getColdRoomById(currentRoomId).enqueue(new Callback<ColdRoomResponse>() {
                 @Override
                 public void onResponse(Call<ColdRoomResponse> call, Response<ColdRoomResponse> response) {
                     if (response.isSuccessful() && response.body() != null) {
                         ColdRoomResponse cr = response.body();
-                        if (tvAlertDetailCamaraName != null && cr.getLocation() != null) {
-                            tvAlertDetailCamaraName.setText(cr.getLocation());
+                        if (tvAlertDetailCamaraName != null) {
+                            String name = (cr.getLocation() != null && !cr.getLocation().isEmpty())
+                                    ? cr.getLocation() : (cr.getModel() != null ? cr.getModel() : "Câmara " + cr.getId());
+                            tvAlertDetailCamaraName.setText(name);
                         }
                         if (tvAlertDetailLimit != null && cr.getMaximumTemperature() != null) {
-                            tvAlertDetailLimit.setText("Limite máximo: " + cr.getMaximumTemperature() + "°C");
+                            tvAlertDetailLimit.setText(String.format(Locale.getDefault(), "Faixa: %.1f°C a %.1f°C",
+                                    cr.getMinimumTemperature() != null ? cr.getMinimumTemperature() : -2.0,
+                                    cr.getMaximumTemperature()));
                         }
                         if (tvAlertDetailUnitName != null && cr.getDistributionCenterName() != null) {
                             tvAlertDetailUnitName.setText(cr.getDistributionCenterName());
@@ -230,7 +319,7 @@ public class AlertDetailsActivity extends AppCompatActivity {
                 public void onFailure(Call<ColdRoomResponse> call, Throwable t) {}
             });
 
-            apiService.getCurrentTemperature(roomId).enqueue(new Callback<TemperatureReadingResponse>() {
+            apiService.getCurrentTemperature(currentRoomId).enqueue(new Callback<TemperatureReadingResponse>() {
                 @Override
                 public void onResponse(Call<TemperatureReadingResponse> call, Response<TemperatureReadingResponse> response) {
                     if (response.isSuccessful() && response.body() != null && response.body().getTemperature() != null) {
@@ -271,7 +360,7 @@ public class AlertDetailsActivity extends AppCompatActivity {
             tvEndTime.setTextColor(ContextCompat.getColor(this, R.color.primary_dark));
             tvAlertStatus.setText("Resolvido");
             tvAlertStatus.setTextColor(ContextCompat.getColor(this, R.color.alert_success));
-            layoutActionButtons.setVisibility(View.GONE);
+            layoutActionButtons.setVisibility(View.VISIBLE);
         } else {
             colEndTime.setVisibility(View.GONE);
             tvStartTime.setTextColor(ContextCompat.getColor(this, R.color.primary_dark));

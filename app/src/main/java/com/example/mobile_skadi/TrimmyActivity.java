@@ -40,7 +40,7 @@ public class TrimmyActivity extends AppCompatActivity {
     private TextView tvInitialUserPrompt;
 
     private TextView chipSuggest1;
-    private TextView chipSuggest2;
+    
     private EditText etTrimmyMessage;
     private FrameLayout btnSendTrimmy;
 
@@ -51,6 +51,12 @@ public class TrimmyActivity extends AppCompatActivity {
     private LinearLayout navTrimmy;
 
     private boolean isChatStarted = false;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        com.example.mobile_skadi.utils.AvatarManager.applyAvatar(this, btnProfileAvatar);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +77,7 @@ public class TrimmyActivity extends AppCompatActivity {
         tvInitialUserPrompt = findViewById(R.id.tvInitialUserPrompt);
 
         chipSuggest1 = findViewById(R.id.chipSuggest1);
-        chipSuggest2 = findViewById(R.id.chipSuggest2);
+        
         etTrimmyMessage = findViewById(R.id.etTrimmyMessage);
         btnSendTrimmy = findViewById(R.id.btnSendTrimmy);
 
@@ -85,30 +91,14 @@ public class TrimmyActivity extends AppCompatActivity {
         if (tvTrimmyGreeting != null) {
             tvTrimmyGreeting.setText("Como podemos te ajudar hoje,\n" + UserRoleManager.getFirstNameForGreeting() + "?");
         }
-        applyPlanState();
-        UserRoleManager.applyBottomNavForRole(this);
-    }
-
-    private void applyPlanState() {
-        View layoutTrimmyBlocked = findViewById(R.id.layoutTrimmyBlocked);
-        View layoutChatInputBar = findViewById(R.id.layoutChatInputBar);
-
-        if (UserRoleManager.isBasicoPlan()) {
-            if (layoutTrimmyBlocked != null) layoutTrimmyBlocked.setVisibility(View.VISIBLE);
+        if (isChatStarted) {
             if (layoutTrimmyWelcome != null) layoutTrimmyWelcome.setVisibility(View.GONE);
-            if (scrollTrimmyChat != null) scrollTrimmyChat.setVisibility(View.GONE);
-            if (layoutChatInputBar != null) layoutChatInputBar.setVisibility(View.GONE);
+            if (scrollTrimmyChat != null) scrollTrimmyChat.setVisibility(View.VISIBLE);
         } else {
-            if (layoutTrimmyBlocked != null) layoutTrimmyBlocked.setVisibility(View.GONE);
-            if (layoutChatInputBar != null) layoutChatInputBar.setVisibility(View.VISIBLE);
-            if (isChatStarted) {
-                if (layoutTrimmyWelcome != null) layoutTrimmyWelcome.setVisibility(View.GONE);
-                if (scrollTrimmyChat != null) scrollTrimmyChat.setVisibility(View.VISIBLE);
-            } else {
-                if (layoutTrimmyWelcome != null) layoutTrimmyWelcome.setVisibility(View.VISIBLE);
-                if (scrollTrimmyChat != null) scrollTrimmyChat.setVisibility(View.GONE);
-            }
+            if (layoutTrimmyWelcome != null) layoutTrimmyWelcome.setVisibility(View.VISIBLE);
+            if (scrollTrimmyChat != null) scrollTrimmyChat.setVisibility(View.GONE);
         }
+        UserRoleManager.applyBottomNavForRole(this);
     }
 
     private void setupListeners() {
@@ -120,18 +110,9 @@ public class TrimmyActivity extends AppCompatActivity {
             startActivity(new Intent(this, ProfileActivity.class));
         });
 
-        View btnUpgradeTrimmy = findViewById(R.id.btnUpgradeTrimmy);
-        if (btnUpgradeTrimmy != null) {
-            btnUpgradeTrimmy.setOnClickListener(v -> {
-                UserRoleManager.setCurrentPlan(UserRoleManager.Plan.EMPRESARIAL);
-                android.widget.Toast.makeText(this, "Upgrade realizado para o Plano Empresarial!", android.widget.Toast.LENGTH_SHORT).show();
-                applyPlanState();
-            });
-        }
-
         // Sugestões rápidas na tela inicial do Trimmy
         chipSuggest1.setOnClickListener(v -> startChatWithPrompt("Quais câmaras estão críticas hoje?"));
-        chipSuggest2.setOnClickListener(v -> startChatWithPrompt("Diagnóstico da Câmara 291"));
+        
 
         // Envio de mensagem pelo botão ou teclado
         btnSendTrimmy.setOnClickListener(v -> handleSendMessage());

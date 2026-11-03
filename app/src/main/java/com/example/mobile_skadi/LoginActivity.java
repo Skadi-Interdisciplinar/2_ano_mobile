@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,12 +76,31 @@ public class LoginActivity extends AppCompatActivity {
         etSenha.addTextChangedListener(new SimpleTextWatcher(() -> tilSenha.setError(null)));
 
         tvEsqueceuSenha.setOnClickListener(v -> {
-            // TODO: implementar fluxo de recuperacao de senha
+            startActivity(new Intent(this, ForgotPasswordActivity.class));
         });
 
-        tvCadastrar.setOnClickListener(v -> {
-            // TODO: navegar para tela de cadastro
-        });
+        tvCadastrar.setOnClickListener(v -> showRegisterInfoBottomSheet());
+    }
+
+    private void showRegisterInfoBottomSheet() {
+        com.google.android.material.bottomsheet.BottomSheetDialog dialog =
+                new com.google.android.material.bottomsheet.BottomSheetDialog(this);
+        View view = android.view.LayoutInflater.from(this).inflate(R.layout.bottom_sheet_register_info, null);
+        dialog.setContentView(view);
+
+        if (dialog.getWindow() != null) {
+            View bottomSheet = dialog.getWindow().findViewById(com.google.android.material.R.id.design_bottom_sheet);
+            if (bottomSheet != null) {
+                bottomSheet.setBackgroundResource(android.R.color.transparent);
+            }
+        }
+
+        View btnEntendi = view.findViewById(R.id.btnEntendiCadastro);
+        if (btnEntendi != null) {
+            btnEntendi.setOnClickListener(v -> dialog.dismiss());
+        }
+
+        dialog.show();
     }
 
     private void onEntrarClicked() {
@@ -188,9 +208,9 @@ public class LoginActivity extends AppCompatActivity {
         return password != null && !password.trim().isEmpty();
     }
 
-    private static class SimpleTextWatcher implements TextWatcher {
+    public static class SimpleTextWatcher implements TextWatcher {
         private final Runnable action;
-        SimpleTextWatcher(Runnable action) { this.action = action; }
+        public SimpleTextWatcher(Runnable action) { this.action = action; }
         @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
         @Override public void onTextChanged(CharSequence s, int start, int before, int count) { action.run(); }
         @Override public void afterTextChanged(Editable s) {}

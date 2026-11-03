@@ -24,11 +24,10 @@ import retrofit2.Response;
 public class OpenTicketBottomSheet extends BottomSheetDialog {
 
     private final String[] ticketTypes = {
-            "Falha de temperatura",
-            "Problema com sensor",
-            "Erro de conexão",
-            "Manutenção da câmara",
-            "Outro assunto"
+            "DUVIDA",
+            "SUGESTAO",
+            "RECLAMACAO",
+            "OUTRO"
     };
 
     public OpenTicketBottomSheet(@NonNull Context context) {
@@ -74,23 +73,45 @@ public class OpenTicketBottomSheet extends BottomSheetDialog {
             }
 
             btnSubmit.setEnabled(false);
-            String tipo = tvTicketTypeSelected.getText() != null ? tvTicketTypeSelected.getText().toString() : "Suporte Geral";
-            SupportRequestRequest request = new SupportRequestRequest(tipo, desc);
+            btnSubmit.setText("Enviando...");
+
+            String tipoEscolhido = tvTicketTypeSelected.getText() != null ? tvTicketTypeSelected.getText().toString().trim() : "OUTRO";
+            String categoria = mapToSupportCategory(tipoEscolhido);
+            String fullDescricao = "[" + tipoEscolhido + "] " + desc;
+
+            SupportRequestRequest request = new SupportRequestRequest(categoria, fullDescricao);
 
             RetrofitClient.getApiService(getContext()).createSupportRequest(request).enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
-                    Toast.makeText(getContext(), "Chamado enviado com sucesso!", Toast.LENGTH_SHORT).show();
-                    dismiss();
+                    btnSubmit.setEnabled(true);
+                    btnSubmit.setText("Enviar chamado");
+
+                    if (response.isSuccessful()) {
+                        Toast.makeText(getContext(), "Chamado enviado com sucesso!", Toast.LENGTH_LONG).show();
+                        dismiss();
+                    } else {
+                        Toast.makeText(getContext(), "Não foi possível abrir o chamado (código: " + response.code() + ").", Toast.LENGTH_LONG).show();
+                    }
                 }
 
                 @Override
                 public void onFailure(Call<Void> call, Throwable t) {
-                    Toast.makeText(getContext(), "Chamado enviado (modo offline)!", Toast.LENGTH_SHORT).show();
-                    dismiss();
+                    btnSubmit.setEnabled(true);
+                    btnSubmit.setText("Enviar chamado");
+                    Toast.makeText(getContext(), "Falha de rede ao conectar com suporte: " + t.getMessage(), Toast.LENGTH_LONG).show();
                 }
             });
         });
+    }
+
+    private String mapToSupportCategory(String tipo) {
+        if (tipo == null) return "OUTRO";
+        String upper = tipo.toUpperCase().trim();
+        if (upper.contains("DUVIDA")) return "DUVIDA";
+        if (upper.contains("SUGESTAO")) return "SUGESTAO";
+        if (upper.contains("RECLAMACAO")) return "RECLAMACAO";
+        return "OUTRO";
     }
 
     public static void show(Context context) {

@@ -10,7 +10,7 @@
     android:paddingTop="20dp"
     android:paddingBottom="36dp">
 
-    <!-- CABEÇALHO COM BOTÃO X E TÍTULO -->
+    <!-- CABEÇALHO COM BOTÃO FECHAR E TÍTULO -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -38,14 +38,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Níveis de alerta"
+            android:text="Níveis de Alerta"
             android:textColor="@color/primary_dark"
             android:textSize="20sp"
             android:fontFamily="@font/manrope"
             android:textStyle="bold" />
     </RelativeLayout>
 
-    <!-- NÍVEL 1: ESTÁVEL -->
+    <!-- NÍVEL 1: BAIXO -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -53,7 +53,6 @@
         android:gravity="top"
         android:layout_marginBottom="24dp">
 
-        <!-- Ícone quadrado arredondado verde -->
         <FrameLayout
             android:layout_width="48dp"
             android:layout_height="48dp"
@@ -65,7 +64,7 @@
                 android:layout_height="24dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_check_circle_green"
-                android:contentDescription="Estável" />
+                android:contentDescription="Baixo" />
         </FrameLayout>
 
         <LinearLayout
@@ -77,7 +76,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Estável"
+                android:text="Baixo"
                 android:textColor="@color/alert_success"
                 android:textSize="18sp"
                 android:fontFamily="@font/manrope"
@@ -97,7 +96,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Não é necessário nenhuma ação no momento."
+                android:text="Não é necessária nenhuma ação no momento. Monitoramento contínuo regular."
                 android:textColor="@color/secondary_gray"
                 android:textSize="12sp"
                 android:fontFamily="@font/manrope"
@@ -113,7 +112,6 @@
         android:gravity="top"
         android:layout_marginBottom="24dp">
 
-        <!-- Ícone quadrado arredondado amarelo -->
         <FrameLayout
             android:layout_width="48dp"
             android:layout_height="48dp"
@@ -157,7 +155,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Acompanhe durante alguns minutos."
+                android:text="Acompanhe durante alguns minutos. Verifique fechamento de portas e fluxo de ar."
                 android:textColor="@color/secondary_gray"
                 android:textSize="12sp"
                 android:fontFamily="@font/manrope"
@@ -172,7 +170,6 @@
         android:orientation="horizontal"
         android:gravity="top">
 
-        <!-- Ícone quadrado arredondado vermelho -->
         <FrameLayout
             android:layout_width="48dp"
             android:layout_height="48dp"
@@ -197,7 +194,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Crítico"
-                android:textColor="@color/alert_orange"
+                android:textColor="@color/alert_danger"
                 android:textSize="18sp"
                 android:fontFamily="@font/manrope"
                 android:textStyle="bold"
@@ -216,7 +213,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Verifique porta, carga e sistema de refrigeração"
+                android:text="Verifique porta, carga e acione equipe técnica ou suporte para manutenção corretiva."
                 android:textColor="@color/secondary_gray"
                 android:textSize="12sp"
                 android:fontFamily="@font/manrope"

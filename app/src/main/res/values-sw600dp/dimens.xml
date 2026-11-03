@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tablet Samsung Galaxy Tab A7 Lite (8.7", 1340x800, sw600dp) -->
+    <dimen name="tablet_screen_padding">40dp</dimen>
+    <dimen name="tablet_login_card_width">480dp</dimen>
+    <dimen name="tablet_header_padding_top">56dp</dimen>
+    <dimen name="tablet_header_padding_bottom">32dp</dimen>
+    <dimen name="tablet_header_title_size">28sp</dimen>
+    <dimen name="tablet_card_spacing">16dp</dimen>
+    <dimen name="tablet_chart_height">280dp</dimen>
+</resources>
