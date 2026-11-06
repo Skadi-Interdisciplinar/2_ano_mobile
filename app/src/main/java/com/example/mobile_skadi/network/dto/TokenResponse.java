@@ -4,6 +4,7 @@ public class TokenResponse {
     private String token;
     private Long expirationTime;
     private String validUntil;
+    private UserResponse user;
 
     public TokenResponse() {
     }
@@ -36,5 +37,13 @@ public class TokenResponse {
 
     public void setValidUntil(String validUntil) {
         this.validUntil = validUntil;
+    }
+
+    public UserResponse getUser() {
+        return user;
+    }
+
+    public void setUser(UserResponse user) {
+        this.user = user;
     }
 }

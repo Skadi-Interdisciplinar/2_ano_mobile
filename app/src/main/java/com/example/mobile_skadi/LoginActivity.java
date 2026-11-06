@@ -108,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
         String senha = etSenha.getText() != null ? etSenha.getText().toString().trim() : "";
 
         if (usuario.isEmpty()) {
-            tilUsuario.setError("Informe o usuario");
+            tilUsuario.setError("Informe o usuário");
             etUsuario.requestFocus();
             return;
         }
@@ -136,6 +136,19 @@ public class LoginActivity extends AppCompatActivity {
                     sessionManager.saveUsername(usuario);
                     sessionManager.setRememberMe(cbLembrar != null && cbLembrar.isChecked());
 
+                    if (tokenResponse.getUser() != null) {
+                        UserResponse u = tokenResponse.getUser();
+                        if (u.getNome() != null && !u.getNome().trim().isEmpty()) {
+                            sessionManager.saveName(u.getNome());
+                        }
+                        if (u.getRole() != null) {
+                            sessionManager.saveRole(u.getRole());
+                        }
+                        if (u.getCdGestor() != null && u.getCdGestor().getName() != null) {
+                            sessionManager.saveUnit(u.getCdGestor().getName());
+                        }
+                    }
+
                     // Buscar perfil do usuário (/me) para sincronizar papel e dados
                     fetchUserProfileAndNavigate(apiService, usuario);
                 } else if (response.code() == 401 || response.code() == 403) {
@@ -161,10 +174,16 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     UserResponse user = response.body();
+                    SessionManager sm = SessionManager.getInstance(LoginActivity.this);
                     if (user.getNome() != null && !user.getNome().trim().isEmpty()) {
-                        SessionManager.getInstance(LoginActivity.this).saveName(user.getNome());
+                        sm.saveName(user.getNome());
                     }
-                    SessionManager.getInstance(LoginActivity.this).saveRole(user.getRole());
+                    if (user.getCdGestor() != null && user.getCdGestor().getName() != null) {
+                        sm.saveUnit(user.getCdGestor().getName());
+                    }
+                    if (user.getRole() != null) {
+                        sm.saveRole(user.getRole());
+                    }
                     if (user.getRole() != null && (user.getRole().equalsIgnoreCase("ROLE_USER") || user.getRole().equalsIgnoreCase("FUNCIONARIO") || user.getRole().equalsIgnoreCase("OPERADOR"))) {
                         UserRoleManager.setCurrentRole(UserRoleManager.Role.FUNCIONARIO);
                     } else {

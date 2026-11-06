@@ -48,12 +48,29 @@ public class SessionManager {
         return preferences.getString(KEY_NAME, "");
     }
 
+    public String getFirstName() {
+        String name = getName();
+        if (name == null || name.trim().isEmpty()) {
+            name = getUsername();
+        }
+        if (name != null && name.contains(" ")) {
+            return name.split(" ")[0];
+        }
+        return (name != null && !name.trim().isEmpty()) ? name : "Usuário";
+    }
+
     public void saveUsername(String username) {
         preferences.edit().putString(KEY_USERNAME, username).apply();
     }
 
     public void saveRole(String role) {
         preferences.edit().putString(KEY_ROLE, role).apply();
+    }
+
+    public void saveUnit(String unit) {
+        if (unit != null && !unit.trim().isEmpty()) {
+            preferences.edit().putString(KEY_UNIT, unit).apply();
+        }
     }
 
     public String getToken() {
@@ -74,7 +91,7 @@ public class SessionManager {
     }
 
     public String getUnit() {
-        return preferences.getString(KEY_UNIT, "Belterra");
+        return preferences.getString(KEY_UNIT, "CD São Paulo - Unidade 11");
     }
 
     public void setRememberMe(boolean rememberMe) {
