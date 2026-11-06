@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/background">
 
-    <!-- O mapa ocupa a tela; cabeÃ§alho, aÃ§Ãµes e cartÃ£o ficam flutuando sobre ele. -->
+    <!-- O mapa ocupa a tela; cabeçalho, ações e cartão ficam flutuando sobre ele. -->
     <com.example.mobile_skadi.MapTouchFrameLayout
         android:id="@+id/mapTouchRoot"
         android:layout_width="0dp"
@@ -16,8 +16,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <org.osmdroid.views.MapView
-            android:id="@+id/osmMapView"
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/mapFragmentContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
@@ -353,8 +353,8 @@
             android:focusable="true"
             android:gravity="center"
             android:orientation="vertical">
-            <ImageView android:layout_width="24dp" android:layout_height="24dp" android:contentDescription="CÃ¢maras" android:src="@drawable/ic_snowflake" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="3dp" android:fontFamily="@font/manrope" android:text="CÃ¢maras" android:textColor="@color/primary_dark" android:textSize="11sp" />
+            <ImageView android:layout_width="24dp" android:layout_height="24dp" android:contentDescription="Câmaras" android:src="@drawable/ic_snowflake" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="3dp" android:fontFamily="@font/manrope" android:text="Câmaras" android:textColor="@color/primary_dark" android:textSize="11sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -382,8 +382,8 @@
                 android:elevation="4dp"
                 android:gravity="center"
                 android:orientation="vertical">
-                <ImageView android:layout_width="26dp" android:layout_height="26dp" android:contentDescription="InÃ­cio" android:src="@drawable/ic_home_outline" />
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="1dp" android:fontFamily="@font/manrope" android:text="InÃ­cio" android:textColor="@color/white" android:textSize="10.5sp" />
+                <ImageView android:layout_width="26dp" android:layout_height="26dp" android:contentDescription="Início" android:src="@drawable/ic_home_outline" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="1dp" android:fontFamily="@font/manrope" android:text="Início" android:textColor="@color/white" android:textSize="10.5sp" />
             </LinearLayout>
         </FrameLayout>
 
@@ -396,8 +396,8 @@
             android:focusable="true"
             android:gravity="center"
             android:orientation="vertical">
-            <ImageView android:layout_width="24dp" android:layout_height="24dp" android:contentDescription="RelatÃ³rios" android:src="@drawable/ic_doc_report" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="3dp" android:fontFamily="@font/manrope" android:text="RelatÃ³rios" android:textColor="@color/primary_dark" android:textSize="11sp" />
+            <ImageView android:layout_width="24dp" android:layout_height="24dp" android:contentDescription="Relatórios" android:src="@drawable/ic_doc_report" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="3dp" android:fontFamily="@font/manrope" android:text="Relatórios" android:textColor="@color/primary_dark" android:textSize="11sp" />
         </LinearLayout>
 
         <LinearLayout

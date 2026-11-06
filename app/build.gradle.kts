@@ -73,7 +73,6 @@ dependencies {
     implementation(libs.okhttp.logging)
     implementation(libs.play.services.maps)
     implementation(libs.play.services.location)
-    implementation(libs.osmdroid.android)
 
     testImplementation(libs.junit)
     testImplementation(libs.okhttp.mockwebserver)

@@ -66,34 +66,19 @@ public final class CdMapDataLoader {
     }
 
     private <T> T optional(Call<T> call) throws IOException {
-        try {
-            return request(call);
-        } catch (AccessException denied) {
-            // Se o perfil do usuário não tiver permissão para esse dado auxiliar,
-            // não quebra o mapa inteiro; apenas trata como dado opcional indisponível.
-            return null;
-        } catch (HttpStatusException unavailable) {
-            if (unavailable.status == 404 || unavailable.status == 403) return null;
+        try { return request(call); }
+        catch (AccessException denied) { throw denied; }
+        catch (HttpStatusException unavailable) {
+            if (unavailable.status == 404) return null;
             throw unavailable;
-        } catch (IOException unavailable) {
-            return null;
         }
+        catch (IOException unavailable) { return null; }
     }
 
     public List<CdMapSummary> load() throws IOException, InterruptedException {
         try {
-            List<DistributionCenterResponse> source;
-            try {
-                source = request(api.getDistributionCenters());
-            } catch (AccessException e) {
-                if (e.status == 403) {
-                    // Usuário sem permissão de CD global ou sem CD vinculado
-                    return Collections.emptyList();
-                }
-                throw e;
-            }
-
-            if (source == null) return Collections.emptyList();
+            List<DistributionCenterResponse> source = request(api.getDistributionCenters());
+            if (source == null) throw new IOException("Unidades indisponíveis");
             Map<Long, DistributionCenterResponse> cds = new LinkedHashMap<>();
             for (DistributionCenterResponse cd : source) if (cd.getId() != null) cds.put(cd.getId(), cd);
             if (cds.isEmpty()) return Collections.emptyList();
