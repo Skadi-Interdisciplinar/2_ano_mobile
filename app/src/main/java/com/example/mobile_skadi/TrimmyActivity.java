@@ -14,16 +14,28 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mobile_skadi.adapters.ChatSessionAdapter;
+import com.example.mobile_skadi.data.ChatMessage;
+import com.example.mobile_skadi.data.ChatSession;
+import com.example.mobile_skadi.data.SkadiDatabaseHelper;
 import com.example.mobile_skadi.network.SessionManager;
 import com.example.mobile_skadi.network.TrimmyApiClient;
 import com.example.mobile_skadi.network.dto.ChatRequest;
 import com.example.mobile_skadi.network.dto.ChatResponse;
 import com.example.mobile_skadi.network.dto.EncerrarChatResponse;
+import com.example.mobile_skadi.utils.AiMessageFormatter;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.card.MaterialCardView;
+
+import java.util.List;
+import java.util.UUID;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,6 +43,8 @@ import retrofit2.Response;
 
 public class TrimmyActivity extends AppCompatActivity {
 
+    private FrameLayout btnChatHistory;
+    private FrameLayout btnClearChat;
     private FrameLayout btnNotification;
     private MaterialCardView btnProfileAvatar;
 
@@ -40,7 +54,7 @@ public class TrimmyActivity extends AppCompatActivity {
     private TextView tvInitialUserPrompt;
 
     private TextView chipSuggest1;
-    
+
     private EditText etTrimmyMessage;
     private FrameLayout btnSendTrimmy;
 
@@ -50,6 +64,8 @@ public class TrimmyActivity extends AppCompatActivity {
     private LinearLayout navRelatorios;
     private LinearLayout navTrimmy;
 
+    private SkadiDatabaseHelper dbHelper;
+    private String currentSessionId;
     private boolean isChatStarted = false;
 
     @Override
@@ -63,11 +79,16 @@ public class TrimmyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trimmy);
 
+        dbHelper = SkadiDatabaseHelper.getInstance(this);
+
         initViews();
         setupListeners();
+        initSessionOrLoadLatest();
     }
 
     private void initViews() {
+        btnChatHistory = findViewById(R.id.btnChatHistory);
+        btnClearChat = findViewById(R.id.btnClearChat);
         btnNotification = findViewById(R.id.btnNotification);
         btnProfileAvatar = findViewById(R.id.btnProfileAvatar);
 
@@ -77,7 +98,7 @@ public class TrimmyActivity extends AppCompatActivity {
         tvInitialUserPrompt = findViewById(R.id.tvInitialUserPrompt);
 
         chipSuggest1 = findViewById(R.id.chipSuggest1);
-        
+
         etTrimmyMessage = findViewById(R.id.etTrimmyMessage);
         btnSendTrimmy = findViewById(R.id.btnSendTrimmy);
 
@@ -89,20 +110,63 @@ public class TrimmyActivity extends AppCompatActivity {
 
         TextView tvTrimmyGreeting = findViewById(R.id.tvTrimmyGreeting);
         if (tvTrimmyGreeting != null) {
-            String userFirst = com.example.mobile_skadi.network.SessionManager.getInstance(this).getFirstName();
+            String userFirst = SessionManager.getInstance(this).getFirstName();
             tvTrimmyGreeting.setText("Como podemos te ajudar hoje,\n" + userFirst + "?");
         }
-        if (isChatStarted) {
-            if (layoutTrimmyWelcome != null) layoutTrimmyWelcome.setVisibility(View.GONE);
-            if (scrollTrimmyChat != null) scrollTrimmyChat.setVisibility(View.VISIBLE);
-        } else {
-            if (layoutTrimmyWelcome != null) layoutTrimmyWelcome.setVisibility(View.VISIBLE);
-            if (scrollTrimmyChat != null) scrollTrimmyChat.setVisibility(View.GONE);
-        }
+
         UserRoleManager.applyBottomNavForRole(this);
     }
 
+    private void initSessionOrLoadLatest() {
+        String latestSession = dbHelper.getLatestSessionId();
+        if (latestSession != null) {
+            loadSession(latestSession);
+        } else {
+            startFreshSession();
+        }
+    }
+
+    private void startFreshSession() {
+        currentSessionId = UUID.randomUUID().toString();
+        isChatStarted = false;
+        if (layoutChatMessages != null) layoutChatMessages.removeAllViews();
+        if (layoutTrimmyWelcome != null) layoutTrimmyWelcome.setVisibility(View.VISIBLE);
+        if (scrollTrimmyChat != null) scrollTrimmyChat.setVisibility(View.GONE);
+        if (btnClearChat != null) btnClearChat.setVisibility(View.GONE);
+    }
+
+    private void loadSession(String sessionId) {
+        currentSessionId = sessionId;
+        List<ChatMessage> messages = dbHelper.getChatMessagesForSession(sessionId);
+        if (messages != null && !messages.isEmpty()) {
+            isChatStarted = true;
+            if (layoutTrimmyWelcome != null) layoutTrimmyWelcome.setVisibility(View.GONE);
+            if (scrollTrimmyChat != null) scrollTrimmyChat.setVisibility(View.VISIBLE);
+            if (btnClearChat != null) btnClearChat.setVisibility(View.VISIBLE);
+
+            layoutChatMessages.removeAllViews();
+            for (ChatMessage msg : messages) {
+                if ("USER".equalsIgnoreCase(msg.getSender())) {
+                    renderUserBubble(msg.getMessage());
+                } else {
+                    renderAiBubble(AiMessageFormatter.format(msg.getMessage()), msg.isError());
+                }
+            }
+            scrollTrimmyChat.post(() -> scrollTrimmyChat.fullScroll(View.FOCUS_DOWN));
+        } else {
+            startFreshSession();
+        }
+    }
+
     private void setupListeners() {
+        if (btnChatHistory != null) {
+            btnChatHistory.setOnClickListener(v -> showHistoryBottomSheet());
+        }
+
+        if (btnClearChat != null) {
+            btnClearChat.setOnClickListener(v -> confirmClearCurrentChat());
+        }
+
         btnNotification.setOnClickListener(v -> {
             startActivity(new Intent(this, NotificationsActivity.class));
         });
@@ -111,9 +175,10 @@ public class TrimmyActivity extends AppCompatActivity {
             startActivity(new Intent(this, ProfileActivity.class));
         });
 
-        // Sugestões rápidas na tela inicial do Trimmy
-        chipSuggest1.setOnClickListener(v -> startChatWithPrompt("Quais câmaras estão críticas hoje?"));
-        
+        // Sugestão rápida na tela inicial do Trimmy
+        if (chipSuggest1 != null) {
+            chipSuggest1.setOnClickListener(v -> startChatWithPrompt("Quais câmaras estão críticas hoje?"));
+        }
 
         // Envio de mensagem pelo botão ou teclado
         btnSendTrimmy.setOnClickListener(v -> handleSendMessage());
@@ -154,12 +219,90 @@ public class TrimmyActivity extends AppCompatActivity {
         });
     }
 
+    private void showHistoryBottomSheet() {
+        BottomSheetDialog dialog = new BottomSheetDialog(this);
+        View view = getLayoutInflater().inflate(R.layout.bottom_sheet_chat_history, null);
+        dialog.setContentView(view);
+
+        RecyclerView rvSessions = view.findViewById(R.id.rvChatSessions);
+        TextView tvEmpty = view.findViewById(R.id.tvEmptySessions);
+        TextView btnNewChat = view.findViewById(R.id.btnNewChatDialog);
+
+        List<ChatSession> sessions = dbHelper.getAllChatSessions();
+        if (sessions.isEmpty()) {
+            tvEmpty.setVisibility(View.VISIBLE);
+            rvSessions.setVisibility(View.GONE);
+        } else {
+            tvEmpty.setVisibility(View.GONE);
+            rvSessions.setVisibility(View.VISIBLE);
+            rvSessions.setLayoutManager(new LinearLayoutManager(this));
+            ChatSessionAdapter adapter = new ChatSessionAdapter(sessions, new ChatSessionAdapter.OnSessionClickListener() {
+                @Override
+                public void onSessionClick(ChatSession session) {
+                    loadSession(session.getId());
+                    dialog.dismiss();
+                }
+
+                @Override
+                public void onSessionDelete(ChatSession session) {
+                    dbHelper.deleteChatSession(session.getId());
+                    if (session.getId().equals(currentSessionId)) {
+                        startFreshSession();
+                    }
+                    sessions.remove(session);
+                    if (sessions.isEmpty()) {
+                        tvEmpty.setVisibility(View.VISIBLE);
+                        rvSessions.setVisibility(View.GONE);
+                    }
+                    if (rvSessions.getAdapter() != null) {
+                        rvSessions.getAdapter().notifyDataSetChanged();
+                    }
+                    Toast.makeText(TrimmyActivity.this, "Conversa removida.", Toast.LENGTH_SHORT).show();
+                }
+            });
+            rvSessions.setAdapter(adapter);
+        }
+
+        btnNewChat.setOnClickListener(v -> {
+            startFreshSession();
+            dialog.dismiss();
+            Toast.makeText(TrimmyActivity.this, "Nova conversa iniciada.", Toast.LENGTH_SHORT).show();
+        });
+
+        dialog.show();
+    }
+
+    private void confirmClearCurrentChat() {
+        new AlertDialog.Builder(this)
+                .setTitle("Apagar conversa atual")
+                .setMessage("Deseja realmente apagar esta conversa?")
+                .setPositiveButton("Apagar", (dialog, which) -> {
+                    if (currentSessionId != null) {
+                        dbHelper.deleteChatSession(currentSessionId);
+                    }
+                    startFreshSession();
+
+                    TrimmyApiClient.getApiService(this).encerrarChat().enqueue(new Callback<EncerrarChatResponse>() {
+                        @Override
+                        public void onResponse(Call<EncerrarChatResponse> call, Response<EncerrarChatResponse> response) {}
+                        @Override
+                        public void onFailure(Call<EncerrarChatResponse> call, Throwable t) {}
+                    });
+
+                    Toast.makeText(this, "Conversa apagada.", Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton("Cancelar", null)
+                .show();
+    }
+
     private void startChatWithPrompt(String promptText) {
         if (!isChatStarted) {
             isChatStarted = true;
             layoutTrimmyWelcome.setVisibility(View.GONE);
             scrollTrimmyChat.setVisibility(View.VISIBLE);
+            if (btnClearChat != null) btnClearChat.setVisibility(View.VISIBLE);
             layoutChatMessages.removeAllViews();
+            dbHelper.createOrUpdateChatSession(currentSessionId, promptText);
         }
         sendChatToAi(promptText);
     }
@@ -173,8 +316,7 @@ public class TrimmyActivity extends AppCompatActivity {
         startChatWithPrompt(text);
     }
 
-    private void sendChatToAi(String userText) {
-        // Balão do usuário
+    private void renderUserBubble(String userText) {
         LinearLayout userRow = new LinearLayout(this);
         userRow.setOrientation(LinearLayout.HORIZONTAL);
         userRow.setGravity(Gravity.END | Gravity.TOP);
@@ -202,11 +344,17 @@ public class TrimmyActivity extends AppCompatActivity {
 
         userRow.addView(tvUser);
         layoutChatMessages.addView(userRow);
+    }
 
-        // Balão de resposta da Trimmy IA
+    private TextView renderAiBubble(CharSequence formattedText, boolean isError) {
         LinearLayout aiRow = new LinearLayout(this);
         aiRow.setOrientation(LinearLayout.HORIZONTAL);
         aiRow.setGravity(Gravity.START | Gravity.TOP);
+        LinearLayout.LayoutParams rowParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        rowParams.bottomMargin = dpToPx(16);
         aiRow.setLayoutParams(rowParams);
 
         FrameLayout aiAvatar = new FrameLayout(this);
@@ -222,8 +370,8 @@ public class TrimmyActivity extends AppCompatActivity {
         aiAvatar.addView(ivLogo);
 
         TextView tvAi = new TextView(this);
-        tvAi.setText("Trimmy está analisando os dados...");
-        tvAi.setTextColor(Color.parseColor("#64748B"));
+        tvAi.setText(formattedText);
+        tvAi.setTextColor(isError ? Color.parseColor("#EF4444") : Color.parseColor("#334155"));
         tvAi.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12.5f);
         tvAi.setTypeface(ResourcesCompat.getFont(this, R.font.manrope));
         tvAi.setBackgroundResource(R.drawable.bg_chat_bubble_ai);
@@ -240,17 +388,35 @@ public class TrimmyActivity extends AppCompatActivity {
         aiRow.addView(aiAvatar);
         aiRow.addView(tvAi);
         layoutChatMessages.addView(aiRow);
+        return tvAi;
+    }
+
+    private void sendChatToAi(String userText) {
+        // 1. Renderiza o balão do usuário e salva no banco de dados local com session_id
+        renderUserBubble(userText);
+        dbHelper.saveChatMessage(currentSessionId, "USER", userText, false);
+
+        if (btnClearChat != null) {
+            btnClearChat.setVisibility(View.VISIBLE);
+        }
+
+        // 2. Renderiza o balão temporário de loading da IA
+        TextView tvAi = renderAiBubble("Trimmy está analisando os dados...", false);
+        tvAi.setTextColor(Color.parseColor("#64748B"));
 
         scrollTrimmyChat.post(() -> scrollTrimmyChat.fullScroll(View.FOCUS_DOWN));
 
-        // Chamada real ao backend de IA (o cabeçalho Authorization: Bearer <token> é adicionado pelo AuthInterceptor)
+        // 3. Chamada real ao backend de IA
         ChatRequest request = new ChatRequest(userText);
         TrimmyApiClient.getApiService(this).chat(request).enqueue(new Callback<ChatResponse>() {
             @Override
             public void onResponse(Call<ChatResponse> call, Response<ChatResponse> response) {
                 if (response.isSuccessful() && response.body() != null && response.body().getResposta() != null) {
-                    tvAi.setText(response.body().getResposta());
+                    String rawResposta = response.body().getResposta();
+                    CharSequence formatted = AiMessageFormatter.format(rawResposta);
+                    tvAi.setText(formatted);
                     tvAi.setTextColor(Color.parseColor("#334155"));
+                    dbHelper.saveChatMessage(currentSessionId, "AI", rawResposta, false);
                 } else {
                     int code = response.code();
                     String msg;
@@ -269,14 +435,17 @@ public class TrimmyActivity extends AppCompatActivity {
                     }
                     tvAi.setText(msg);
                     tvAi.setTextColor(Color.parseColor("#EF4444"));
+                    dbHelper.saveChatMessage(currentSessionId, "AI", msg, true);
                 }
                 scrollTrimmyChat.post(() -> scrollTrimmyChat.fullScroll(View.FOCUS_DOWN));
             }
 
             @Override
             public void onFailure(Call<ChatResponse> call, Throwable t) {
-                tvAi.setText("Não foi possível conectar ao servidor do Trimmy IA (porta 8000). Verifique se o serviço está ativo.");
+                String errorMsg = "Não foi possível conectar ao servidor do Trimmy IA (porta 8000). Verifique se o serviço está ativo.";
+                tvAi.setText(errorMsg);
                 tvAi.setTextColor(Color.parseColor("#EF4444"));
+                dbHelper.saveChatMessage(currentSessionId, "AI", errorMsg, true);
                 scrollTrimmyChat.post(() -> scrollTrimmyChat.fullScroll(View.FOCUS_DOWN));
             }
         });
@@ -285,15 +454,6 @@ public class TrimmyActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (isChatStarted) {
-            TrimmyApiClient.getApiService(this).encerrarChat().enqueue(new Callback<EncerrarChatResponse>() {
-                @Override
-                public void onResponse(Call<EncerrarChatResponse> call, Response<EncerrarChatResponse> response) {}
-
-                @Override
-                public void onFailure(Call<EncerrarChatResponse> call, Throwable t) {}
-            });
-        }
     }
 
     private int dpToPx(int dp) {
