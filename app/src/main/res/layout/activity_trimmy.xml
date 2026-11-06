@@ -50,7 +50,25 @@
 
         <!-- BOTÃO NOTIFICAÇÃO -->
                 <!-- BOTAO LIMPAR HISTORICO -->
+                <!-- BOTAO HISTORICO DE CHATS ANTIGOS -->
         <FrameLayout
+            android:id="@+id/btnChatHistory"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_circle_notif"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:contentDescription="Conversas anteriores"
+                android:src="@drawable/ic_history_white" />
+        </FrameLayout>
+
+<FrameLayout
             android:id="@+id/btnClearChat"
             android:layout_width="40dp"
             android:layout_height="40dp"

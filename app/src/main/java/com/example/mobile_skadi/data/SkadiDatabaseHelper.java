@@ -19,13 +19,14 @@ import java.util.Map;
 public class SkadiDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "skadi_local.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     // Tabelas
     private static final String TABLE_COLD_ROOMS = "tb_local_cold_rooms";
     private static final String TABLE_ALERTS = "tb_local_alerts";
     private static final String TABLE_READINGS = "tb_local_readings";
     private static final String TABLE_CHAT_MESSAGES = "tb_local_chat_messages";
+    private static final String TABLE_CHAT_SESSIONS = "tb_local_chat_sessions";
 
     // Colunas Câmaras
     private static final String COL_ROOM_ID = "id";
@@ -50,10 +51,16 @@ public class SkadiDatabaseHelper extends SQLiteOpenHelper {
 
     // Colunas ChatBot Trimmy
     private static final String COL_CHAT_ID = "id";
+    private static final String COL_CHAT_SESSION_ID = "session_id";
     private static final String COL_CHAT_SENDER = "sender";
     private static final String COL_CHAT_MESSAGE = "message";
     private static final String COL_CHAT_TIMESTAMP = "timestamp";
     private static final String COL_CHAT_IS_ERROR = "is_error";
+
+    // Colunas Sessões de Chat
+    private static final String COL_SESSION_ID = "id";
+    private static final String COL_SESSION_TITLE = "title";
+    private static final String COL_SESSION_CREATED_AT = "created_at";
 
     private static SkadiDatabaseHelper instance;
 
@@ -91,8 +98,14 @@ public class SkadiDatabaseHelper extends SQLiteOpenHelper {
                 COL_READING_TEMP + " REAL, " +
                 COL_READING_MEASURED_AT + " TEXT);";
 
+        String createSessions = "CREATE TABLE IF NOT EXISTS " + TABLE_CHAT_SESSIONS + " (" +
+                COL_SESSION_ID + " TEXT PRIMARY KEY, " +
+                COL_SESSION_TITLE + " TEXT, " +
+                COL_SESSION_CREATED_AT + " INTEGER);";
+
         String createChatMessages = "CREATE TABLE IF NOT EXISTS " + TABLE_CHAT_MESSAGES + " (" +
                 COL_CHAT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COL_CHAT_SESSION_ID + " TEXT, " +
                 COL_CHAT_SENDER + " TEXT, " +
                 COL_CHAT_MESSAGE + " TEXT, " +
                 COL_CHAT_TIMESTAMP + " INTEGER, " +
@@ -101,38 +114,39 @@ public class SkadiDatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(createColdRooms);
         db.execSQL(createAlerts);
         db.execSQL(createReadings);
+        db.execSQL(createSessions);
         db.execSQL(createChatMessages);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion < 2) {
-            String createChatMessages = "CREATE TABLE IF NOT EXISTS " + TABLE_CHAT_MESSAGES + " (" +
-                    COL_CHAT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    COL_CHAT_SENDER + " TEXT, " +
-                    COL_CHAT_MESSAGE + " TEXT, " +
-                    COL_CHAT_TIMESTAMP + " INTEGER, " +
-                    COL_CHAT_IS_ERROR + " INTEGER);";
-            db.execSQL(createChatMessages);
-        } else {
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_COLD_ROOMS);
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_ALERTS);
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_READINGS);
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_CHAT_MESSAGES);
-            onCreate(db);
-        }
+        ensureChatTables(db);
     }
 
     @Override
     public void onOpen(SQLiteDatabase db) {
         super.onOpen(db);
-        String createChatMessages = "CREATE TABLE IF NOT EXISTS " + TABLE_CHAT_MESSAGES + " (" +
+        ensureChatTables(db);
+    }
+
+    private void ensureChatTables(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_CHAT_SESSIONS + " (" +
+                COL_SESSION_ID + " TEXT PRIMARY KEY, " +
+                COL_SESSION_TITLE + " TEXT, " +
+                COL_SESSION_CREATED_AT + " INTEGER);");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_CHAT_MESSAGES + " (" +
                 COL_CHAT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COL_CHAT_SESSION_ID + " TEXT, " +
                 COL_CHAT_SENDER + " TEXT, " +
                 COL_CHAT_MESSAGE + " TEXT, " +
                 COL_CHAT_TIMESTAMP + " INTEGER, " +
-                COL_CHAT_IS_ERROR + " INTEGER);";
-        db.execSQL(createChatMessages);
+                COL_CHAT_IS_ERROR + " INTEGER);");
+
+        // Garante adição de session_id se tabela antiga v2 existia sem a coluna
+        try {
+            db.execSQL("ALTER TABLE " + TABLE_CHAT_MESSAGES + " ADD COLUMN " + COL_CHAT_SESSION_ID + " TEXT;");
+        } catch (Exception ignored) {}
     }
 
     // --- Persistência de Câmaras ---
@@ -177,19 +191,19 @@ public class SkadiDatabaseHelper extends SQLiteOpenHelper {
                 int idxCd = cursor.getColumnIndexOrThrow(COL_ROOM_CD_ID);
 
                 while (cursor.moveToNext()) {
-                    ColdRoomResponse r = new ColdRoomResponse();
-                    r.setId(cursor.getLong(idxId));
-                    r.setLocation(cursor.getString(idxLoc));
+                    ColdRoomResponse cr = new ColdRoomResponse();
+                    cr.setId(cursor.getLong(idxId));
+                    cr.setLocation(cursor.getString(idxLoc));
                     if (!cursor.isNull(idxMin)) {
-                        r.setMinimumTemperature(BigDecimal.valueOf(cursor.getDouble(idxMin)));
+                        cr.setMinimumTemperature(BigDecimal.valueOf(cursor.getDouble(idxMin)));
                     }
                     if (!cursor.isNull(idxMax)) {
-                        r.setMaximumTemperature(BigDecimal.valueOf(cursor.getDouble(idxMax)));
+                        cr.setMaximumTemperature(BigDecimal.valueOf(cursor.getDouble(idxMax)));
                     }
                     if (!cursor.isNull(idxCd)) {
-                        r.setDistributionCenterId(cursor.getLong(idxCd));
+                        cr.setDistributionCenterId(cursor.getLong(idxCd));
                     }
-                    list.add(r);
+                    list.add(cr);
                 }
             } finally {
                 cursor.close();
@@ -254,7 +268,7 @@ public class SkadiDatabaseHelper extends SQLiteOpenHelper {
         return list;
     }
 
-    // --- Persistência de Leituras de Temperatura ---
+    // --- Persistência de Leituras ---
     public synchronized void saveReadings(List<TemperatureReadingResponse> readings) {
         if (readings == null) return;
         SQLiteDatabase db = getWritableDatabase();
@@ -328,11 +342,70 @@ public class SkadiDatabaseHelper extends SQLiteOpenHelper {
         return map;
     }
 
-    // --- Persistência de Mensagens do ChatBot Trimmy ---
-    public synchronized long saveChatMessage(String sender, String message, boolean isError) {
+    // --- Sessões de Chat (Trimmy) ---
+    public synchronized void createOrUpdateChatSession(String sessionId, String title) {
+        if (sessionId == null || sessionId.trim().isEmpty()) return;
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COL_SESSION_ID, sessionId);
+        if (title != null && !title.trim().isEmpty()) {
+            cv.put(COL_SESSION_TITLE, title.trim());
+        }
+        cv.put(COL_SESSION_CREATED_AT, System.currentTimeMillis());
+        db.insertWithOnConflict(TABLE_CHAT_SESSIONS, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
+    }
+
+    public synchronized List<ChatSession> getAllChatSessions() {
+        List<ChatSession> sessions = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "SELECT s." + COL_SESSION_ID + ", s." + COL_SESSION_TITLE + ", s." + COL_SESSION_CREATED_AT +
+                ", COUNT(m." + COL_CHAT_ID + ") as msg_count " +
+                " FROM " + TABLE_CHAT_SESSIONS + " s " +
+                " LEFT JOIN " + TABLE_CHAT_MESSAGES + " m ON s." + COL_SESSION_ID + " = m." + COL_CHAT_SESSION_ID +
+                " GROUP BY s." + COL_SESSION_ID +
+                " ORDER BY s." + COL_SESSION_CREATED_AT + " DESC";
+
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor != null) {
+            try {
+                int idxId = cursor.getColumnIndexOrThrow(COL_SESSION_ID);
+                int idxTitle = cursor.getColumnIndexOrThrow(COL_SESSION_TITLE);
+                int idxCreated = cursor.getColumnIndexOrThrow(COL_SESSION_CREATED_AT);
+                int idxCount = cursor.getColumnIndexOrThrow("msg_count");
+
+                while (cursor.moveToNext()) {
+                    String id = cursor.getString(idxId);
+                    String title = cursor.getString(idxTitle);
+                    long created = cursor.getLong(idxCreated);
+                    int count = cursor.getInt(idxCount);
+                    sessions.add(new ChatSession(id, title, created, count));
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        return sessions;
+    }
+
+    public synchronized void deleteChatSession(String sessionId) {
+        if (sessionId == null) return;
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete(TABLE_CHAT_MESSAGES, COL_CHAT_SESSION_ID + " = ?", new String[]{sessionId});
+        db.delete(TABLE_CHAT_SESSIONS, COL_SESSION_ID + " = ?", new String[]{sessionId});
+    }
+
+    public synchronized void clearAllChatSessions() {
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete(TABLE_CHAT_MESSAGES, null, null);
+        db.delete(TABLE_CHAT_SESSIONS, null, null);
+    }
+
+    // --- Mensagens do ChatBot Trimmy ---
+    public synchronized long saveChatMessage(String sessionId, String sender, String message, boolean isError) {
         if (message == null || message.trim().isEmpty()) return -1;
         SQLiteDatabase db = getWritableDatabase();
         ContentValues cv = new ContentValues();
+        cv.put(COL_CHAT_SESSION_ID, sessionId);
         cv.put(COL_CHAT_SENDER, sender);
         cv.put(COL_CHAT_MESSAGE, message.trim());
         cv.put(COL_CHAT_TIMESTAMP, System.currentTimeMillis());
@@ -340,13 +413,17 @@ public class SkadiDatabaseHelper extends SQLiteOpenHelper {
         return db.insert(TABLE_CHAT_MESSAGES, null, cv);
     }
 
-    public synchronized List<ChatMessage> getChatHistory() {
+    public synchronized List<ChatMessage> getChatMessagesForSession(String sessionId) {
         List<ChatMessage> list = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.query(TABLE_CHAT_MESSAGES, null, null, null, null, null, COL_CHAT_ID + " ASC");
+        String selection = sessionId == null ? COL_CHAT_SESSION_ID + " IS NULL" : COL_CHAT_SESSION_ID + " = ?";
+        String[] args = sessionId == null ? null : new String[]{sessionId};
+
+        Cursor cursor = db.query(TABLE_CHAT_MESSAGES, null, selection, args, null, null, COL_CHAT_ID + " ASC");
         if (cursor != null) {
             try {
                 int idxId = cursor.getColumnIndexOrThrow(COL_CHAT_ID);
+                int idxSession = cursor.getColumnIndexOrThrow(COL_CHAT_SESSION_ID);
                 int idxSender = cursor.getColumnIndexOrThrow(COL_CHAT_SENDER);
                 int idxMsg = cursor.getColumnIndexOrThrow(COL_CHAT_MESSAGE);
                 int idxTime = cursor.getColumnIndexOrThrow(COL_CHAT_TIMESTAMP);
@@ -354,12 +431,13 @@ public class SkadiDatabaseHelper extends SQLiteOpenHelper {
 
                 while (cursor.moveToNext()) {
                     long id = cursor.getLong(idxId);
+                    String sId = cursor.getString(idxSession);
                     String sender = cursor.getString(idxSender);
                     String message = cursor.getString(idxMsg);
                     long timestamp = cursor.getLong(idxTime);
                     boolean isError = cursor.getInt(idxErr) == 1;
 
-                    list.add(new ChatMessage(id, sender, message, timestamp, isError));
+                    list.add(new ChatMessage(id, sId, sender, message, timestamp, isError));
                 }
             } finally {
                 cursor.close();
@@ -368,8 +446,18 @@ public class SkadiDatabaseHelper extends SQLiteOpenHelper {
         return list;
     }
 
-    public synchronized void clearChatHistory() {
-        SQLiteDatabase db = getWritableDatabase();
-        db.delete(TABLE_CHAT_MESSAGES, null, null);
+    public synchronized String getLatestSessionId() {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(TABLE_CHAT_SESSIONS, new String[]{COL_SESSION_ID}, null, null, null, null, COL_SESSION_CREATED_AT + " DESC", "1");
+        if (cursor != null) {
+            try {
+                if (cursor.moveToFirst()) {
+                    return cursor.getString(0);
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        return null;
     }
 }

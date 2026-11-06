@@ -2,6 +2,7 @@ package com.example.mobile_skadi.data;
 
 public class ChatMessage {
     private long id;
+    private String sessionId;
     private String sender; // "USER" or "AI"
     private String message;
     private long timestamp;
@@ -10,15 +11,17 @@ public class ChatMessage {
     public ChatMessage() {
     }
 
-    public ChatMessage(String sender, String message, boolean isError) {
+    public ChatMessage(String sessionId, String sender, String message, boolean isError) {
+        this.sessionId = sessionId;
         this.sender = sender;
         this.message = message;
         this.timestamp = System.currentTimeMillis();
         this.isError = isError;
     }
 
-    public ChatMessage(long id, String sender, String message, long timestamp, boolean isError) {
+    public ChatMessage(long id, String sessionId, String sender, String message, long timestamp, boolean isError) {
         this.id = id;
+        this.sessionId = sessionId;
         this.sender = sender;
         this.message = message;
         this.timestamp = timestamp;
@@ -31,6 +34,14 @@ public class ChatMessage {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 
     public String getSender() {
