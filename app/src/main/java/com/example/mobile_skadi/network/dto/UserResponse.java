@@ -16,6 +16,9 @@ public class UserResponse {
 
     private String status;
 
+    @SerializedName(value = "cdGestor", alternate = {"cd_gestor", "distributionCenter"})
+    private DistributionCenterResponse cdGestor;
+
     public UserResponse() {
     }
 
@@ -65,5 +68,13 @@ public class UserResponse {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public DistributionCenterResponse getCdGestor() {
+        return cdGestor;
+    }
+
+    public void setCdGestor(DistributionCenterResponse cdGestor) {
+        this.cdGestor = cdGestor;
     }
 }

@@ -51,6 +51,7 @@ public class AlertDetailsActivity extends AppCompatActivity {
     private TextView tvAlertDetailLimit;
     private TextView tvAlertDetailCamaraName;
     private TextView tvAlertDetailUnitName;
+    private TextView tvAlertHeaderUnit;
 
     private LinearLayout navCamaras;
     private LinearLayout navAlertas;
@@ -107,6 +108,8 @@ public class AlertDetailsActivity extends AppCompatActivity {
         tvAlertDetailLimit = findViewById(R.id.tvAlertDetailLimit);
         tvAlertDetailCamaraName = findViewById(R.id.tvAlertDetailCamaraName);
         tvAlertDetailUnitName = findViewById(R.id.tvAlertDetailUnitName);
+        tvAlertHeaderUnit = findViewById(R.id.tvAlertHeaderUnit);
+        if (tvAlertHeaderUnit != null) tvAlertHeaderUnit.setText(com.example.mobile_skadi.network.SessionManager.getInstance(this).getUnit());
 
         navCamaras = findViewById(R.id.navCamaras);
         navAlertas = findViewById(R.id.navAlertas);
@@ -310,6 +313,7 @@ public class AlertDetailsActivity extends AppCompatActivity {
                                     cr.getMaximumTemperature()));
                         }
                         if (tvAlertDetailUnitName != null && cr.getDistributionCenterName() != null) {
+                            if (tvAlertHeaderUnit != null) tvAlertHeaderUnit.setText(cr.getDistributionCenterName());
                             tvAlertDetailUnitName.setText(cr.getDistributionCenterName());
                         }
                     }

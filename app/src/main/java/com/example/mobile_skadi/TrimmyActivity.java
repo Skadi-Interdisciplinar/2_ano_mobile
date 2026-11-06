@@ -89,7 +89,8 @@ public class TrimmyActivity extends AppCompatActivity {
 
         TextView tvTrimmyGreeting = findViewById(R.id.tvTrimmyGreeting);
         if (tvTrimmyGreeting != null) {
-            tvTrimmyGreeting.setText("Como podemos te ajudar hoje,\n" + UserRoleManager.getFirstNameForGreeting() + "?");
+            String userFirst = com.example.mobile_skadi.network.SessionManager.getInstance(this).getFirstName();
+            tvTrimmyGreeting.setText("Como podemos te ajudar hoje,\n" + userFirst + "?");
         }
         if (isChatStarted) {
             if (layoutTrimmyWelcome != null) layoutTrimmyWelcome.setVisibility(View.GONE);

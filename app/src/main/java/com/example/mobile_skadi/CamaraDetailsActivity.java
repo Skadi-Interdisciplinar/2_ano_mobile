@@ -76,6 +76,7 @@ public class CamaraDetailsActivity extends AppCompatActivity {
         btnBack = findViewById(R.id.btnBack);
         tvCamaraTitle = findViewById(R.id.tvCamaraTitle);
         tvCamaraSubtitle = findViewById(R.id.tvCamaraSubtitle);
+        if (tvCamaraSubtitle != null) tvCamaraSubtitle.setText(com.example.mobile_skadi.network.SessionManager.getInstance(this).getUnit());
         tvCamaraStatusBadge = findViewById(R.id.tvCamaraStatusBadge);
         tvCurrentTemp = findViewById(R.id.tvCurrentTemp);
         tvTempRange = findViewById(R.id.tvTempRange);
